@@ -1,0 +1,40 @@
+{
+  "type": "panel",
+  "name": "Funnel chart",
+  "id": "grafana-funnel-chart",
+  "info": {
+    "description": "Plugin that will add the possibility to visualize data as a funnel chart",
+    "author": {
+      "name": "Marcus Andersson",
+      "url": ""
+    },
+    "keywords": [
+      "chart",
+      "grafana",
+      "panel",
+      "funnel",
+      "visualization"
+    ],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://github.com/grafana/simple-react-panel"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/grafana/simple-react-panel/blob/master/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaVersion": "7.0.x",
+    "plugins": []
+  }
+}
