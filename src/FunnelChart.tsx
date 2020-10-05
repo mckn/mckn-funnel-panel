@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { PanelProps, PanelData } from '@grafana/data';
 import { SimpleOptions } from 'types';
 import { css, cx } from 'emotion';
@@ -62,50 +62,8 @@ export const FunnelChart: React.FC<Props> = ({ options, data, width, height }) =
         `
       )}
     >
-      <svg
-        className={styles.svg}
-        width={width}
-        height={height}
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        viewBox={`0 0 ${width} ${height}`}
-      >
-        {steps.map((step, index) => {
-          if (isStage(step)) {
-            return (
-              <svg
-                key={`stage-${index}`}
-                viewBox={`0 0 ${step.width} ${step.height}`}
-                width={step.width}
-                height={step.height}
-                x={step.point.x}
-                y={step.point.y}
-              >
-                <g>
-                  <rect x="0" y="0" width={step.width} height={step.height} style={{ fill: step.color }}></rect>
-                  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">
-                    {step.value}
-                  </text>
-                </g>
-              </svg>
-            );
-          }
-
-          if (isPassage(step)) {
-            const topLeft = `${step.topLeft.x} ${step.topLeft.y}`;
-            const topRight = `${step.topRight.x} ${step.topRight.y}`;
-            const bottomRight = `${step.bottomRight.x} ${step.bottomRight.y}`;
-            const bottomLeft = `${step.bottomLeft.x} ${step.bottomLeft.y}`;
-
-            const d = `M${topLeft} L${bottomLeft} L${bottomRight} L${topRight} Z`;
-            return <path key={`passage-${index}`} d={d} style={{ fill: step.color }} />;
-          }
-
-          return null;
-        })}
-        {renderPercentage(steps, height, styles.percentageText)}
-      </svg>
-
+      {renderWithCanvas(styles, steps, width, height)}
+      {/* {renderWithSvg(styles, steps, width, height)} */}
       <div className={styles.textBox}>
         {options.showSeriesCount && (
           <div
@@ -119,6 +77,140 @@ export const FunnelChart: React.FC<Props> = ({ options, data, width, height }) =
         <div>Text option value: {options.text}</div>
       </div>
     </div>
+  );
+};
+
+const renderWithCanvas = (styles: any, steps: FunnelStep[], width: number, height: number) => {
+  const draw = useCallback(
+    (context: CanvasRenderingContext2D) => {
+      for (const step of steps) {
+        if (isStage(step)) {
+          drawStageBox(context, step);
+          drawStageValue(context, step);
+          drawStagePercentage(context, step, width);
+          continue;
+        }
+
+        if (isPassage(step)) {
+          drawPassageBox(context, step);
+          continue;
+        }
+      }
+    },
+    [styles, steps, width, height]
+  );
+  const canvasRef = useCanvas(draw);
+
+  return <canvas width={width} height={height} ref={canvasRef}></canvas>;
+};
+
+const drawPassageBox = (context: CanvasRenderingContext2D, step: FunnelPassage) => {
+  const topLeft = `${step.topLeft.x} ${step.topLeft.y}`;
+  const topRight = `${step.topRight.x} ${step.topRight.y}`;
+  const bottomRight = `${step.bottomRight.x} ${step.bottomRight.y}`;
+  const bottomLeft = `${step.bottomLeft.x} ${step.bottomLeft.y}`;
+  const passage = new Path2D(`M${topLeft} L${bottomLeft} L${bottomRight} L${topRight} Z`);
+  context.fillStyle = step.color;
+  context.fill(passage);
+};
+
+const drawStageBox = (context: CanvasRenderingContext2D, step: FunnelStage) => {
+  const rectangle = new Path2D();
+  rectangle.rect(step.point.x, step.point.y, step.width, step.height);
+  context.fillStyle = step.color;
+  context.fill(rectangle);
+};
+
+const drawStageValue = (context: CanvasRenderingContext2D, step: FunnelStage) => {
+  context.font = '15px sans-serif';
+  context.fillStyle = '#000';
+  context.textBaseline = 'middle';
+
+  const value = `${step.value}`;
+  const text = context.measureText(value);
+  const textY = step.point.y + step.height / 2;
+  const textX = step.point.x + step.width / 2 - text.width / 2;
+
+  context.fillText(value, textX, textY);
+};
+
+const drawStagePercentage = (context: CanvasRenderingContext2D, step: FunnelStage, width: number) => {
+  context.font = '15px sans-serif';
+  context.fillStyle = '#FFF';
+  context.textBaseline = 'middle';
+
+  const percentage = `${step.percentage.toFixed(2)}%`;
+  const text = context.measureText(percentage);
+  const textY = step.point.y + step.height / 2;
+  const textX = width - 50 - text.width / 2;
+
+  context.fillText(percentage, textX, textY);
+};
+
+const useCanvas = (draw: (context: CanvasRenderingContext2D) => void) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      return;
+    }
+
+    const context = canvas.getContext('2d');
+    if (!context) {
+      return;
+    }
+
+    draw(context);
+  }, [draw]);
+  return canvasRef;
+};
+
+const renderWithSvg = (styles: any, steps: FunnelStep[], width: number, height: number) => {
+  return (
+    <svg
+      className={styles.svg}
+      width={width}
+      height={height}
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      viewBox={`0 0 ${width} ${height}`}
+    >
+      {steps.map((step, index) => {
+        if (isStage(step)) {
+          return (
+            <svg
+              key={`stage-${index}`}
+              viewBox={`0 0 ${step.width} ${step.height}`}
+              width={step.width}
+              height={step.height}
+              x={step.point.x}
+              y={step.point.y}
+            >
+              <g>
+                <rect x="0" y="0" width={step.width} height={step.height} style={{ fill: step.color }}></rect>
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">
+                  {step.value}
+                </text>
+              </g>
+            </svg>
+          );
+        }
+
+        if (isPassage(step)) {
+          const topLeft = `${step.topLeft.x} ${step.topLeft.y}`;
+          const topRight = `${step.topRight.x} ${step.topRight.y}`;
+          const bottomRight = `${step.bottomRight.x} ${step.bottomRight.y}`;
+          const bottomLeft = `${step.bottomLeft.x} ${step.bottomLeft.y}`;
+
+          const d = `M${topLeft} L${bottomLeft} L${bottomRight} L${topRight} Z`;
+          return <path key={`passage-${index}`} d={d} style={{ fill: step.color }} />;
+        }
+
+        return null;
+      })}
+      {renderPercentage(steps, height, styles.percentageText)}
+    </svg>
   );
 };
 
