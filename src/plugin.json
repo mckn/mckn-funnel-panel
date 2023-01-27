@@ -1,13 +1,13 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "Funnel Panel",
+  "name": "Funnel panel",
   "id": "mckn-funnel-panel",
   "info": {
     "keywords": ["panel"],
     "description": "Grafana panel to create funnel charts",
     "author": {
-      "name": "Mckn"
+      "name": "mckn"
     },
     "logos": {
       "small": "img/logo.svg",
