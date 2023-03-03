@@ -1,2 +1,2 @@
-export { usePainter } from './usePainter';
+export { useCanvasDrawer } from './useCanvasDrawer';
 export { useInstructions } from './instructions/useInstructions';

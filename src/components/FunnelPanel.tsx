@@ -1,12 +1,10 @@
 import React, { type ReactElement, createRef, useEffect } from 'react';
 import { FieldType, toDataFrame, type PanelProps } from '@grafana/data';
 import { type PanelOptions } from 'types';
-import { usePainter, useInstructions } from '../painter';
+import { useCanvasDrawer, useInstructions } from '../canvas';
 
 export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   const { width, height } = props;
-  const canvasRef = createRef<HTMLCanvasElement>();
-  const painter = usePainter(canvasRef);
 
   const data = toDataFrame({
     name: 'funnel data',
@@ -24,6 +22,8 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
     ],
   });
 
+  const canvasRef = createRef<HTMLCanvasElement>();
+  const painter = useCanvasDrawer(canvasRef);
   const { instructions } = useInstructions({ width, height, data });
   useEffect(() => painter(instructions), [painter, instructions]);
 

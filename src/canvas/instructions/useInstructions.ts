@@ -1,11 +1,11 @@
 import { DataFrame, FieldType } from '@grafana/data';
 import { useMemo } from 'react';
 import { convertToInstructions } from './converter';
-import { PaintInstruction } from './types';
+import { DrawInstruction } from '../types';
 
 type InstructionsResult = {
   error?: string;
-  instructions?: PaintInstruction[];
+  instructions?: DrawInstruction[];
 };
 
 type InstructionsOptions = {
@@ -33,6 +33,7 @@ export function useInstructions(options: InstructionsOptions): InstructionsResul
         canvasWidth: width,
         valuesField: valuesField,
         labelsField: labelsField,
+        connectBars: true,
       }),
     };
   }, [width, height, data]);
