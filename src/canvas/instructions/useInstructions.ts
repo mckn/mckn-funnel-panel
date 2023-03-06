@@ -1,7 +1,9 @@
-import { DataFrame, FieldType } from '@grafana/data';
+import { DataFrame } from '@grafana/data';
 import { useMemo } from 'react';
 import { convertToInstructions } from './converter';
 import { DrawInstruction } from '../types';
+import { dataFramesToFunnelData } from './dataMapper';
+import { useTheme2 } from '@grafana/ui';
 
 type InstructionsResult = {
   error?: string;
@@ -11,17 +13,17 @@ type InstructionsResult = {
 type InstructionsOptions = {
   width: number;
   height: number;
-  data: DataFrame;
+  data: DataFrame[];
 };
 
 export function useInstructions(options: InstructionsOptions): InstructionsResult {
   const { width, height, data } = options;
+  const theme = useTheme2();
 
   return useMemo(() => {
-    const labelsField = data.fields.find((f) => f.type === FieldType.string);
-    const valuesField = data.fields.find((f) => f.type === FieldType.number);
+    const funnelData = dataFramesToFunnelData(data, theme);
 
-    if (!labelsField || !valuesField) {
+    if (funnelData.length === 0) {
       return {
         error: 'invalid data',
       };
@@ -31,10 +33,9 @@ export function useInstructions(options: InstructionsOptions): InstructionsResul
       instructions: convertToInstructions({
         canvasHeight: height,
         canvasWidth: width,
-        valuesField: valuesField,
-        labelsField: labelsField,
+        data: funnelData,
         connectBars: true,
       }),
     };
-  }, [width, height, data]);
+  }, [width, height, data, theme]);
 }

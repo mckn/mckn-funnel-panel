@@ -1,11 +1,10 @@
-import { Field } from '@grafana/data';
 import { DrawInstruction } from '../types';
+import { FunnelData } from './dataMapper';
 
 type ConvertOptions = {
   canvasWidth: number;
   canvasHeight: number;
-  labelsField: Field<string>;
-  valuesField: Field<number>;
+  data: FunnelData[];
   connectBars: boolean;
 };
 
@@ -29,9 +28,8 @@ type BarInfo = {
 };
 
 export function convertToInstructions(options: ConvertOptions): DrawInstruction[] {
-  const { valuesField, canvasHeight, canvasWidth, connectBars } = options;
-  const values = valuesField.values;
-  const numberOfBars = calculateNumberOfBars(values.length, connectBars);
+  const { data, canvasHeight, canvasWidth, connectBars } = options;
+  const numberOfBars = calculateNumberOfBars(data.length, connectBars);
   const barWidth = canvasWidth * 0.8;
   const barHeight = (canvasHeight * 0.8) / numberOfBars;
   const startY = (canvasHeight - canvasHeight * 0.8) / 2;
@@ -39,11 +37,11 @@ export function convertToInstructions(options: ConvertOptions): DrawInstruction[
 
   let previousBar: BarInfo | undefined;
 
-  for (let i = 0; i < values.length; i++) {
-    const value = values.get(i);
-    const x = canvasWidth / 2 - (barWidth * value) / 2;
-    const y = startY + barHeight * (connectBars ? 2 : 1) * i;
-    const w = barWidth * value;
+  for (let i = 0; i < data.length; i++) {
+    const point = data[i];
+    const x = canvasWidth / 2 - (barWidth * point.percent) / 2;
+    const y = startY + barHeight * (connectBars ? 1.5 : 1) * i;
+    const w = barWidth * point.percent;
     const h = barHeight;
     const bar = calculateBarInfo(x, y, w, h);
 
@@ -51,15 +49,19 @@ export function convertToInstructions(options: ConvertOptions): DrawInstruction[
       instructions.push(drawTrapezoid(previousBar, bar));
     }
 
-    instructions.push(drawRect(x, y, w, h));
+    instructions.push(drawRect(point.color, x, y, w, h));
     previousBar = bar;
   }
 
   return instructions;
 }
 
-function drawRect(x: number, y: number, w: number, h: number): DrawInstruction {
-  return (ctx) => ctx.fillRect(x, y, w, h);
+function drawRect(color: string, x: number, y: number, w: number, h: number): DrawInstruction {
+  return (ctx) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = 'black';
+  };
 }
 
 function drawTrapezoid(previous: BarInfo, current: BarInfo): DrawInstruction {
@@ -83,7 +85,7 @@ function calculateNumberOfBars(numberOfValues: number, connectBars: boolean): nu
   if (!connectBars) {
     return numberOfValues;
   }
-  return numberOfValues + (numberOfValues - 1);
+  return numberOfValues + (numberOfValues - 1) / 2;
 }
 
 function calculateBarInfo(x: number, y: number, w: number, h: number): BarInfo {

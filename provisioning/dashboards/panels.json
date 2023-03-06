@@ -1,0 +1,95 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "vHsj2qbVk"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "seriesCountSize": "sm",
+        "showSeriesCount": false,
+        "text": "Default value of text input option"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Label",
+                "type": "string",
+                "values": ["Sent", "Viewed", "Clicked", "Add to cart", "Purchased"]
+              },
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [52300, 35679, 15690, 5596, 3290]
+              }
+            ],
+            "meta": {},
+            "name": "Sent"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Funnel - one query with full values",
+      "type": "mckn-funnel-panel"
+    }
+  ],
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Funnel Examples",
+  "uid": "NtsITqb4z",
+  "version": 1,
+  "weekStart": ""
+}
