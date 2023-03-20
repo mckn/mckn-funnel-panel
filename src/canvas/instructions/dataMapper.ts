@@ -11,13 +11,17 @@ export function dataFramesToFunnelData(data: DataFrame[], theme: GrafanaTheme2):
   const result: FunnelData[] = [];
 
   for (const frame of data) {
-    const labelIndex = frame.fields.findIndex((f) => f.type === FieldType.string);
-    const valueIndex = frame.fields.findIndex((f) => f.type === FieldType.number);
+    const labelField = frame.fields.find((f) => f.type === FieldType.string);
+    const valueField = frame.fields.find((f) => f.type === FieldType.number);
+
+    if (!labelField || !valueField) {
+      continue;
+    }
 
     for (let i = 0; i < frame.length; i++) {
-      const value = frame.fields[valueIndex].values.get(i);
-      const label = frame.fields[labelIndex].values.get(i);
-      const color = getFieldSeriesColor(frame.fields[valueIndex], theme);
+      const value = valueField.values.get(i);
+      const label = labelField.values.get(i);
+      const color = getFieldSeriesColor(valueField, theme);
 
       result.push({
         label,

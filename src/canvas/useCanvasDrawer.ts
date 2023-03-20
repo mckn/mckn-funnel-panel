@@ -13,11 +13,8 @@ export function useCanvasDrawer(ref?: RefObject<HTMLCanvasElement>): CanvasDrawe
       }
 
       for (let i = 0; i < instructions.length; i++) {
-        const draw = instructions[i];
-
-        if (typeof draw === 'function') {
-          draw(context);
-        }
+        const instruction = instructions[i];
+        instruction.draw(context);
       }
     };
   }, [ref]);

@@ -1,30 +1,13 @@
 import { DrawInstruction } from '../types';
+import { Bar } from './bar';
 import { FunnelData } from './dataMapper';
+import { Trapezoid } from './trapezoid';
 
 type ConvertOptions = {
   canvasWidth: number;
   canvasHeight: number;
   data: FunnelData[];
   connectBars: boolean;
-};
-
-type BarInfo = {
-  topLeft: {
-    x: number;
-    y: number;
-  };
-  topRight: {
-    x: number;
-    y: number;
-  };
-  bottomLeft: {
-    x: number;
-    y: number;
-  };
-  bottomRight: {
-    x: number;
-    y: number;
-  };
 };
 
 export function convertToInstructions(options: ConvertOptions): DrawInstruction[] {
@@ -35,7 +18,7 @@ export function convertToInstructions(options: ConvertOptions): DrawInstruction[
   const startY = (canvasHeight - canvasHeight * 0.8) / 2;
   const instructions: DrawInstruction[] = [];
 
-  let previousBar: BarInfo | undefined;
+  let previousBar: Bar | undefined;
 
   for (let i = 0; i < data.length; i++) {
     const point = data[i];
@@ -43,42 +26,23 @@ export function convertToInstructions(options: ConvertOptions): DrawInstruction[
     const y = startY + barHeight * (connectBars ? 1.5 : 1) * i;
     const w = barWidth * point.percent;
     const h = barHeight;
-    const bar = calculateBarInfo(x, y, w, h);
+    const bar = new Bar({ x, y, w, h, color: point.color });
 
-    if (previousBar) {
-      instructions.push(drawTrapezoid(previousBar, bar));
+    if (previousBar && connectBars) {
+      instructions.push(
+        new Trapezoid({
+          from: previousBar,
+          to: bar,
+          color: 'green',
+        })
+      );
     }
 
-    instructions.push(drawRect(point.color, x, y, w, h));
+    instructions.push(bar);
     previousBar = bar;
   }
 
   return instructions;
-}
-
-function drawRect(color: string, x: number, y: number, w: number, h: number): DrawInstruction {
-  return (ctx) => {
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, w, h);
-    ctx.fillStyle = 'black';
-  };
-}
-
-function drawTrapezoid(previous: BarInfo, current: BarInfo): DrawInstruction {
-  const topLeft = previous.bottomLeft;
-  const topRight = previous.bottomRight;
-  const bottomLeft = current.topLeft;
-  const bottomRight = current.topRight;
-
-  return (ctx) => {
-    ctx.beginPath();
-    ctx.moveTo(topLeft.x, topLeft.y);
-    ctx.lineTo(topRight.x, topRight.y);
-    ctx.lineTo(bottomRight.x, bottomRight.y);
-    ctx.lineTo(bottomLeft.x, bottomLeft.y);
-    ctx.lineTo(topLeft.x, topLeft.y);
-    ctx.fill();
-  };
 }
 
 function calculateNumberOfBars(numberOfValues: number, connectBars: boolean): number {
@@ -86,25 +50,4 @@ function calculateNumberOfBars(numberOfValues: number, connectBars: boolean): nu
     return numberOfValues;
   }
   return numberOfValues + (numberOfValues - 1) / 2;
-}
-
-function calculateBarInfo(x: number, y: number, w: number, h: number): BarInfo {
-  return {
-    topLeft: {
-      x: x,
-      y: y,
-    },
-    topRight: {
-      x: x + w,
-      y: y,
-    },
-    bottomLeft: {
-      x: x,
-      y: y + h,
-    },
-    bottomRight: {
-      x: x + w,
-      y: y + h,
-    },
-  };
 }

@@ -1,40 +1,18 @@
-import { PanelPlugin } from '@grafana/data';
+import { FieldColorModeId, FieldConfigProperty, PanelPlugin } from '@grafana/data';
 import { FunnelPanel } from 'components/FunnelPanel';
 import { type PanelOptions } from './types';
 
-export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel).setPanelOptions((builder) => {
-  return builder
-    .addTextInput({
-      path: 'text',
-      name: 'Simple text option',
-      description: 'Description of panel option',
-      defaultValue: 'Default value of text input option',
-    })
-    .addBooleanSwitch({
-      path: 'showSeriesCount',
-      name: 'Show series counter',
-      defaultValue: false,
-    })
-    .addRadio({
-      path: 'seriesCountSize',
-      defaultValue: 'sm',
-      name: 'Series counter size',
+export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel).useFieldConfig({
+  standardOptions: {
+    [FieldConfigProperty.Color]: {
       settings: {
-        options: [
-          {
-            value: 'sm',
-            label: 'Small',
-          },
-          {
-            value: 'md',
-            label: 'Medium',
-          },
-          {
-            value: 'lg',
-            label: 'Large',
-          },
-        ],
+        byValueSupport: true,
+        bySeriesSupport: true,
+        preferThresholdsMode: false,
       },
-      showIf: (config) => config.showSeriesCount,
-    });
+      defaultValue: {
+        mode: FieldColorModeId.ContinuousGrYlRd,
+      },
+    },
+  },
 });
