@@ -17,7 +17,7 @@ export function Chart(props: Props): ReactElement {
     <div className={styles.chart}>
       {data.map((d, i) => (
         <Fragment key={d.label}>
-          <Bar label={d.label} percent={d.percent} color={d.color} />
+          <Bar value={d.value} percentage={d.percentage} color={d.color} />
           <BarGap from={d} to={data[i + 1]} />
         </Fragment>
       ))}

@@ -5,7 +5,7 @@ import { useTheme2 } from '@grafana/ui';
 export type FunnelData = {
   label: string;
   value: number;
-  percent: number;
+  percentage: number;
   color: string;
 };
 
@@ -31,7 +31,7 @@ export function useFunnelData(data: DataFrame[]): FunnelData[] {
         result.push({
           label,
           value,
-          percent: 0,
+          percentage: 0,
           color: color.color,
         });
       }
@@ -41,7 +41,7 @@ export function useFunnelData(data: DataFrame[]): FunnelData[] {
     const max = sorted[0];
 
     return sorted.map((s) => {
-      s.percent = s.value / max.value;
+      s.percentage = s.value / max.value;
       return s;
     });
   }, [data, theme]);

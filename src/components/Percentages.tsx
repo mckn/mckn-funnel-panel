@@ -12,9 +12,11 @@ export function Percentages(props: Props): ReactElement {
   const styles = useStyles2(getStyles);
 
   return (
-    <div className={styles.percentages}>
+    <div className={styles.container}>
       {data.map((d, i) => (
-        <div key={d.percent}>{d.percent * 100}%</div>
+        <div className={styles.percentage} key={d.percentage}>
+          {d.percentage * 100}
+        </div>
       ))}
     </div>
   );
@@ -24,10 +26,17 @@ export const PurePercentages = React.memo(Percentages);
 
 const getStyles = () => {
   return {
-    percentages: css({
-      flexBasis: '150px',
+    container: css({
+      flexBasis: '120px',
       display: 'flex',
       flexDirection: 'column',
+      paddingLeft: '10px',
+    }),
+    percentage: css({
+      flexGrow: 1,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'start',
     }),
   };
 };

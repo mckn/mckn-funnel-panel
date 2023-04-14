@@ -22,9 +22,9 @@ const getStyles = (from: FunnelData, to?: FunnelData) => () => {
   }
 
   const color = tinycolor(from.color).darken(15).toHexString();
-  const topLeft = 100 * ((1 - from.percent) / 2);
+  const topLeft = 100 * ((1 - from.percentage) / 2);
   const topRight = 100 - topLeft;
-  const bottomLeft = 100 * ((1 - to.percent) / 2);
+  const bottomLeft = 100 * ((1 - to.percentage) / 2);
   const bottomRight = 100 - bottomLeft;
 
   return {

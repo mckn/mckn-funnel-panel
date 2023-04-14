@@ -12,9 +12,11 @@ export function Labels(props: Props): ReactElement {
   const styles = useStyles2(getStyles);
 
   return (
-    <div className={styles.labels}>
+    <div className={styles.container}>
       {data.map((d, i) => (
-        <div key={d.label}>{d.label}</div>
+        <div className={styles.label} key={d.label}>
+          {d.label}
+        </div>
       ))}
     </div>
   );
@@ -24,10 +26,17 @@ export const PureLabels = React.memo(Labels);
 
 const getStyles = () => {
   return {
-    labels: css({
-      flexBasis: '150px',
+    container: css({
+      flexBasis: '120px',
       display: 'flex',
       flexDirection: 'column',
+      paddingRight: '10px',
+    }),
+    label: css({
+      flexGrow: 1,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'end',
     }),
   };
 };
