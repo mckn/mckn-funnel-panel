@@ -1,14 +1,41 @@
-import React, { type ReactElement, createRef, useEffect } from 'react';
-import { type PanelProps } from '@grafana/data';
+import React, { type ReactElement } from 'react';
+import { css } from '@emotion/css';
+import { useStyles2 } from '@grafana/ui';
+import { GrafanaTheme2, type PanelProps } from '@grafana/data';
 import { type PanelOptions } from 'types';
-import { useCanvasDrawer, useInstructions } from '../canvas';
+import { useFunnelData } from 'data';
+import { PureChart } from './Chart';
+import { PureLabels } from './Labels';
+import { PurePercentages } from './Percentages';
 
 export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   const { width, height, data } = props;
-  const canvasRef = createRef<HTMLCanvasElement>();
-  const painter = useCanvasDrawer(canvasRef);
-  const { instructions } = useInstructions({ width, height, data: data.series });
-  useEffect(() => painter(instructions), [painter, instructions]);
+  const funnelData = useFunnelData(data.series);
+  const styles = useStyles2(getStyles(width, height));
 
-  return <canvas width={width} height={height} ref={canvasRef} />;
+  return (
+    <div className={styles.container}>
+      <PureLabels data={funnelData} />
+      <PureChart data={funnelData} />
+      <PurePercentages data={funnelData} />
+    </div>
+  );
 }
+
+const getStyles = (width: number, height: number) => (theme: GrafanaTheme2) => {
+  return {
+    container: css({
+      width: `${width}px`,
+      height: `${height}px`,
+      display: 'flex',
+    }),
+    left: css({
+      flexBasis: '150px',
+      backgroundColor: 'blue',
+    }),
+    right: css({
+      flexBasis: '150px',
+      backgroundColor: 'white',
+    }),
+  };
+};
