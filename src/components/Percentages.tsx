@@ -15,11 +15,15 @@ export function Percentages(props: Props): ReactElement {
     <div className={styles.container}>
       {data.map((d, i) => (
         <div className={styles.percentage} key={d.percentage}>
-          {d.percentage * 100}
+          {formatPercentage(d.percentage * 100)}
         </div>
       ))}
     </div>
   );
+}
+
+function formatPercentage(value: number): string {
+  return `${Math.round((value + Number.EPSILON) * 100) / 100}%`;
 }
 
 export const PurePercentages = React.memo(Percentages);

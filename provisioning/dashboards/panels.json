@@ -24,7 +24,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -33,9 +32,31 @@
         "type": "marcusolsson-static-datasource",
         "uid": "vHsj2qbVk"
       },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
-        "h": 9,
-        "w": 12,
+        "h": 23,
+        "w": 11,
         "x": 0,
         "y": 0
       },
@@ -57,13 +78,25 @@
                 "config": {},
                 "name": "Label",
                 "type": "string",
-                "values": ["Sent", "Viewed", "Clicked", "Add to cart", "Purchased"]
+                "values": [
+                  "Sent",
+                  "Viewed",
+                  "Clicked",
+                  "Add to cart",
+                  "Purchased"
+                ]
               },
               {
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [52300, 35679, 15690, 5596, 3290]
+                "values": [
+                  52300,
+                  35679,
+                  15690,
+                  5596,
+                  3290
+                ]
               }
             ],
             "meta": {},
@@ -73,6 +106,189 @@
         }
       ],
       "title": "Funnel - one query with full values",
+      "type": "mckn-funnel-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "vHsj2qbVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 11,
+        "x": 11,
+        "y": 0
+      },
+      "id": 4,
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [
+                  52000
+                ]
+              },
+              {
+                "config": {},
+                "name": "Name",
+                "type": "string",
+                "values": [
+                  "Sent"
+                ]
+              }
+            ],
+            "meta": {}
+          },
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [
+                  15690
+                ]
+              },
+              {
+                "config": {},
+                "name": "Name",
+                "type": "string",
+                "values": [
+                  "Viewed"
+                ]
+              }
+            ],
+            "meta": {}
+          },
+          "hide": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [
+                  35678
+                ]
+              },
+              {
+                "config": {},
+                "name": "Name",
+                "type": "string",
+                "values": [
+                  "Clicked"
+                ]
+              }
+            ],
+            "meta": {}
+          },
+          "hide": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [
+                  5596
+                ]
+              },
+              {
+                "config": {},
+                "name": "Name",
+                "type": "string",
+                "values": [
+                  "Added to cart"
+                ]
+              }
+            ],
+            "meta": {}
+          },
+          "hide": false,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [
+                  3290
+                ]
+              },
+              {
+                "config": {},
+                "name": "Name",
+                "type": "string",
+                "values": [
+                  "Purchased"
+                ]
+              }
+            ],
+            "meta": {}
+          },
+          "hide": false,
+          "refId": "E"
+        }
+      ],
+      "title": "Funnel - multiple queries",
       "type": "mckn-funnel-panel"
     }
   ],
