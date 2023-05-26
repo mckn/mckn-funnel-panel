@@ -2,6 +2,11 @@ import { useMemo } from 'react';
 import { DataFrame, FieldType, getFieldSeriesColor } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
 
+export type FunnelDataResult = {
+  data: FunnelData;
+  status: 'error' | 'unsupported' | 'success';
+};
+
 export type FunnelData = {
   label: string;
   value: number;
