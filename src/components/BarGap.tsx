@@ -1,9 +1,10 @@
 import React, { type ReactElement } from 'react';
 import { css } from '@emotion/css';
 import tinycolor from 'tinycolor2';
-import { useStyles2 } from '@grafana/ui';
+import { Icon, useStyles2 } from '@grafana/ui';
 import { type FunnelData } from 'data';
 import { formatPercentage } from './Percentages';
+import { useTooltip } from './Tooltip';
 
 type Props = {
   from: FunnelData;
@@ -13,21 +14,26 @@ type Props = {
 export function BarGap(props: Props): ReactElement | null {
   const { from, to } = props;
   const styles = useStyles2(getStyles(from, to));
+  const [tooltipId, Tooltip] = useTooltip('bargap');
 
   const toPercentage = to?.percentage ?? 0;
   const fromPercentage = from?.percentage ?? 0;
   const drop = toPercentage / fromPercentage;
-
-  console.log({ drop, to: to?.percentage, from: from.percentage });
 
   if (!Boolean(to)) {
     return null;
   }
 
   return (
-    <div className={styles.barGap}>
-      <div className={styles.percentage}>{formatPercentage(drop)}</div>
-    </div>
+    <>
+      <div className={styles.barGap} data-tooltip-id={tooltipId}>
+        <div className={styles.percentage}>
+          <Icon name="arrow-down" />
+          {' ' + formatPercentage(drop)}
+        </div>
+      </div>
+      <Tooltip>Testing 123</Tooltip>
+    </>
   );
 }
 
@@ -56,6 +62,7 @@ const getStyles = (from: FunnelData, to?: FunnelData) => () => {
       display: 'flex',
       width: `${to.percentage * 100}%`,
       justifyContent: 'center',
+      alignItems: 'center',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
     }),

@@ -2,6 +2,7 @@ import React, { type ReactElement } from 'react';
 import { css } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
 import { type GrafanaTheme2 } from '@grafana/data';
+import { useTooltip } from './Tooltip';
 
 type Props = {
   percentage: number;
@@ -12,11 +13,15 @@ type Props = {
 export function Bar(props: Props): ReactElement {
   const { percentage, value, color } = props;
   const styles = useStyles2(getStyles(color));
+  const [tooltipId, Tooltip] = useTooltip('bar');
 
   return (
-    <div className={styles.bar} style={{ width: `${percentage * 100}%` }}>
-      <p className={styles.text}>{value}</p>
-    </div>
+    <>
+      <div data-tooltip-id={tooltipId} className={styles.bar} style={{ width: `${percentage * 100}%` }}>
+        <p className={styles.text}>{value}</p>
+      </div>
+      <Tooltip>Testing 456</Tooltip>
+    </>
   );
 }
 
