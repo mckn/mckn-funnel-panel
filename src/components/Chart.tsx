@@ -1,5 +1,5 @@
 import React, { type ReactElement, Fragment } from 'react';
-import { type FunnelData } from 'data';
+import { type FunnelData } from '../data/useFunnelData';
 import { css } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
 import { BarGap } from './BarGap';

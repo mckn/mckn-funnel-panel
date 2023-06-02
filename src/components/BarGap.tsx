@@ -2,7 +2,7 @@ import React, { type ReactElement } from 'react';
 import { css } from '@emotion/css';
 import tinycolor from 'tinycolor2';
 import { Icon, IconName, useStyles2 } from '@grafana/ui';
-import { type FunnelData } from 'data';
+import { type FunnelData } from '../data/useFunnelData';
 import { formatPercentage } from './Percentages';
 import { useTooltipProps } from './Tooltip';
 import { BarGapTooltip } from './BarGapTooltip';

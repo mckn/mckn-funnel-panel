@@ -3,7 +3,7 @@ import { css } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
 import { GrafanaTheme2, type PanelProps } from '@grafana/data';
 import { type PanelOptions } from 'types';
-import { useFunnelData } from 'data';
+import { useFunnelData } from '../data/useFunnelData';
 import { PureChart } from './Chart';
 import { PureLabels } from './Labels';
 import { PurePercentages } from './Percentages';
