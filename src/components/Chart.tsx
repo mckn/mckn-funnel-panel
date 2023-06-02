@@ -4,6 +4,7 @@ import { css } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
 import { BarGap } from './BarGap';
 import { Bar } from './Bar';
+import { TooltipProvider } from './Tooltip';
 
 type Props = {
   data: FunnelData[];
@@ -15,12 +16,14 @@ export function Chart(props: Props): ReactElement {
 
   return (
     <div className={styles.chart}>
-      {data.map((d, i) => (
-        <Fragment key={`${d.label}-${d.percentage}`}>
-          <Bar value={d.value} percentage={d.percentage} color={d.color} />
-          <BarGap from={d} to={data[i + 1]} />
-        </Fragment>
-      ))}
+      <TooltipProvider>
+        {data.map((d, i) => (
+          <Fragment key={`${d.label}-${d.percentage}`}>
+            <Bar value={d.value} percentage={d.percentage} color={d.color} />
+            <BarGap from={d} to={data[i + 1]} />
+          </Fragment>
+        ))}
+      </TooltipProvider>
     </div>
   );
 }

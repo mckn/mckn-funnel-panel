@@ -4,7 +4,8 @@ import tinycolor from 'tinycolor2';
 import { Icon, IconName, useStyles2 } from '@grafana/ui';
 import { type FunnelData } from 'data';
 import { formatPercentage } from './Percentages';
-import { useTooltip } from './Tooltip';
+import { useTooltipProps } from './Tooltip';
+import { BarGapTooltip } from './BarGapTooltip';
 
 type Props = {
   from: FunnelData;
@@ -14,27 +15,26 @@ type Props = {
 export function BarGap(props: Props): ReactElement | null {
   const { from, to } = props;
   const styles = useStyles2(getStyles(from, to));
-  const [tooltipId, Tooltip] = useTooltip('bargap');
 
   const toPercentage = to?.percentage ?? 0;
   const fromPercentage = from?.percentage ?? 0;
   const drop = toPercentage / fromPercentage;
   const icon = getIconName(fromPercentage, toPercentage);
+  const tooltipProps = useTooltipProps({
+    content: <BarGapTooltip />,
+  });
 
   if (!Boolean(to)) {
     return null;
   }
 
   return (
-    <>
-      <div className={styles.barGap} data-tooltip-id={tooltipId}>
-        <div className={styles.percentage}>
-          <Icon name={icon} />
-          {' ' + formatPercentage(drop)}
-        </div>
+    <div {...tooltipProps} className={styles.barGap}>
+      <div className={styles.percentage}>
+        <Icon name={icon} />
+        {' ' + formatPercentage(drop)}
       </div>
-      <Tooltip>Testing 123</Tooltip>
-    </>
+    </div>
   );
 }
 

@@ -1,32 +1,67 @@
-import React, { PropsWithChildren, ReactElement, useMemo } from 'react';
+import React, { PropsWithChildren, ReactElement, ReactNode, createContext, useContext, useEffect, useRef } from 'react';
 import { useTheme2 } from '@grafana/ui';
-import { Tooltip } from 'react-tooltip';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
+import { nanoid } from 'nanoid';
 
-export function useTooltip(scope: string): [string, (props: PropsWithChildren) => ReactElement] {
+type TooltipContextType = {
+  id: string;
+};
+
+const TooltipContext = createContext<TooltipContextType | null>(null);
+
+export function TooltipProvider(props: PropsWithChildren): ReactElement {
+  const { children } = props;
   const theme = useTheme2();
-  const { isDark } = theme;
-
-  return useMemo(() => {
-    const id = createTooltipId(`gfp-${scope}`);
-    return [id, (props: PropsWithChildren) => <FunnelTooltip {...props} id={id} isDark={isDark} />];
-  }, [isDark, scope]);
-}
-
-let sequence = 0;
-
-function createTooltipId(prefix: string): string {
-  sequence = sequence + 1;
-  return `${prefix}-${sequence}`;
-}
-
-type Props = PropsWithChildren<{ id: string; isDark: boolean }>;
-
-function FunnelTooltip(props: Props): ReactElement {
-  const { id, isDark, children } = props;
+  const variant = theme.isDark ? 'light' : 'dark';
+  const tooltipRef = useRef(nanoid());
 
   return (
-    <Tooltip id={id} variant={isDark ? 'light' : 'dark'} noArrow={true} float={true}>
+    <TooltipContext.Provider value={{ id: tooltipRef.current }}>
       {children}
-    </Tooltip>
+      <ReactTooltip
+        id={tooltipRef.current}
+        variant={variant}
+        noArrow={true}
+        float={true}
+        place="right"
+        render={({ content }) => {
+          if (content === null) {
+            return null;
+          }
+          return contentRegistry[content];
+        }}
+      />
+    </TooltipContext.Provider>
   );
+}
+
+type TooltipPropsResult = {
+  'data-tooltip-content': string | undefined;
+  'data-tooltip-id': string | undefined;
+};
+
+type TooltipPropsOptions = {
+  content: ReactNode;
+};
+
+const contentRegistry: Record<string, ReactNode> = {};
+
+export function useTooltipProps(options: TooltipPropsOptions): TooltipPropsResult {
+  const { content } = options;
+  const context = useContext(TooltipContext);
+  const contentRef = useRef(nanoid());
+
+  useEffect(() => {
+    const contentId = contentRef.current;
+    contentRegistry[contentId] = content;
+
+    return () => {
+      delete contentRegistry[contentId];
+    };
+  }, [content, contentRef]);
+
+  return {
+    'data-tooltip-id': context?.id,
+    'data-tooltip-content': contentRef.current,
+  };
 }
