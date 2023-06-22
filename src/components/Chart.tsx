@@ -19,7 +19,7 @@ export function Chart(props: Props): ReactElement {
       <TooltipProvider>
         {data.map((d, i) => (
           <Fragment key={`${d.label}-${d.percentage}`}>
-            <Bar value={d.value} percentage={d.percentage} color={d.color} />
+            <Bar value={d.value} percentage={d.percentage} color={d.color} label={d.label} />
             <BarGap from={d} to={data[i + 1]} />
           </Fragment>
         ))}

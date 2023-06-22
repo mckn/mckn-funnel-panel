@@ -1,0 +1,1 @@
+export { formatPercentage } from './formatPercentage';

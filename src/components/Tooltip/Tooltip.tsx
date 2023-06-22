@@ -28,7 +28,7 @@ export function TooltipProvider(props: PropsWithChildren): ReactElement {
           if (content === null) {
             return null;
           }
-          return contentRegistry[content];
+          return contentRegistry[content] ?? null;
         }}
       />
     </TooltipContext.Provider>

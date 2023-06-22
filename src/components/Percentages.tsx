@@ -2,6 +2,7 @@ import React, { type ReactElement } from 'react';
 import { type FunnelData } from '../data/useFunnelData';
 import { css } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
+import { formatPercentage } from '../utils';
 
 type Props = {
   data: FunnelData[];
@@ -20,11 +21,6 @@ export function Percentages(props: Props): ReactElement {
       ))}
     </div>
   );
-}
-
-export function formatPercentage(value: number): string {
-  const raw = value * 100;
-  return `${Math.round((raw + Number.EPSILON) * 100) / 100}%`;
 }
 
 export const PurePercentages = React.memo(Percentages);

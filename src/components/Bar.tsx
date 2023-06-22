@@ -2,20 +2,20 @@ import React, { type ReactElement } from 'react';
 import { css } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
 import { type GrafanaTheme2 } from '@grafana/data';
-import { useTooltipProps } from './Tooltip';
-import { BarTooltip } from './BarTooltip';
+import { BarTooltip, useTooltipProps } from './Tooltip';
 
 type Props = {
   percentage: number;
   value: number;
   color: string;
+  label: string;
 };
 
 export function Bar(props: Props): ReactElement {
-  const { percentage, value, color } = props;
+  const { percentage, value, color, label } = props;
   const styles = useStyles2(getStyles(color));
   const tooltipProps = useTooltipProps({
-    content: <BarTooltip />,
+    content: <BarTooltip label={label} value={value} percentage={percentage} />,
   });
 
   return (

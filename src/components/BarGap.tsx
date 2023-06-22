@@ -3,9 +3,8 @@ import { css } from '@emotion/css';
 import tinycolor from 'tinycolor2';
 import { Icon, IconName, useStyles2 } from '@grafana/ui';
 import { type FunnelData } from '../data/useFunnelData';
-import { formatPercentage } from './Percentages';
-import { useTooltipProps } from './Tooltip';
-import { BarGapTooltip } from './BarGapTooltip';
+import { formatPercentage } from '../utils';
+import { useTooltipProps, BarGapTooltip } from './Tooltip';
 
 type Props = {
   from: FunnelData;
@@ -21,7 +20,7 @@ export function BarGap(props: Props): ReactElement | null {
   const drop = toPercentage / fromPercentage;
   const icon = getIconName(fromPercentage, toPercentage);
   const tooltipProps = useTooltipProps({
-    content: <BarGapTooltip />,
+    content: <BarGapTooltip drop={drop} fromLabel={from.label} toLabel={to?.label} />,
   });
 
   if (!Boolean(to)) {
