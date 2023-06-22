@@ -10,16 +10,24 @@ import { PurePercentages } from './Percentages';
 
 export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   const { width, height, data } = props;
-  const funnelData = useFunnelData(data.series);
+  const { data: funnelData, status } = useFunnelData(data.series);
   const styles = useStyles2(getStyles(width, height));
 
-  return (
-    <div className={styles.container}>
-      <PureLabels data={funnelData} />
-      <PureChart data={funnelData} />
-      <PurePercentages data={funnelData} />
-    </div>
-  );
+  switch (status) {
+    case 'unsupported':
+      <div className={styles.container}>unsupported</div>;
+    case 'error':
+      <div className={styles.container}>error</div>;
+
+    default:
+      return (
+        <div className={styles.container}>
+          <PureLabels data={funnelData} />
+          <PureChart data={funnelData} />
+          <PurePercentages data={funnelData} />
+        </div>
+      );
+  }
 }
 
 const getStyles = (width: number, height: number) => (theme: GrafanaTheme2) => {

@@ -3,7 +3,7 @@ import { DataFrame, FieldType, getFieldSeriesColor } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
 
 export type FunnelDataResult = {
-  data: FunnelData;
+  data: FunnelData[];
   status: 'error' | 'unsupported' | 'success';
 };
 
@@ -14,7 +14,7 @@ export type FunnelData = {
   color: string;
 };
 
-export function useFunnelData(data: DataFrame[]): FunnelData[] {
+export function useFunnelData(data: DataFrame[]): FunnelDataResult {
   const theme = useTheme2();
 
   return useMemo(() => {
@@ -42,12 +42,22 @@ export function useFunnelData(data: DataFrame[]): FunnelData[] {
       }
     }
 
+    if (result.length === 0 && data.length > 0) {
+      return {
+        data: result,
+        status: 'unsupported',
+      };
+    }
+
     const sorted = result.sort((a, b) => b.value - a.value);
     const max = sorted[0];
 
-    return sorted.map((s) => {
-      s.percentage = s.value / max.value;
-      return s;
-    });
+    return {
+      data: sorted.map((s) => {
+        s.percentage = s.value / max.value;
+        return s;
+      }),
+      status: 'success',
+    };
   }, [data, theme]);
 }
