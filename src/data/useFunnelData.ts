@@ -1,15 +1,32 @@
 import { useMemo } from 'react';
-import { type GetFieldDisplayValuesOptions, getFieldDisplayValues, type DisplayValue } from '@grafana/data';
+import {
+  type GetFieldDisplayValuesOptions,
+  getFieldDisplayValues,
+  type DisplayValue,
+  type DataFrame,
+} from '@grafana/data';
+
+export enum FunnelDataResultStatus {
+  unsupported,
+  success,
+}
 
 export type FunnelDataResult = {
   values: DisplayValue[];
-  status: 'error' | 'unsupported' | 'success';
+  status: FunnelDataResultStatus;
 };
 
 export function useFunnelData(options: Omit<GetFieldDisplayValuesOptions, 'reduceOptions'>): FunnelDataResult {
   const { theme, data, fieldConfig, replaceVariables, timeZone } = options;
 
   return useMemo(() => {
+    if (!isSupported(data)) {
+      return {
+        values: [],
+        status: FunnelDataResultStatus.unsupported,
+      };
+    }
+
     const values = getFieldDisplayValues({
       fieldConfig: fieldConfig,
       reduceOptions: { calcs: [] },
@@ -17,18 +34,13 @@ export function useFunnelData(options: Omit<GetFieldDisplayValuesOptions, 'reduc
       theme: theme,
       data: data,
       timeZone,
-    }).map((v) => v.display);
+    });
 
-    if (values.length === 0) {
-      return {
-        values: [],
-        status: 'unsupported',
-      };
-    }
+    const displayValues = values.map((v) => v.display);
 
     return {
-      values: sortValues(values),
-      status: 'success',
+      values: sortValues(displayValues),
+      status: FunnelDataResultStatus.success,
     };
   }, [theme, data, fieldConfig, replaceVariables, timeZone]);
 }
@@ -40,4 +52,16 @@ function sortValues(values: DisplayValue[]): DisplayValue[] {
 
     return bp - ap;
   });
+}
+
+function isSupported(data?: DataFrame[]): boolean {
+  if (!data) {
+    return false;
+  }
+
+  const noOfFields = data.reduce((count, frame) => {
+    return count + frame.fields.length;
+  }, 0);
+
+  return noOfFields > 1;
 }

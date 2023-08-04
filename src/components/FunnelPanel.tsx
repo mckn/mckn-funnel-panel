@@ -3,10 +3,11 @@ import { css } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { GrafanaTheme2, type PanelProps } from '@grafana/data';
 import { type PanelOptions } from 'types';
-import { useFunnelData } from '../data/useFunnelData';
+import { FunnelDataResultStatus, useFunnelData } from '../data/useFunnelData';
 import { PureChart } from './Chart';
 import { PureLabels } from './Labels';
 import { PurePercentages } from './Percentages';
+import { PureUnsupported } from './Unsupported';
 
 export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   const { width, height, data, fieldConfig, replaceVariables, timeZone } = props;
@@ -14,19 +15,20 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   const styles = useStyles2(getStyles(width, height));
 
   const { values, status } = useFunnelData({
-    fieldConfig: fieldConfig,
+    fieldConfig,
     replaceVariables,
-    theme: theme,
+    theme,
     data: data.series,
     timeZone,
   });
 
   switch (status) {
-    case 'unsupported':
-      <div className={styles.container}>unsupported</div>;
-    case 'error':
-      <div className={styles.container}>error</div>;
-
+    case FunnelDataResultStatus.unsupported:
+      return (
+        <div className={styles.container}>
+          <PureUnsupported />
+        </div>
+      );
     default:
       return (
         <div className={styles.container}>

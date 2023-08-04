@@ -3,6 +3,7 @@ import { FunnelPanel } from 'components/FunnelPanel';
 import { type PanelOptions } from './types';
 
 export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel).useFieldConfig({
+  disableStandardOptions: [FieldConfigProperty.NoValue, FieldConfigProperty.Thresholds, FieldConfigProperty.Links],
   standardOptions: {
     [FieldConfigProperty.Color]: {
       settings: {
@@ -13,6 +14,9 @@ export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel).useFieldConfig(
       defaultValue: {
         mode: FieldColorModeId.ContinuousGrYlRd,
       },
+    },
+    [FieldConfigProperty.Min]: {
+      defaultValue: 0,
     },
   },
 });
