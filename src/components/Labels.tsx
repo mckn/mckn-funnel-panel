@@ -1,21 +1,22 @@
 import React, { type ReactElement } from 'react';
-import { type FunnelData } from '../data/useFunnelData';
 import { css } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
+import { type DisplayValue } from '@grafana/data';
+import { getDisplayValueKey } from 'utils';
 
 type Props = {
-  data: FunnelData[];
+  values: DisplayValue[];
 };
 
 export function Labels(props: Props): ReactElement {
-  const { data } = props;
+  const { values } = props;
   const styles = useStyles2(getStyles);
 
   return (
     <div className={styles.container}>
-      {data.map((d, i) => (
-        <div className={styles.label} key={d.label}>
-          {d.label}
+      {values.map((v) => (
+        <div className={styles.label} key={getDisplayValueKey(v)}>
+          {v.title}
         </div>
       ))}
     </div>

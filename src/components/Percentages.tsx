@@ -1,22 +1,22 @@
 import React, { type ReactElement } from 'react';
-import { type FunnelData } from '../data/useFunnelData';
 import { css } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
-import { formatPercentage } from '../utils';
+import { formatPercentage, getDisplayValueKey } from '../utils';
+import { type DisplayValue } from '@grafana/data';
 
 type Props = {
-  data: FunnelData[];
+  values: DisplayValue[];
 };
 
 export function Percentages(props: Props): ReactElement {
-  const { data } = props;
+  const { values } = props;
   const styles = useStyles2(getStyles);
 
   return (
     <div className={styles.container}>
-      {data.map((d, i) => (
-        <div className={styles.percentage} key={d.percentage}>
-          {formatPercentage(d.percentage)}
+      {values.map((v) => (
+        <div className={styles.percentage} key={getDisplayValueKey(v)}>
+          {formatPercentage(v.percent ?? 0)}
         </div>
       ))}
     </div>

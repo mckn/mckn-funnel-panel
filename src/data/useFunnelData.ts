@@ -1,63 +1,43 @@
 import { useMemo } from 'react';
-import { DataFrame, FieldType, getFieldSeriesColor } from '@grafana/data';
-import { useTheme2 } from '@grafana/ui';
+import { type GetFieldDisplayValuesOptions, getFieldDisplayValues, type DisplayValue } from '@grafana/data';
 
 export type FunnelDataResult = {
-  data: FunnelData[];
+  values: DisplayValue[];
   status: 'error' | 'unsupported' | 'success';
 };
 
-export type FunnelData = {
-  label: string;
-  value: number;
-  percentage: number;
-  color: string;
-};
-
-export function useFunnelData(data: DataFrame[]): FunnelDataResult {
-  const theme = useTheme2();
+export function useFunnelData(options: Omit<GetFieldDisplayValuesOptions, 'reduceOptions'>): FunnelDataResult {
+  const { theme, data, fieldConfig, replaceVariables, timeZone } = options;
 
   return useMemo(() => {
-    const result: FunnelData[] = [];
+    const values = getFieldDisplayValues({
+      fieldConfig: fieldConfig,
+      reduceOptions: { calcs: [] },
+      replaceVariables,
+      theme: theme,
+      data: data,
+      timeZone,
+    }).map((v) => v.display);
 
-    for (const frame of data) {
-      const labelField = frame.fields.find((f) => f.type === FieldType.string);
-      const valueField = frame.fields.find((f) => f.type === FieldType.number);
-
-      if (!labelField || !valueField) {
-        continue;
-      }
-
-      for (let i = 0; i < frame.length; i++) {
-        const value = valueField.values.get(i);
-        const label = labelField.values.get(i);
-        const color = getFieldSeriesColor(valueField, theme);
-
-        result.push({
-          label,
-          value,
-          percentage: 0,
-          color: color.color,
-        });
-      }
-    }
-
-    if (result.length === 0 && data.length > 0) {
+    if (values.length === 0) {
       return {
-        data: result,
+        values: [],
         status: 'unsupported',
       };
     }
 
-    const sorted = result.sort((a, b) => b.value - a.value);
-    const max = sorted[0];
-
     return {
-      data: sorted.map((s) => {
-        s.percentage = s.value / max.value;
-        return s;
-      }),
+      values: sortValues(values),
       status: 'success',
     };
-  }, [data, theme]);
+  }, [theme, data, fieldConfig, replaceVariables, timeZone]);
+}
+
+function sortValues(values: DisplayValue[]): DisplayValue[] {
+  return values.sort((a, b) => {
+    const ap = a.percent ?? 0;
+    const bp = b.percent ?? 0;
+
+    return bp - ap;
+  });
 }

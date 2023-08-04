@@ -38,6 +38,7 @@
             "mode": "continuous-GrYlRd"
           },
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -106,6 +107,12 @@
         }
       ],
       "title": "Funnel - one query with full values",
+      "transformations": [
+        {
+          "id": "rowsToFields",
+          "options": {}
+        }
+      ],
       "type": "mckn-funnel-panel"
     },
     {
@@ -119,6 +126,7 @@
             "mode": "palette-classic"
           },
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -157,17 +165,10 @@
                 "values": [
                   52000
                 ]
-              },
-              {
-                "config": {},
-                "name": "Name",
-                "type": "string",
-                "values": [
-                  "Sent"
-                ]
               }
             ],
-            "meta": {}
+            "meta": {},
+            "name": "Sent"
           },
           "refId": "A"
         },
@@ -185,17 +186,10 @@
                 "values": [
                   15690
                 ]
-              },
-              {
-                "config": {},
-                "name": "Name",
-                "type": "string",
-                "values": [
-                  "Viewed"
-                ]
               }
             ],
-            "meta": {}
+            "meta": {},
+            "name": "Viewed"
           },
           "hide": false,
           "refId": "B"
@@ -214,17 +208,10 @@
                 "values": [
                   35678
                 ]
-              },
-              {
-                "config": {},
-                "name": "Name",
-                "type": "string",
-                "values": [
-                  "Clicked"
-                ]
               }
             ],
-            "meta": {}
+            "meta": {},
+            "name": "Clicked"
           },
           "hide": false,
           "refId": "C"
@@ -243,17 +230,10 @@
                 "values": [
                   5596
                 ]
-              },
-              {
-                "config": {},
-                "name": "Name",
-                "type": "string",
-                "values": [
-                  "Added to cart"
-                ]
               }
             ],
-            "meta": {}
+            "meta": {},
+            "name": "Added to cart"
           },
           "hide": false,
           "refId": "D"
@@ -272,17 +252,10 @@
                 "values": [
                   3290
                 ]
-              },
-              {
-                "config": {},
-                "name": "Name",
-                "type": "string",
-                "values": [
-                  "Purchased"
-                ]
               }
             ],
-            "meta": {}
+            "meta": {},
+            "name": "Purchased"
           },
           "hide": false,
           "refId": "E"
@@ -292,7 +265,8 @@
       "type": "mckn-funnel-panel"
     }
   ],
-  "schemaVersion": 37,
+  "refresh": "",
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {

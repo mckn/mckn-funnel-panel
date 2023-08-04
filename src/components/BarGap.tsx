@@ -2,25 +2,25 @@ import React, { type ReactElement } from 'react';
 import { css } from '@emotion/css';
 import tinycolor from 'tinycolor2';
 import { Icon, IconName, useStyles2 } from '@grafana/ui';
-import { type FunnelData } from '../data/useFunnelData';
 import { formatPercentage } from '../utils';
 import { useTooltipProps, BarGapTooltip } from './Tooltip';
+import { type DisplayValue } from '@grafana/data';
 
 type Props = {
-  from: FunnelData;
-  to?: FunnelData;
+  from: DisplayValue;
+  to?: DisplayValue;
 };
 
 export function BarGap(props: Props): ReactElement | null {
   const { from, to } = props;
   const styles = useStyles2(getStyles(from, to));
 
-  const toPercentage = to?.percentage ?? 0;
-  const fromPercentage = from?.percentage ?? 0;
+  const toPercentage = to?.percent ?? 0;
+  const fromPercentage = from?.percent ?? 0;
   const drop = toPercentage / fromPercentage;
   const icon = getIconName(fromPercentage, toPercentage);
   const tooltipProps = useTooltipProps({
-    content: <BarGapTooltip drop={drop} fromLabel={from.label} toLabel={to?.label} />,
+    content: <BarGapTooltip drop={drop} fromLabel={from.title ?? ''} toLabel={to?.title} />,
   });
 
   if (!Boolean(to)) {
@@ -47,15 +47,17 @@ function getIconName(from: number, to: number): IconName {
   return 'arrow-right';
 }
 
-const getStyles = (from: FunnelData, to?: FunnelData) => () => {
+const getStyles = (from: DisplayValue, to?: DisplayValue) => () => {
   if (!to) {
     return {};
   }
 
+  const toPercent = to.percent ?? 0;
+  const fromPercent = from.percent ?? 0;
   const color = tinycolor(from.color).darken(15).toHexString();
-  const topLeft = 100 * ((1 - from.percentage) / 2);
+  const topLeft = 100 * ((1 - fromPercent) / 2);
   const topRight = 100 - topLeft;
-  const bottomLeft = 100 * ((1 - to.percentage) / 2);
+  const bottomLeft = 100 * ((1 - toPercent) / 2);
   const bottomRight = 100 - bottomLeft;
 
   return {
@@ -70,7 +72,7 @@ const getStyles = (from: FunnelData, to?: FunnelData) => () => {
     }),
     percentage: css({
       display: 'flex',
-      width: `${to.percentage * 100}%`,
+      width: `${toPercent * 100}%`,
       justifyContent: 'center',
       alignItems: 'center',
       textOverflow: 'ellipsis',
