@@ -5,7 +5,7 @@
   "id": "mckn-funnel-panel",
   "info": {
     "keywords": ["panel"],
-    "description": "Create funnel charts",
+    "description": "Visualize how data moves through a process",
     "author": {
       "name": "mckn"
     },
@@ -16,14 +16,17 @@
     "links": [
       {
         "name": "Website",
-        "url": "https://github.com/grafana/grafana-starter-panel"
+        "url": "https://github.com/mckn/grafana-funnel-panel"
       },
       {
         "name": "License",
-        "url": "https://github.com/grafana/grafana-starter-panel/blob/master/LICENSE"
+        "url": "https://github.com/mckn/grafana-funnel-panel/blob/master/LICENSE"
       }
     ],
-    "screenshots": [],
+    "screenshots": [{
+      "name": "Overview",
+      "path": "img/panel.png"
+    }],
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },
