@@ -7,7 +7,8 @@ import { FunnelDataResultStatus, useFunnelData } from '../data/useFunnelData';
 import { PureChart } from './Chart';
 import { PureLabels } from './Labels';
 import { PurePercentages } from './Percentages';
-import { PureUnsupported } from './Unsupported';
+import { Unsupported } from './Unsupported';
+import { Nodata } from './Nodata';
 
 export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   const { width, height, data, fieldConfig, replaceVariables, timeZone } = props;
@@ -23,10 +24,16 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   });
 
   switch (status) {
+    case FunnelDataResultStatus.nodata:
+      return (
+        <div className={styles.container}>
+          <Nodata />
+        </div>
+      );
     case FunnelDataResultStatus.unsupported:
       return (
         <div className={styles.container}>
-          <PureUnsupported />
+          <Unsupported />
         </div>
       );
     default:

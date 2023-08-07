@@ -4,10 +4,12 @@ import {
   getFieldDisplayValues,
   type DisplayValue,
   type DataFrame,
+  FieldType,
 } from '@grafana/data';
 
 export enum FunnelDataResultStatus {
   unsupported,
+  nodata,
   success,
 }
 
@@ -20,6 +22,13 @@ export function useFunnelData(options: Omit<GetFieldDisplayValuesOptions, 'reduc
   const { theme, data, fieldConfig, replaceVariables, timeZone } = options;
 
   return useMemo(() => {
+    if (noData(data)) {
+      return {
+        values: [],
+        status: FunnelDataResultStatus.nodata,
+      };
+    }
+
     if (!isSupported(data)) {
       return {
         values: [],
@@ -55,13 +64,20 @@ function sortValues(values: DisplayValue[]): DisplayValue[] {
 }
 
 function isSupported(data?: DataFrame[]): boolean {
-  if (!data) {
+  if (!data || data.length === 0) {
     return false;
   }
 
-  const noOfFields = data.reduce((count, frame) => {
-    return count + frame.fields.length;
-  }, 0);
+  return data.every((d) => {
+    const field = d.fields.find((f) => {
+      return f.type === FieldType.number;
+    });
 
-  return noOfFields > 1;
+    console.log({ field });
+    return Boolean(field);
+  });
+}
+
+function noData(data?: DataFrame[]): boolean {
+  return !data || data.length === 0;
 }

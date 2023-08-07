@@ -1,5 +1,5 @@
 import { formatPercentage } from '../../utils';
-import React, { ReactElement } from 'react';
+import React, { type ReactElement } from 'react';
 
 type Props = {
   percentage: number;

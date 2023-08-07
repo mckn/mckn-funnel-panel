@@ -1,4 +1,12 @@
-import React, { PropsWithChildren, ReactElement, ReactNode, createContext, useContext, useEffect, useRef } from 'react';
+import React, {
+  type PropsWithChildren,
+  type ReactElement,
+  type ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react';
 import { useTheme2 } from '@grafana/ui';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { nanoid } from 'nanoid';

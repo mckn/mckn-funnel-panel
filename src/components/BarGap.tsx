@@ -1,7 +1,7 @@
 import React, { type ReactElement } from 'react';
 import { css } from '@emotion/css';
 import tinycolor from 'tinycolor2';
-import { Icon, IconName, useStyles2 } from '@grafana/ui';
+import { Icon, type IconName, useStyles2 } from '@grafana/ui';
 import { formatPercentage } from '../utils';
 import { useTooltipProps, BarGapTooltip } from './Tooltip';
 import { type DisplayValue } from '@grafana/data';
