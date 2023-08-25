@@ -38,6 +38,7 @@ const getStyles = () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'end',
+      textAlign: 'right',
     }),
   };
 };
