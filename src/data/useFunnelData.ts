@@ -73,7 +73,6 @@ function isSupported(data?: DataFrame[]): boolean {
       return f.type === FieldType.number;
     });
 
-    console.log({ field });
     return Boolean(field);
   });
 }
