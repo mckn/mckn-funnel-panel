@@ -14,7 +14,7 @@
     "e2e:update": "yarn cypress install && yarn grafana-e2e run --update-screenshots",
     "server": "docker-compose up --build"
   },
-  "author": "Mckn",
+  "author": "mckn",
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/core": "^7.16.7",
