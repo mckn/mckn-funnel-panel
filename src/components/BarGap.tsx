@@ -4,7 +4,7 @@ import tinycolor from 'tinycolor2';
 import { Icon, type IconName, useStyles2 } from '@grafana/ui';
 import { formatPercentage } from '../utils';
 import { useTooltipProps, BarGapTooltip } from './Tooltip';
-import { type DisplayValue } from '@grafana/data';
+import { GrafanaTheme2, type DisplayValue } from '@grafana/data';
 
 type Props = {
   from: DisplayValue;
@@ -48,7 +48,7 @@ function getIconName(from: number, to: number): IconName {
   return 'arrow-right';
 }
 
-const getStyles = (from: DisplayValue, to?: DisplayValue) => () => {
+const getStyles = (from: DisplayValue, to?: DisplayValue) => (theme: GrafanaTheme2) => {
   if (!to) {
     return {};
   }
@@ -79,6 +79,7 @@ const getStyles = (from: DisplayValue, to?: DisplayValue) => () => {
     percentage: css({
       display: 'flex',
       position: 'absolute',
+      color: theme.colors.text.maxContrast,
       width: `${toPercent * 100}%`,
       justifyContent: 'center',
       alignItems: 'center',
