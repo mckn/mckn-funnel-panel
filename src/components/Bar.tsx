@@ -41,7 +41,6 @@ const getStyles = (color: string) => (theme: GrafanaTheme2) => {
       paddingRight: '5px',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
-      overflow: 'hidden',
     }),
   };
 };

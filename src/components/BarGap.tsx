@@ -28,7 +28,8 @@ export function BarGap(props: Props): ReactElement | null {
   }
 
   return (
-    <div {...tooltipProps} className={styles.barGap}>
+    <div {...tooltipProps} className={styles.container}>
+      <div className={styles.barGap} />
       <div className={styles.percentage}>
         <Icon name={icon} />
         {' ' + formatPercentage(drop)}
@@ -61,21 +62,26 @@ const getStyles = (from: DisplayValue, to?: DisplayValue) => () => {
   const bottomRight = 100 - bottomLeft;
 
   return {
-    barGap: css({
+    container: css({
+      position: 'relative',
       display: 'flex',
-      backgroundColor: color,
-      flexGrow: 1,
-      clipPath: `polygon(${topLeft}% 0%, ${topRight}% 0%, ${bottomRight}% 100%, ${bottomLeft}% 100%)`,
+      flexGrow: 2,
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
     }),
+    barGap: css({
+      width: '100%',
+      height: '100%',
+      backgroundColor: color,
+      clipPath: `polygon(${topLeft}% 0%, ${topRight}% 0%, ${bottomRight}% 100%, ${bottomLeft}% 100%)`,
+    }),
     percentage: css({
       display: 'flex',
+      position: 'absolute',
       width: `${toPercent * 100}%`,
       justifyContent: 'center',
       alignItems: 'center',
-      textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
     }),
   };
