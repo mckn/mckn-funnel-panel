@@ -4,7 +4,7 @@ import tinycolor from 'tinycolor2';
 import { Icon, type IconName, useStyles2 } from '@grafana/ui';
 import { formatPercentage } from '../utils';
 import { useTooltipProps, BarGapTooltip } from './Tooltip';
-import { type DisplayValue } from '@grafana/data';
+import { GrafanaTheme2, type DisplayValue } from '@grafana/data';
 
 type Props = {
   from: DisplayValue;
@@ -28,7 +28,8 @@ export function BarGap(props: Props): ReactElement | null {
   }
 
   return (
-    <div {...tooltipProps} className={styles.barGap}>
+    <div {...tooltipProps} className={styles.container}>
+      <div className={styles.barGap} />
       <div className={styles.percentage}>
         <Icon name={icon} />
         {' ' + formatPercentage(drop)}
@@ -47,7 +48,7 @@ function getIconName(from: number, to: number): IconName {
   return 'arrow-right';
 }
 
-const getStyles = (from: DisplayValue, to?: DisplayValue) => () => {
+const getStyles = (from: DisplayValue, to?: DisplayValue) => (theme: GrafanaTheme2) => {
   if (!to) {
     return {};
   }
@@ -61,21 +62,27 @@ const getStyles = (from: DisplayValue, to?: DisplayValue) => () => {
   const bottomRight = 100 - bottomLeft;
 
   return {
-    barGap: css({
+    container: css({
+      position: 'relative',
       display: 'flex',
-      backgroundColor: color,
-      flexGrow: 1,
-      clipPath: `polygon(${topLeft}% 0%, ${topRight}% 0%, ${bottomRight}% 100%, ${bottomLeft}% 100%)`,
+      flexGrow: 2,
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
     }),
+    barGap: css({
+      width: '100%',
+      height: '100%',
+      backgroundColor: color,
+      clipPath: `polygon(${topLeft}% 0%, ${topRight}% 0%, ${bottomRight}% 100%, ${bottomLeft}% 100%)`,
+    }),
     percentage: css({
       display: 'flex',
+      position: 'absolute',
+      color: theme.colors.text.maxContrast,
       width: `${toPercent * 100}%`,
       justifyContent: 'center',
       alignItems: 'center',
-      textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
     }),
   };
