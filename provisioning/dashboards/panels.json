@@ -60,9 +60,7 @@
                 "config": {},
                 "name": "Text",
                 "type": "string",
-                "values": [
-                  "asdfasdf"
-                ]
+                "values": ["asdfasdf"]
               }
             ],
             "meta": {},
@@ -174,7 +172,7 @@
         "x": 0,
         "y": 8
       },
-      "id": 2,
+      "id": 7,
       "options": {
         "seriesCountSize": "sm",
         "showSeriesCount": false,
@@ -192,25 +190,13 @@
                 "config": {},
                 "name": "Label",
                 "type": "string",
-                "values": [
-                  "Sent",
-                  "Viewed",
-                  "Clicked",
-                  "Add to cart",
-                  "Purchased"
-                ]
+                "values": ["Sent", "Viewed", "Clicked", "Add to cart", "Purchased"]
               },
               {
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [
-                  52300,
-                  35679,
-                  15690,
-                  5596,
-                  3290
-                ]
+                "values": [52300, 35679, 15690, 5596, 3290]
               }
             ],
             "meta": {},
@@ -262,9 +248,7 @@
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [
-                  52000
-                ]
+                "values": [52000]
               }
             ],
             "meta": {},
@@ -283,9 +267,7 @@
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [
-                  15690
-                ]
+                "values": [15690]
               }
             ],
             "meta": {},
@@ -305,9 +287,7 @@
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [
-                  35678
-                ]
+                "values": [35678]
               }
             ],
             "meta": {},
@@ -327,9 +307,7 @@
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [
-                  5596
-                ]
+                "values": [5596]
               }
             ],
             "meta": {},
@@ -349,9 +327,7 @@
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [
-                  3
-                ]
+                "values": [3]
               }
             ],
             "meta": {},
@@ -363,6 +339,69 @@
       ],
       "title": "Funnel - multiple queries",
       "type": "mckn-funnel-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "vHsj2qbVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "min": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 11,
+        "x": 0,
+        "y": 31
+      },
+      "id": 2,
+      "options": {
+        "seriesCountSize": "sm",
+        "showSeriesCount": false,
+        "text": "Default value of text input option"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Label",
+                "type": "string",
+                "values": ["Viewed", "Clicked", "Add to cart", "Purchased"]
+              },
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [11, 1, 1, 0]
+              }
+            ],
+            "meta": {},
+            "name": "Sent"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Funnel - verify drop between bars",
+      "transformations": [
+        {
+          "id": "rowsToFields",
+          "options": {}
+        }
+      ],
+      "type": "mckn-funnel-panel"
     }
   ],
   "refresh": "",
@@ -373,7 +412,7 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
