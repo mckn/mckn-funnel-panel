@@ -51,6 +51,9 @@ jobs:
       - name: Start grafana docker
         run: yarn server -d
 
+      - name: Setup playwright browser
+        run: npx playwright install --with-deps chromium
+
       - name: Run e2e tests
         run: yarn e2e
 
