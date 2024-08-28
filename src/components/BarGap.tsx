@@ -9,6 +9,7 @@ import { GrafanaTheme2, type DisplayValue } from '@grafana/data';
 type Props = {
   from: DisplayValue;
   to?: DisplayValue;
+  'data-testid'?: string;
 };
 
 export function BarGap(props: Props): ReactElement | null {
@@ -28,7 +29,7 @@ export function BarGap(props: Props): ReactElement | null {
   }
 
   return (
-    <div {...tooltipProps} className={styles.container}>
+    <div {...tooltipProps} className={styles.container} data-testid={props['data-testid']}>
       <div className={styles.barGap} />
       <div className={styles.percentage}>
         <Icon name={icon} />

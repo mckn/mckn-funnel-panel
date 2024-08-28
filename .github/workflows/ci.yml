@@ -51,11 +51,14 @@ jobs:
       - name: Start grafana docker
         run: yarn server -d
 
+      - name: Setup playwright browser
+        run: npx playwright install --with-deps chromium
+
       - name: Run e2e tests
         run: yarn e2e
 
       - name: stop grafana docker
-        run: docker-compose down
+        run: docker compose down
 
       - name: Check for backend
         id: check-for-backend
