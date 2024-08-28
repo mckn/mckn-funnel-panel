@@ -55,7 +55,8 @@ const getStyles = (from: DisplayValue, to?: DisplayValue) => (theme: GrafanaThem
 
   const toPercent = to.percent ?? 0;
   const fromPercent = from.percent ?? 0;
-  const color = tinycolor(from.color).darken(15).toHexString();
+  const bgColor = tinycolor(from.color).darken(15).toHexString();
+  const textColor = theme.colors.getContrastText(bgColor);
   const topLeft = 100 * ((1 - fromPercent) / 2);
   const topRight = 100 - topLeft;
   const bottomLeft = 100 * ((1 - toPercent) / 2);
@@ -73,13 +74,13 @@ const getStyles = (from: DisplayValue, to?: DisplayValue) => (theme: GrafanaThem
     barGap: css({
       width: '100%',
       height: '100%',
-      backgroundColor: color,
+      backgroundColor: bgColor,
       clipPath: `polygon(${topLeft}% 0%, ${topRight}% 0%, ${bottomRight}% 100%, ${bottomLeft}% 100%)`,
     }),
     percentage: css({
       display: 'flex',
       position: 'absolute',
-      color: theme.colors.text.maxContrast,
+      color: textColor,
       width: `${toPercent * 100}%`,
       justifyContent: 'center',
       alignItems: 'center',

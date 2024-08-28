@@ -25,18 +25,20 @@ export function Bar(props: Props): ReactElement {
   );
 }
 
-const getStyles = (color: string) => (theme: GrafanaTheme2) => {
+const getStyles = (bgColor: string) => (theme: GrafanaTheme2) => {
+  const textColor = theme.colors.getContrastText(bgColor, 1.5);
+
   return {
     bar: css({
       flexGrow: 2,
-      backgroundColor: color,
+      backgroundColor: bgColor,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
     }),
     text: css({
       margin: 0,
-      color: theme.colors.text.maxContrast,
+      color: textColor,
       paddingLeft: '5px',
       paddingRight: '5px',
       textOverflow: 'ellipsis',
