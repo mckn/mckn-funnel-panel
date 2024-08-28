@@ -14,8 +14,8 @@ export function Labels(props: Props): ReactElement {
 
   return (
     <div className={styles.container}>
-      {values.map((v) => (
-        <div className={styles.label} key={getDisplayValueKey(v)}>
+      {values.map((v, i) => (
+        <div className={styles.label} key={getDisplayValueKey(v)} data-testid={`label-${i}`}>
           {v.title}
         </div>
       ))}

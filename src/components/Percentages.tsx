@@ -14,8 +14,8 @@ export function Percentages(props: Props): ReactElement {
 
   return (
     <div className={styles.container}>
-      {values.map((v) => (
-        <div className={styles.percentage} key={getDisplayValueKey(v)}>
+      {values.map((v, i) => (
+        <div className={styles.percentage} key={getDisplayValueKey(v)} data-testid={`percentage-${i}`}>
           {formatPercentage(v.percent ?? 0)}
         </div>
       ))}

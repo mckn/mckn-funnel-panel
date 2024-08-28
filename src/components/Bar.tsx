@@ -6,6 +6,7 @@ import { BarTooltip, useTooltipProps } from './Tooltip';
 
 type Props = {
   value: DisplayValue;
+  'data-testid'?: string;
 };
 
 export function Bar(props: Props): ReactElement {
@@ -17,7 +18,12 @@ export function Bar(props: Props): ReactElement {
   });
 
   return (
-    <div {...tooltipProps} className={styles.bar} style={{ width: `${percent * 100}%` }}>
+    <div
+      {...tooltipProps}
+      className={styles.bar}
+      style={{ width: `${percent * 100}%` }}
+      data-testid={props['data-testid']}
+    >
       <p className={styles.text}>
         <FormattedValueDisplay value={value} />
       </p>

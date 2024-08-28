@@ -20,8 +20,8 @@ export function Chart(props: Props): ReactElement {
       <TooltipProvider>
         {values.map((v, i) => (
           <Fragment key={getDisplayValueKey(v)}>
-            <Bar value={v} />
-            <BarGap from={v} to={values[i + 1]} />
+            <Bar value={v} data-testid={`bar-${i}`} />
+            <BarGap from={v} to={values[i + 1]} data-testid={`gap-${i}`} />
           </Fragment>
         ))}
       </TooltipProvider>
