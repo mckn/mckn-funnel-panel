@@ -32,6 +32,7 @@
     "@types/node": "^20.8.7",
     "@types/react-router-dom": "^5.2.0",
     "@types/testing-library__jest-dom": "5.14.8",
+    "@types/tinycolor2": "^1.4.6",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
     "eslint-plugin-deprecation": "^2.0.0",
