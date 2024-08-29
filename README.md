@@ -37,8 +37,8 @@ git clone git@github.com:mckn/mckn-funnel-panel.git
 cd mckn-funnel-panel
 
 # Install dependencies and build the plugin.
-yarn install
-yarn run dev
+npm install
+npm run dev
 
 # Start a local instance of Grafana with a provisioned dashboard.
 docker-compose up

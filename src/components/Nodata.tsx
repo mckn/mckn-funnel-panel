@@ -1,15 +1,15 @@
 import { css } from '@emotion/css';
 import { type GrafanaTheme2 } from '@grafana/data';
-import { HorizontalGroup, useStyles2 } from '@grafana/ui';
+import { Stack, useStyles2 } from '@grafana/ui';
 import React, { type ReactElement } from 'react';
 
 export function Nodata(): ReactElement {
   const styles = useStyles2(getStyles);
 
   return (
-    <HorizontalGroup justify="center" align="center">
+    <Stack justifyContent="center" alignItems="center">
       <p className={styles.text}>No data</p>
-    </HorizontalGroup>
+    </Stack>
   );
 }
 
