@@ -1,15 +1,16 @@
 import { css } from '@emotion/css';
 import { type GrafanaTheme2 } from '@grafana/data';
-import { Stack, useStyles2 } from '@grafana/ui';
+import { useStyles2 } from '@grafana/ui';
 import React, { type ReactElement } from 'react';
+import { Center } from './Center';
 
 export function Nodata(): ReactElement {
   const styles = useStyles2(getStyles);
 
   return (
-    <Stack justifyContent="center" alignItems="center">
+    <Center>
       <p className={styles.text}>No data</p>
-    </Stack>
+    </Center>
   );
 }
 
