@@ -3,16 +3,18 @@ import { css } from '@emotion/css';
 import { FormattedValueDisplay, useStyles2 } from '@grafana/ui';
 import { type DisplayValue, type GrafanaTheme2 } from '@grafana/data';
 import { BarTooltip, useTooltipProps } from './Tooltip';
+import { ChartData } from './Chart';
 
 type Props = {
   value: DisplayValue;
+  chart: ChartData;
   'data-testid'?: string;
 };
 
 export function Bar(props: Props): ReactElement {
-  const { value } = props;
+  const { value, chart } = props;
   const { color, title = '', percent = 0, numeric } = value;
-  const styles = useStyles2(getStyles(color!));
+  const styles = useStyles2(getStyles(color!, chart));
   const tooltipProps = useTooltipProps({
     content: <BarTooltip label={title} value={numeric} percentage={percent} />,
   });
@@ -31,8 +33,8 @@ export function Bar(props: Props): ReactElement {
   );
 }
 
-const getStyles = (bgColor: string) => (theme: GrafanaTheme2) => {
-  const textColor = theme.colors.getContrastText(bgColor, 1.5);
+const getStyles = (bgColor: string, chart: ChartData) => (theme: GrafanaTheme2) => {
+  const textColor = theme.colors.getContrastText(chart.backgroundColor ?? bgColor, theme.colors.contrastThreshold);
 
   return {
     bar: css({

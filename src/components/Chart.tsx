@@ -7,6 +7,10 @@ import { TooltipProvider } from './Tooltip';
 import { type DisplayValue } from '@grafana/data';
 import { getDisplayValueKey } from '../utils';
 
+export type ChartData = {
+  backgroundColor?: string;
+};
+
 type Props = {
   values: DisplayValue[];
 };
@@ -15,13 +19,15 @@ export function Chart(props: Props): ReactElement {
   const { values } = props;
   const styles = useStyles2(getStyles);
 
+  const chart: ChartData = { backgroundColor: values.length > 0 ? values[0].color : undefined };
+
   return (
     <div className={styles.chart}>
       <TooltipProvider>
         {values.map((v, i) => (
           <Fragment key={getDisplayValueKey(v)}>
-            <Bar value={v} data-testid={`bar-${i}`} />
-            <BarGap from={v} to={values[i + 1]} data-testid={`gap-${i}`} />
+            <Bar value={v} chart={chart} data-testid={`bar-${i}`} />
+            <BarGap from={v} to={values[i + 1]} chart={chart} data-testid={`gap-${i}`} />
           </Fragment>
         ))}
       </TooltipProvider>

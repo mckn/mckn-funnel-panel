@@ -60,7 +60,9 @@
                 "config": {},
                 "name": "Text",
                 "type": "string",
-                "values": ["asdfasdf"]
+                "values": [
+                  "asdfasdf"
+                ]
               }
             ],
             "meta": {},
@@ -159,7 +161,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-GrYlRd"
+            "mode": "palette-classic"
           },
           "mappings": [],
           "min": 0
@@ -190,13 +192,25 @@
                 "config": {},
                 "name": "Label",
                 "type": "string",
-                "values": ["Sent", "Viewed", "Clicked", "Add to cart", "Purchased"]
+                "values": [
+                  "Sent",
+                  "Viewed",
+                  "Clicked",
+                  "Add to cart",
+                  "Purchased"
+                ]
               },
               {
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [52300, 35679, 15690, 5596, 3290]
+                "values": [
+                  52300,
+                  35679,
+                  15690,
+                  5596,
+                  3290
+                ]
               }
             ],
             "meta": {},
@@ -222,7 +236,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "shades",
+            "fixedColor": "light-blue"
           },
           "mappings": [],
           "min": 0
@@ -248,7 +263,9 @@
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [52000]
+                "values": [
+                  52000
+                ]
               }
             ],
             "meta": {},
@@ -267,7 +284,9 @@
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [15690]
+                "values": [
+                  15690
+                ]
               }
             ],
             "meta": {},
@@ -287,7 +306,9 @@
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [35678]
+                "values": [
+                  35678
+                ]
               }
             ],
             "meta": {},
@@ -307,7 +328,9 @@
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [5596]
+                "values": [
+                  5596
+                ]
               }
             ],
             "meta": {},
@@ -327,7 +350,9 @@
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [3]
+                "values": [
+                  3
+                ]
               }
             ],
             "meta": {},
@@ -379,13 +404,23 @@
                 "config": {},
                 "name": "Label",
                 "type": "string",
-                "values": ["Viewed", "Clicked", "Add to cart", "Purchased"]
+                "values": [
+                  "Viewed",
+                  "Clicked",
+                  "Add to cart",
+                  "Purchased"
+                ]
               },
               {
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [11, 1, 1, 0]
+                "values": [
+                  11,
+                  1,
+                  1,
+                  0
+                ]
               }
             ],
             "meta": {},

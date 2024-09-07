@@ -5,16 +5,18 @@ import { Icon, type IconName, useStyles2 } from '@grafana/ui';
 import { formatPercentage } from '../utils';
 import { useTooltipProps, BarGapTooltip } from './Tooltip';
 import { GrafanaTheme2, type DisplayValue } from '@grafana/data';
+import { ChartData } from './Chart';
 
 type Props = {
   from: DisplayValue;
   to?: DisplayValue;
+  chart: ChartData;
   'data-testid'?: string;
 };
 
 export function BarGap(props: Props): ReactElement | null {
-  const { from, to } = props;
-  const styles = useStyles2(getStyles(from, to));
+  const { from, to, chart } = props;
+  const styles = useStyles2(getStyles(from, to, chart));
 
   const toPercentage = to?.percent ?? 0;
   const fromPercentage = from?.percent ?? 0;
@@ -49,7 +51,7 @@ function getIconName(from: number, to: number): IconName {
   return 'arrow-right';
 }
 
-const getStyles = (from: DisplayValue, to?: DisplayValue) => (theme: GrafanaTheme2) => {
+const getStyles = (from: DisplayValue, to: DisplayValue | undefined, chart: ChartData) => (theme: GrafanaTheme2) => {
   if (!to) {
     return {};
   }
@@ -57,7 +59,7 @@ const getStyles = (from: DisplayValue, to?: DisplayValue) => (theme: GrafanaThem
   const toPercent = to.percent ?? 0;
   const fromPercent = from.percent ?? 0;
   const bgColor = tinycolor(from.color).darken(15).toHexString();
-  const textColor = theme.colors.getContrastText(bgColor);
+  const textColor = theme.colors.getContrastText(chart.backgroundColor ?? bgColor, theme.colors.contrastThreshold);
   const topLeft = 100 * ((1 - fromPercent) / 2);
   const topRight = 100 - topLeft;
   const bottomLeft = 100 * ((1 - toPercent) / 2);
