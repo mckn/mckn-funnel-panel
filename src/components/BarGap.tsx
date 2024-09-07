@@ -65,6 +65,20 @@ const getStyles = (from: DisplayValue, to: DisplayValue | undefined, chart: Char
   const bottomLeft = 100 * ((1 - toPercent) / 2);
   const bottomRight = 100 - bottomLeft;
 
+  // Color of text over Grafana background. This happen when width of funnel's
+  // end is smaller than text length.
+  const textColorOverflow = theme.colors.getContrastText(
+    theme.colors.background.primary,
+    theme.colors.contrastThreshold
+  );
+  const percentageExtraStyle =
+    tinycolor(textColor).isLight() === tinycolor(textColorOverflow).isLight()
+      ? {}
+      : {
+          backgroundColor: tinycolor(bgColor).setAlpha(0.8).toRgbString(),
+          borderRadius: '0.25em',
+        };
+
   return {
     container: css({
       position: 'relative',
@@ -84,10 +98,10 @@ const getStyles = (from: DisplayValue, to: DisplayValue | undefined, chart: Char
       display: 'flex',
       position: 'absolute',
       color: textColor,
-      width: `${toPercent * 100}%`,
       justifyContent: 'center',
       alignItems: 'center',
       whiteSpace: 'nowrap',
+      ...percentageExtraStyle,
     }),
   };
 };

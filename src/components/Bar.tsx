@@ -4,6 +4,7 @@ import { FormattedValueDisplay, useStyles2 } from '@grafana/ui';
 import { type DisplayValue, type GrafanaTheme2 } from '@grafana/data';
 import { BarTooltip, useTooltipProps } from './Tooltip';
 import { ChartData } from './Chart';
+import tinycolor from 'tinycolor2';
 
 type Props = {
   value: DisplayValue;
@@ -36,6 +37,20 @@ export function Bar(props: Props): ReactElement {
 const getStyles = (bgColor: string, chart: ChartData) => (theme: GrafanaTheme2) => {
   const textColor = theme.colors.getContrastText(chart.backgroundColor ?? bgColor, theme.colors.contrastThreshold);
 
+  // Color of text over Grafana background. This happen when width of funnel's
+  // end is smaller than text length.
+  const textColorOverflow = theme.colors.getContrastText(
+    theme.colors.background.primary,
+    theme.colors.contrastThreshold
+  );
+  const textExtraStyle =
+    tinycolor(textColor).isLight() === tinycolor(textColorOverflow).isLight()
+      ? {}
+      : {
+          backgroundColor: tinycolor(bgColor).setAlpha(0.8).toRgbString(),
+          borderRadius: '0.25em',
+        };
+
   return {
     bar: css({
       flexGrow: 2,
@@ -49,8 +64,8 @@ const getStyles = (bgColor: string, chart: ChartData) => (theme: GrafanaTheme2) 
       color: textColor,
       paddingLeft: '5px',
       paddingRight: '5px',
-      textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
+      ...textExtraStyle,
     }),
   };
 };
