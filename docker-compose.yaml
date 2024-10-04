@@ -9,6 +9,7 @@ services:
         grafana_version: ${GRAFANA_VERSION:-11.0.0}
     environment:
       - GF_INSTALL_PLUGINS=marcusolsson-static-datasource
+      - GF_USERS_DEFAULT_THEME=system
     ports:
       - 3000:3000/tcp
     volumes:
