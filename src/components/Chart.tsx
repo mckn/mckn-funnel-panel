@@ -1,15 +1,11 @@
 import React, { type ReactElement, Fragment } from 'react';
 import { css } from '@emotion/css';
-import { useStyles2 } from '@grafana/ui';
+import { useStyles2, useTheme2 } from '@grafana/ui';
 import { BarGap } from './BarGap';
 import { Bar } from './Bar';
 import { TooltipProvider } from './Tooltip';
 import { type DisplayValue } from '@grafana/data';
-import { getDisplayValueKey } from '../utils';
-
-export type ChartData = {
-  backgroundColor?: string;
-};
+import { getContrastText, getDisplayValueKey } from '../utils';
 
 type Props = {
   values: DisplayValue[];
@@ -17,17 +13,17 @@ type Props = {
 
 export function Chart(props: Props): ReactElement {
   const { values } = props;
+  const theme = useTheme2();
   const styles = useStyles2(getStyles);
-
-  const chart: ChartData = { backgroundColor: values.length > 0 ? values[0].color : undefined };
+  const textColor = getContrastText(values, theme);
 
   return (
     <div className={styles.chart}>
       <TooltipProvider>
         {values.map((v, i) => (
           <Fragment key={getDisplayValueKey(v)}>
-            <Bar value={v} chart={chart} data-testid={`bar-${i}`} />
-            <BarGap from={v} to={values[i + 1]} chart={chart} data-testid={`gap-${i}`} />
+            <Bar value={v} textColor={textColor} data-testid={`bar-${i}`} />
+            <BarGap from={v} to={values[i + 1]} textColor={textColor} data-testid={`gap-${i}`} />
           </Fragment>
         ))}
       </TooltipProvider>
