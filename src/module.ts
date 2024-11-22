@@ -19,4 +19,11 @@ export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel).useFieldConfig(
       defaultValue: 0,
     },
   },
+}).setPanelOptions((builder) => {
+  builder.addBooleanSwitch({
+    path: 'orderValues',
+    name: 'Sort data values',
+    defaultValue: true
+  });
 });
+
