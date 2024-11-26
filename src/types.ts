@@ -1,8 +1,8 @@
-
-type orderValues = true | false;
-// interface defining panel options type
+export enum Sorting {
+  ascending = 'ascending',
+  descending = 'descending',
+  none = 'none',
+}
 export interface PanelOptions {
-    text: string;
-    showSeriesCount: boolean;
-    orderValues: orderValues;
+  sorting: Sorting;
 }
