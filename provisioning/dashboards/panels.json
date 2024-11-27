@@ -48,6 +48,9 @@
         "y": 0
       },
       "id": 5,
+      "options": {
+        "sorting": "descending"
+      },
       "targets": [
         {
           "datasource": {
@@ -60,9 +63,7 @@
                 "config": {},
                 "name": "Text",
                 "type": "string",
-                "values": [
-                  "asdfasdf"
-                ]
+                "values": ["asdfasdf"]
               }
             ],
             "meta": {},
@@ -85,6 +86,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -98,6 +100,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -146,6 +149,7 @@
           "showLegend": true
         },
         "tooltip": {
+          "maxHeight": 600,
           "mode": "single",
           "sort": "none"
         }
@@ -178,6 +182,7 @@
       "options": {
         "seriesCountSize": "sm",
         "showSeriesCount": false,
+        "sorting": "descending",
         "text": "Default value of text input option"
       },
       "targets": [
@@ -192,25 +197,13 @@
                 "config": {},
                 "name": "Label",
                 "type": "string",
-                "values": [
-                  "Sent",
-                  "Viewed",
-                  "Clicked",
-                  "Add to cart",
-                  "Purchased"
-                ]
+                "values": ["Sent", "Viewed", "Clicked", "Add to cart", "Purchased"]
               },
               {
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [
-                  52300,
-                  35679,
-                  15690,
-                  5596,
-                  3290
-                ]
+                "values": [52300, 35679, 15690, 5596, 3290]
               }
             ],
             "meta": {},
@@ -236,8 +229,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "shades",
-            "fixedColor": "light-blue"
+            "mode": "palette-classic"
           },
           "mappings": [],
           "min": 0
@@ -250,7 +242,13 @@
         "x": 11,
         "y": 8
       },
-      "id": 4,
+      "id": 8,
+      "options": {
+        "seriesCountSize": "sm",
+        "showSeriesCount": false,
+        "sorting": "ascending",
+        "text": "Default value of text input option"
+      },
       "targets": [
         {
           "datasource": {
@@ -261,108 +259,30 @@
             "fields": [
               {
                 "config": {},
+                "name": "Label",
+                "type": "string",
+                "values": ["Sent", "Viewed", "Clicked", "Add to cart", "Purchased"]
+              },
+              {
+                "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [
-                  52000
-                ]
+                "values": [52300, 35679, 15690, 5596, 3290]
               }
             ],
             "meta": {},
             "name": "Sent"
           },
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "marcusolsson-static-datasource",
-            "uid": "vHsj2qbVk"
-          },
-          "frame": {
-            "fields": [
-              {
-                "config": {},
-                "name": "Value",
-                "type": "number",
-                "values": [
-                  15690
-                ]
-              }
-            ],
-            "meta": {},
-            "name": "Viewed"
-          },
-          "hide": false,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "marcusolsson-static-datasource",
-            "uid": "vHsj2qbVk"
-          },
-          "frame": {
-            "fields": [
-              {
-                "config": {},
-                "name": "Value",
-                "type": "number",
-                "values": [
-                  35678
-                ]
-              }
-            ],
-            "meta": {},
-            "name": "Clicked"
-          },
-          "hide": false,
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "marcusolsson-static-datasource",
-            "uid": "vHsj2qbVk"
-          },
-          "frame": {
-            "fields": [
-              {
-                "config": {},
-                "name": "Value",
-                "type": "number",
-                "values": [
-                  5596
-                ]
-              }
-            ],
-            "meta": {},
-            "name": "Added to cart"
-          },
-          "hide": false,
-          "refId": "D"
-        },
-        {
-          "datasource": {
-            "type": "marcusolsson-static-datasource",
-            "uid": "vHsj2qbVk"
-          },
-          "frame": {
-            "fields": [
-              {
-                "config": {},
-                "name": "Value",
-                "type": "number",
-                "values": [
-                  3
-                ]
-              }
-            ],
-            "meta": {},
-            "name": "Purchased"
-          },
-          "hide": false,
-          "refId": "E"
         }
       ],
-      "title": "Funnel - multiple queries",
+      "title": "Funnel - ascending sorting",
+      "transformations": [
+        {
+          "id": "rowsToFields",
+          "options": {}
+        }
+      ],
       "type": "mckn-funnel-panel"
     },
     {
@@ -390,6 +310,7 @@
       "options": {
         "seriesCountSize": "sm",
         "showSeriesCount": false,
+        "sorting": "descending",
         "text": "Default value of text input option"
       },
       "targets": [
@@ -404,23 +325,13 @@
                 "config": {},
                 "name": "Label",
                 "type": "string",
-                "values": [
-                  "Viewed",
-                  "Clicked",
-                  "Add to cart",
-                  "Purchased"
-                ]
+                "values": ["Viewed", "Clicked", "Add to cart", "Purchased"]
               },
               {
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [
-                  11,
-                  1,
-                  1,
-                  0
-                ]
+                "values": [11, 1, 1, 0]
               }
             ],
             "meta": {},
@@ -437,11 +348,140 @@
         }
       ],
       "type": "mckn-funnel-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "vHsj2qbVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-blue",
+            "mode": "shades"
+          },
+          "mappings": [],
+          "min": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 11,
+        "x": 11,
+        "y": 31
+      },
+      "id": 4,
+      "options": {
+        "sorting": "descending"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [52000]
+              }
+            ],
+            "meta": {},
+            "name": "Sent"
+          },
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [15690]
+              }
+            ],
+            "meta": {},
+            "name": "Viewed"
+          },
+          "hide": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [35678]
+              }
+            ],
+            "meta": {},
+            "name": "Clicked"
+          },
+          "hide": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [5596]
+              }
+            ],
+            "meta": {},
+            "name": "Added to cart"
+          },
+          "hide": false,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [3]
+              }
+            ],
+            "meta": {},
+            "name": "Purchased"
+          },
+          "hide": false,
+          "refId": "E"
+        }
+      ],
+      "title": "Funnel - multiple queries",
+      "type": "mckn-funnel-panel"
     }
   ],
   "refresh": "",
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": []
@@ -450,6 +490,7 @@
     "from": "now-30m",
     "to": "now"
   },
+  "timeRangeUpdatedDuringEditOrView": false,
   "timepicker": {},
   "timezone": "",
   "title": "Funnel Examples",

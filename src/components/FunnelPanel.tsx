@@ -11,7 +11,7 @@ import { Unsupported } from './Unsupported';
 import { Nodata } from './Nodata';
 
 export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
-  const { width, height, data, fieldConfig, replaceVariables, timeZone } = props;
+  const { width, height, data, options, fieldConfig, replaceVariables, timeZone } = props;
   const theme = useTheme2();
   const styles = useStyles2(getStyles(width, height));
 
@@ -21,7 +21,8 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
     theme,
     data: data.series,
     timeZone,
-  });
+  }, options);
+
 
   switch (status) {
     case FunnelDataResultStatus.nodata:

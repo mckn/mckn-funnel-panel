@@ -1,1 +1,8 @@
-export interface PanelOptions {}
+export enum Sorting {
+  ascending = 'ascending',
+  descending = 'descending',
+  none = 'none',
+}
+export interface PanelOptions {
+  sorting: Sorting;
+}

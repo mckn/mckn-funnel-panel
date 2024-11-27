@@ -6,6 +6,7 @@ import {
   type DataFrame,
   FieldType,
 } from '@grafana/data';
+import { PanelOptions, Sorting } from 'types';
 
 export enum FunnelDataResultStatus {
   unsupported,
@@ -18,8 +19,12 @@ export type FunnelDataResult = {
   status: FunnelDataResultStatus;
 };
 
-export function useFunnelData(options: Omit<GetFieldDisplayValuesOptions, 'reduceOptions'>): FunnelDataResult {
-  const { theme, data, fieldConfig, replaceVariables, timeZone } = options;
+export function useFunnelData(
+  params: Omit<GetFieldDisplayValuesOptions, 'reduceOptions'>,
+  options: PanelOptions
+): FunnelDataResult {
+  const { theme, data, fieldConfig, replaceVariables, timeZone } = params;
+  const { sorting } = options;
 
   return useMemo(() => {
     if (noData(data)) {
@@ -48,18 +53,27 @@ export function useFunnelData(options: Omit<GetFieldDisplayValuesOptions, 'reduc
     const displayValues = values.map((v) => v.display);
 
     return {
-      values: sortValues(displayValues),
+      values: sortValues(displayValues, sorting),
       status: FunnelDataResultStatus.success,
     };
-  }, [theme, data, fieldConfig, replaceVariables, timeZone]);
+  }, [theme, data, fieldConfig, replaceVariables, timeZone, sorting]);
 }
 
-function sortValues(values: DisplayValue[]): DisplayValue[] {
+function sortValues(values: DisplayValue[], sorting: Sorting): DisplayValue[] {
+  if (sorting === Sorting.none) {
+    return values;
+  }
+
   return values.sort((a, b) => {
     const ap = a.percent ?? 0;
     const bp = b.percent ?? 0;
 
-    return bp - ap;
+    switch (sorting) {
+      case Sorting.ascending:
+        return ap - bp;
+      default:
+        return bp - ap;
+    }
   });
 }
 
