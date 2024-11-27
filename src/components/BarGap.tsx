@@ -19,7 +19,7 @@ export function BarGap(props: Props): ReactElement | null {
 
   const toPercentage = to?.percent ?? 0;
   const fromPercentage = from?.percent ?? 0;
-  const drop = (fromPercentage - toPercentage) / fromPercentage;
+  const drop = (fromPercentage - toPercentage) / toPercentage;
   const icon = getIconName(fromPercentage, toPercentage);
   const tooltipProps = useTooltipProps({
     content: <BarGapTooltip drop={drop} fromLabel={from.title ?? ''} toLabel={to?.title} />,
