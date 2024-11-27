@@ -62,10 +62,10 @@
   },
   "dependencies": {
     "@emotion/css": "11.10.6",
-    "@grafana/data": "^11.2.0",
-    "@grafana/runtime": "^11.2.0",
+    "@grafana/data": "^11.3.1",
+    "@grafana/runtime": "^11.3.1",
     "@grafana/schema": "^10.4.0",
-    "@grafana/ui": "^11.2.0",
+    "@grafana/ui": "^11.3.1",
     "nanoid": "^4.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
