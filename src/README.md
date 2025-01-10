@@ -24,6 +24,7 @@ The most common scenarios for this would be if you have a pre-baked view contain
 ## FAQ
 
 **Q: The percentage values looks off in my funnel, what am I doing wrong?**
+
 A: Check the standard options for your panel. Your `min` value might be set to `auto` which will cause Grafana to normalize the data and use the lowest value in the data set as the minimum value. Try to set this value to `0` to see if it will resolve the issue. For more details see the following [issue](https://github.com/mckn/mckn-funnel-panel/issues/47#issuecomment-2561915080).
 
 ## Contributing
