@@ -1,6 +1,6 @@
 {
   "name": "funnel-panel",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Grafana panel to create funnel charts",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",

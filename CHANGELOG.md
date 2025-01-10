@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0
+
+Feature: It is now possible to configure how to sort the bars in the funnel panel.
+Bugfix: Added a FAQ to highlight that you might need to set `min:0` in standard options if your data is normalized by minium value.
+
 ## 1.1.2
 
 Improved accessability and fixed issue with white text on light background. Big thanks to https://github.com/negrel for help fixing this.
