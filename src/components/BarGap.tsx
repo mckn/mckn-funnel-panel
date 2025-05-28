@@ -10,11 +10,12 @@ type Props = {
   from: DisplayValue;
   to?: DisplayValue;
   textColor: string;
+  showRemainedPercentage: boolean;
   'data-testid'?: string;
 };
 
 export function BarGap(props: Props): ReactElement | null {
-  const { from, to, textColor } = props;
+  const { from, to, textColor, showRemainedPercentage } = props;
   const styles = useStyles2(getStyles(from, to, textColor));
 
   const toPercentage = to?.percent ?? 0;
@@ -22,7 +23,7 @@ export function BarGap(props: Props): ReactElement | null {
   const drop = (fromPercentage - toPercentage) / fromPercentage;
   const icon = getIconName(fromPercentage, toPercentage);
   const tooltipProps = useTooltipProps({
-    content: <BarGapTooltip drop={drop} fromLabel={from.title ?? ''} toLabel={to?.title} />,
+    content: <BarGapTooltip drop={drop} fromLabel={from.title ?? ''} toLabel={to?.title} showRemainedPercentage={showRemainedPercentage} />,
   });
 
   if (!Boolean(to)) {
@@ -34,7 +35,7 @@ export function BarGap(props: Props): ReactElement | null {
       <div className={styles.barGap} />
       <div className={styles.percentage}>
         <Icon name={icon} />
-        {' ' + formatPercentage(drop)}
+        {' ' + formatPercentage((showRemainedPercentage ?? true) ? 1 - drop : drop)}
       </div>
     </div>
   );

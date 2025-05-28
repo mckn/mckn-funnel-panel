@@ -5,15 +5,19 @@ type Props = {
   drop: number;
   fromLabel: string;
   toLabel?: string;
+  showRemainedPercentage: boolean;
 };
 
 export function BarGapTooltip(props: Props): ReactElement {
-  const { drop, fromLabel, toLabel } = props;
+  const { drop, fromLabel, toLabel, showRemainedPercentage } = props;
 
   return (
     <div>
       <div>
-        {formatPercentage(drop)} drop from &quot;{fromLabel}&quot; to &quot;{toLabel}&quot;
+        {(showRemainedPercentage ?? true)
+          ? `${formatPercentage(1 - drop)} retained from "${fromLabel}" to "${toLabel}"`
+          : `${formatPercentage(drop)} drop from "${fromLabel}" to "${toLabel}"`
+        }
       </div>
     </div>
   );

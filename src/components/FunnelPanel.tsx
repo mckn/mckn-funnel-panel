@@ -41,7 +41,7 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
       return (
         <div className={styles.container}>
           <PureLabels values={values} />
-          <PureChart values={values} />
+          <PureChart values={values} options={options} />
           <PurePercentages values={values} />
         </div>
       );
