@@ -547,7 +547,7 @@
           "refId": "A"
         }
       ],
-      "title": "Funnel - one query with full values",
+      "title": "Funnel - show retention rate",
       "transformations": [
         {
           "id": "rowsToFields",
