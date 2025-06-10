@@ -53,6 +53,6 @@ export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel)
       name: 'Show retention rate',
       category: ['Funnel'],
       description: 'Show retention rate instead of drop-off rate in gap labels and tooltips',
-      defaultValue: true,
+      defaultValue: false,
     });
   });
