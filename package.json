@@ -66,7 +66,7 @@
     "@grafana/runtime": "^11.3.1",
     "@grafana/schema": "^10.4.0",
     "@grafana/ui": "^11.3.1",
-    "nanoid": "^4.0.2",
+    "nanoid": "^5.1.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-tooltip": "^5.13.1",
