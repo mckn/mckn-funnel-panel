@@ -12,17 +12,21 @@ import { Nodata } from './Nodata';
 
 export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   const { width, height, data, options, fieldConfig, replaceVariables, timeZone } = props;
+  const { showRemainedPercentage } = options;
+
   const theme = useTheme2();
   const styles = useStyles2(getStyles(width, height));
 
-  const { values, status } = useFunnelData({
-    fieldConfig,
-    replaceVariables,
-    theme,
-    data: data.series,
-    timeZone,
-  }, options);
-
+  const { values, status } = useFunnelData(
+    {
+      fieldConfig,
+      replaceVariables,
+      theme,
+      data: data.series,
+      timeZone,
+    },
+    options
+  );
 
   switch (status) {
     case FunnelDataResultStatus.nodata:
@@ -41,7 +45,7 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
       return (
         <div className={styles.container}>
           <PureLabels values={values} />
-          <PureChart values={values} />
+          <PureChart values={values} showRemainedPercentage={showRemainedPercentage} />
           <PurePercentages values={values} />
         </div>
       );

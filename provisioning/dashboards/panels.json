@@ -478,6 +478,83 @@
       ],
       "title": "Funnel - multiple queries",
       "type": "mckn-funnel-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "vHsj2qbVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "min": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 11,
+        "x": 0,
+        "y": 54
+      },
+      "id": 9,
+      "options": {
+        "seriesCountSize": "sm",
+        "showRemainedPercentage": true,
+        "showSeriesCount": false,
+        "sorting": "descending",
+        "text": "Default value of text input option"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Label",
+                "type": "string",
+                "values": [
+                  "Sent",
+                  "Viewed",
+                  "Clicked",
+                  "Add to cart",
+                  "Purchased"
+                ]
+              },
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [
+                  52300,
+                  35679,
+                  15690,
+                  5596,
+                  3290
+                ]
+              }
+            ],
+            "meta": {},
+            "name": "Sent"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Funnel - show retention rate",
+      "transformations": [
+        {
+          "id": "rowsToFields",
+          "options": {}
+        }
+      ],
+      "type": "mckn-funnel-panel"
     }
   ],
   "refresh": "",

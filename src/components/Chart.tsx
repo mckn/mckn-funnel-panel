@@ -9,10 +9,11 @@ import { getContrastText, getDisplayValueKey } from '../utils';
 
 type Props = {
   values: DisplayValue[];
+  showRemainedPercentage: boolean;
 };
 
 export function Chart(props: Props): ReactElement {
-  const { values } = props;
+  const { values, showRemainedPercentage } = props;
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
   const textColor = getContrastText(values, theme);
@@ -23,7 +24,13 @@ export function Chart(props: Props): ReactElement {
         {values.map((v, i) => (
           <Fragment key={getDisplayValueKey(v)}>
             <Bar value={v} textColor={textColor} data-testid={`bar-${i}`} />
-            <BarGap from={v} to={values[i + 1]} textColor={textColor} data-testid={`gap-${i}`} />
+            <BarGap
+              from={v}
+              to={values[i + 1]}
+              textColor={textColor}
+              showRemainedPercentage={showRemainedPercentage}
+              data-testid={`gap-${i}`}
+            />
           </Fragment>
         ))}
       </TooltipProvider>

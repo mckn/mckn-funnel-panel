@@ -5,4 +5,5 @@ export enum Sorting {
 }
 export interface PanelOptions {
   sorting: Sorting;
+  showRemainedPercentage: boolean;
 }
