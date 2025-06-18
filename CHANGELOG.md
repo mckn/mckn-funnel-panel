@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+Feature: It is now possible to configure the panel to show the bar gap as a retention instead of a drop.
+
 ## 1.2.0
 
 Feature: It is now possible to configure how to sort the bars in the funnel panel.
