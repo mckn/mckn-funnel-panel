@@ -6,15 +6,14 @@ import { Bar } from './Bar';
 import { TooltipProvider } from './Tooltip';
 import { type DisplayValue } from '@grafana/data';
 import { getContrastText, getDisplayValueKey } from '../utils';
-import { type PanelOptions } from '../types';
 
 type Props = {
   values: DisplayValue[];
-  options: PanelOptions;
+  showRemainedPercentage: boolean;
 };
 
 export function Chart(props: Props): ReactElement {
-  const { values, options } = props;
+  const { values, showRemainedPercentage } = props;
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
   const textColor = getContrastText(values, theme);
@@ -25,7 +24,13 @@ export function Chart(props: Props): ReactElement {
         {values.map((v, i) => (
           <Fragment key={getDisplayValueKey(v)}>
             <Bar value={v} textColor={textColor} data-testid={`bar-${i}`} />
-            <BarGap from={v} to={values[i + 1]} textColor={textColor} showRemainedPercentage={options.showRemainedPercentage} data-testid={`gap-${i}`} />
+            <BarGap
+              from={v}
+              to={values[i + 1]}
+              textColor={textColor}
+              showRemainedPercentage={showRemainedPercentage}
+              data-testid={`gap-${i}`}
+            />
           </Fragment>
         ))}
       </TooltipProvider>
