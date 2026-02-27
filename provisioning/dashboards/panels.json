@@ -520,25 +520,13 @@
                 "config": {},
                 "name": "Label",
                 "type": "string",
-                "values": [
-                  "Sent",
-                  "Viewed",
-                  "Clicked",
-                  "Add to cart",
-                  "Purchased"
-                ]
+                "values": ["Sent", "Viewed", "Clicked", "Add to cart", "Purchased"]
               },
               {
                 "config": {},
                 "name": "Value",
                 "type": "number",
-                "values": [
-                  52300,
-                  35679,
-                  15690,
-                  5596,
-                  3290
-                ]
+                "values": [52300, 35679, 15690, 5596, 3290]
               }
             ],
             "meta": {},

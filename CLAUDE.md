@@ -22,6 +22,7 @@ Node >= 20 (see `.nvmrc`). Use `npm ci` for installs.
 ### Entry point
 
 `src/module.ts` exports `plugin`, a `PanelPlugin<PanelOptions>` instance. It registers:
+
 - `FunnelPanel` as the panel renderer
 - Field config: color mode `ContinuousGrYlRd`, default min 0, disabled NoValue/Thresholds/Links
 - Panel options: `sorting` (descending/ascending/none) and `showRemainedPercentage` (boolean)
@@ -53,6 +54,7 @@ FunnelPanel
 ### Types
 
 `src/types.ts`:
+
 - `Sorting` enum: `ascending`, `descending`, `none`
 - `PanelOptions`: `{ sorting: Sorting; showRemainedPercentage: boolean }`
 
@@ -66,6 +68,7 @@ FunnelPanel
 ### Tooltip system (`src/components/Tooltip/`)
 
 Module-level `contentRegistry` (Record<string, ReactNode>) with react-tooltip:
+
 - `TooltipProvider` creates one tooltip instance per chart with a `nanoid` ID
 - `useTooltipProps` hook registers content in registry, returns data attributes for trigger elements
 - `BarTooltip` — shows label, value, percentage
@@ -91,6 +94,7 @@ Module-level `contentRegistry` (Record<string, ReactNode>) with react-tooltip:
 ### Imports
 
 TypeScript `baseUrl` is `src/`, so use bare imports:
+
 ```ts
 import { Sorting } from 'types';
 import { getContrastText } from 'utils';
