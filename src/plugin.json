@@ -23,10 +23,12 @@
         "url": "https://github.com/mckn/grafana-funnel-panel/blob/master/LICENSE"
       }
     ],
-    "screenshots": [{
-      "name": "Overview",
-      "path": "img/panel.png"
-    }],
+    "screenshots": [
+      {
+        "name": "Overview",
+        "path": "img/panel.png"
+      }
+    ],
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },

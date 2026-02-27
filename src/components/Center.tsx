@@ -14,7 +14,7 @@ export function Center({ children }: PropsWithChildren) {
   }
 
   return (
-    // eslint-disable-next-line deprecation/deprecation
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     <HorizontalGroup justify="center" align="center">
       {children}
     </HorizontalGroup>
