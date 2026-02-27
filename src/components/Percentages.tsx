@@ -28,7 +28,6 @@ export const PurePercentages = React.memo(Percentages);
 const getStyles = () => {
   return {
     container: css({
-      flexBasis: '120px',
       display: 'flex',
       flexDirection: 'column',
       paddingLeft: '10px',

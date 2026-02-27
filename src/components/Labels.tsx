@@ -28,7 +28,6 @@ export const PureLabels = React.memo(Labels);
 const getStyles = () => {
   return {
     container: css({
-      flexBasis: '120px',
       display: 'flex',
       flexDirection: 'column',
       paddingRight: '10px',
