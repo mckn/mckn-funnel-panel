@@ -8,6 +8,7 @@ services:
     environment:
       - GF_INSTALL_PLUGINS=marcusolsson-static-datasource
       - GF_USERS_DEFAULT_THEME=system
+      - GF_FEATURE_TOGGLES_ENABLE=localizationForPlugins
     extends:
       file: .config/docker-compose-base.yaml
       service: grafana

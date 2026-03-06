@@ -1,0 +1,32 @@
+{
+  "components": {
+    "bar-gap-tooltip": {
+      "drop": "{{percentage}} de queda de \"{{fromLabel}}\" para \"{{toLabel}}\"",
+      "retained": "{{percentage}} retido de \"{{fromLabel}}\" para \"{{toLabel}}\""
+    },
+    "nodata": {
+      "message": "Sem dados"
+    },
+    "unsupported": {
+      "description": "Os dados fornecidos não são compatíveis com este painel. Cada data frame fornecido ao painel precisa conter pelo menos um campo numérico que será usado para visualizar cada etapa do funil.",
+      "title": "Dados não compatíveis"
+    }
+  },
+  "panel": {
+    "options": {
+      "show-remained-percentage": {
+        "description": "Mostrar taxa de retenção em vez da taxa de abandono nos rótulos e tooltips dos intervalos",
+        "name": "Mostrar taxa de retenção"
+      },
+      "sorting": {
+        "ascending-description": "Ordenar do menor para o maior",
+        "ascending-label": "Crescente",
+        "descending-description": "Ordenar do maior para o menor",
+        "descending-label": "Decrescente",
+        "name": "Ordenação",
+        "none-description": "Nenhuma ordenação é aplicada",
+        "none-label": "Nenhuma"
+      }
+    }
+  }
+}

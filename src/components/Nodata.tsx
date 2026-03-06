@@ -1,5 +1,6 @@
 import { css } from '@emotion/css';
 import { type GrafanaTheme2 } from '@grafana/data';
+import { t } from '@grafana/i18n';
 import { useStyles2 } from '@grafana/ui';
 import React, { type ReactElement } from 'react';
 import { Center } from './Center';
@@ -9,7 +10,7 @@ export function Nodata(): ReactElement {
 
   return (
     <Center>
-      <p className={styles.text}>No data</p>
+      <p className={styles.text}>{t('components.nodata.message', 'No data')}</p>
     </Center>
   );
 }

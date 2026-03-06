@@ -1,6 +1,10 @@
 import { FieldColorModeId, FieldConfigProperty, PanelPlugin } from '@grafana/data';
+import { t } from '@grafana/i18n';
 import { FunnelPanel } from 'components/FunnelPanel';
+import { initI18n } from './initI18n';
 import { Sorting, type PanelOptions } from './types';
+
+await initI18n();
 
 export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel)
   .useFieldConfig({
@@ -24,24 +28,24 @@ export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel)
   .setPanelOptions((builder) => {
     builder.addRadio({
       path: 'sorting',
-      name: 'Sorting',
+      name: t('panel.options.sorting.name', 'Sorting'),
       category: ['Funnel'],
       settings: {
         options: [
           {
             value: Sorting.descending,
-            label: 'Descending',
-            description: 'Sort from highest to lowest',
+            label: t('panel.options.sorting.descending-label', 'Descending'),
+            description: t('panel.options.sorting.descending-description', 'Sort from highest to lowest'),
           },
           {
             value: Sorting.ascending,
-            label: 'Ascending',
-            description: 'Sort from lowest to highest',
+            label: t('panel.options.sorting.ascending-label', 'Ascending'),
+            description: t('panel.options.sorting.ascending-description', 'Sort from lowest to highest'),
           },
           {
             value: Sorting.none,
-            label: 'None',
-            description: 'No sorting is applied',
+            label: t('panel.options.sorting.none-label', 'None'),
+            description: t('panel.options.sorting.none-description', 'No sorting is applied'),
           },
         ],
       },
@@ -50,9 +54,12 @@ export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel)
 
     builder.addBooleanSwitch({
       path: 'showRemainedPercentage',
-      name: 'Show retention rate',
+      name: t('panel.options.show-remained-percentage.name', 'Show retention rate'),
       category: ['Funnel'],
-      description: 'Show retention rate instead of drop-off rate in gap labels and tooltips',
+      description: t(
+        'panel.options.show-remained-percentage.description',
+        'Show retention rate instead of drop-off rate in gap labels and tooltips'
+      ),
       defaultValue: false,
     });
   });
