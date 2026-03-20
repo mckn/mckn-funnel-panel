@@ -14,6 +14,10 @@
   },
   "panel": {
     "options": {
+      "show-percentage": {
+        "description": "Mostrar a coluna de porcentagens ao lado das barras do funil",
+        "name": "Mostrar porcentagens"
+      },
       "show-remained-percentage": {
         "description": "Mostrar taxa de retenção em vez da taxa de abandono nos rótulos e tooltips dos intervalos",
         "name": "Mostrar taxa de retenção"

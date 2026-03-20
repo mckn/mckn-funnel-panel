@@ -62,4 +62,15 @@ export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel)
       ),
       defaultValue: false,
     });
+
+    builder.addBooleanSwitch({
+      path: 'showPercentage',
+      name: t('panel.options.show-percentage.name', 'Show percentages'),
+      category: ['Funnel'],
+      description: t(
+        'panel.options.show-percentage.description',
+        'Show the percentage column next to the funnel bars'
+      ),
+      defaultValue: true,
+    });
   });

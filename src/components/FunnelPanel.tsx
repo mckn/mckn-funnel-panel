@@ -12,7 +12,7 @@ import { Nodata } from './Nodata';
 
 export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   const { width, height, data, options, fieldConfig, replaceVariables, timeZone } = props;
-  const { showRemainedPercentage } = options;
+  const { showRemainedPercentage, showPercentage } = options;
 
   const theme = useTheme2();
   const styles = useStyles2(getStyles(width, height));
@@ -46,7 +46,7 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
         <div className={styles.container}>
           <PureLabels values={values} />
           <PureChart values={values} showRemainedPercentage={showRemainedPercentage} />
-          <PurePercentages values={values} />
+          {showPercentage !== false && <PurePercentages values={values} />}
         </div>
       );
   }

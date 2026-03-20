@@ -14,6 +14,10 @@
   },
   "panel": {
     "options": {
+      "show-percentage": {
+        "description": "Mostrar la columna de porcentajes junto a las barras del embudo",
+        "name": "Mostrar porcentajes"
+      },
       "show-remained-percentage": {
         "description": "Mostrar la tasa de retención en lugar de la tasa de abandono en las etiquetas y los tooltips de los espacios",
         "name": "Mostrar tasa de retención"
