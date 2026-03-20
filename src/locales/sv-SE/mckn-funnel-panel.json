@@ -1,0 +1,32 @@
+{
+  "components": {
+    "bar-gap-tooltip": {
+      "drop": "{{percentage}} tapp från \"{{fromLabel}}\" till \"{{toLabel}}\"",
+      "retained": "{{percentage}} kvar från \"{{fromLabel}}\" till \"{{toLabel}}\""
+    },
+    "nodata": {
+      "message": "Ingen data"
+    },
+    "unsupported": {
+      "description": "Den data du har angett stöds inte av den här panelen. Varje 'data frame' som skickas till panelen måste innehålla minst ett numeriskt fält som kan används för att visualisera ett steg i funneln.",
+      "title": "Data som inte stöds"
+    }
+  },
+  "panel": {
+    "options": {
+      "show-remained-percentage": {
+        "description": "Visa andel som stannar kvar istället för andel som faller bort i mellanrum och verktygstips",
+        "name": "Visa andel kvar"
+      },
+      "sorting": {
+        "ascending-description": "Sortera från lägsta till högsta",
+        "ascending-label": "Stigande",
+        "descending-description": "Sortera från högsta till lägsta",
+        "descending-label": "Fallande",
+        "name": "Sortering",
+        "none-description": "Ingen sortering tillämpas",
+        "none-label": "Ingen"
+      }
+    }
+  }
+}

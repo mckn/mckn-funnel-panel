@@ -13,6 +13,7 @@ npm run lint         # ESLint
 npm run lint:fix     # ESLint with auto-fix
 npm run e2e          # Playwright e2e tests (requires running Grafana)
 npm run server       # Start local Grafana via Docker on port 3000
+npm run i18n-extract # Extract translation keys to src/locales/
 ```
 
 Node >= 20 (see `.nvmrc`). Use `npm ci` for installs.
@@ -91,6 +92,16 @@ Module-level `contentRegistry` (Record<string, ReactNode>) with react-tooltip:
 - Wrap with `React.memo` and export as `PureX` (e.g., `PureChart`, `PureLabels`)
 - Use barrel exports via `index.ts` files in subdirectories
 
+### Internationalization (i18n)
+
+- Use `t()` from `@grafana/i18n` for short strings and attribute values
+- Use `<Trans>` from `@grafana/i18n` for longer JSX content (full sentences/paragraphs)
+- Translation key pattern: `panel.options.*` for panel options, `components.<component-name>.*` for component strings
+- For interpolated values use `{{doublebraces}}` syntax: `t('key', 'Hello {{name}}', { name })`
+- Locale files live in `src/locales/{lang}/mckn-funnel-panel.json` (en-US, sv-SE, es-ES, pt-BR, fr-FR)
+- After adding or changing any user-facing strings, run `npm run i18n-extract` to sync the en-US locale file, then manually update sv-SE, es-ES, pt-BR, and fr-FR
+- Do not call `t()` at module scope (top-level). Only call it inside components or lazy callbacks like `setPanelOptions`
+
 ### Imports
 
 TypeScript `baseUrl` is `src/`, so use bare imports:
@@ -103,7 +114,7 @@ import { getContrastText } from 'utils';
 ### Backward compatibility
 
 - `Center.tsx` runtime-checks for `Stack` component availability, falls back to deprecated `HorizontalGroup`
-- Plugin targets Grafana >= 9.2.5 (see `src/plugin.json` `grafanaDependency`)
+- Plugin targets Grafana >= 11.0.0 (see `src/plugin.json` `grafanaDependency`)
 
 ## Testing
 

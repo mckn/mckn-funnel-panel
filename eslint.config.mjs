@@ -1,4 +1,5 @@
 import { defineConfig } from 'eslint/config';
+import grafanaI18nPlugin from '@grafana/i18n/eslint-plugin';
 import baseConfig from './.config/eslint.config.mjs';
 
 export default defineConfig([
@@ -33,4 +34,13 @@ export default defineConfig([
     ],
   },
   ...baseConfig,
+  {
+    name: 'grafana/i18n-rules',
+    files: ['src/**/*.{ts,tsx}'],
+    plugins: { '@grafana/i18n': grafanaI18nPlugin },
+    rules: {
+      '@grafana/i18n/no-untranslated-strings': ['error', { calleesToIgnore: ['^css$', 'use[A-Z].*'] }],
+      '@grafana/i18n/no-translation-top-level': 'error',
+    },
+  },
 ]);

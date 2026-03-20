@@ -1,0 +1,32 @@
+{
+  "components": {
+    "bar-gap-tooltip": {
+      "drop": "{{percentage}} de perte de \"{{fromLabel}}\" à \"{{toLabel}}\"",
+      "retained": "{{percentage}} retenus de \"{{fromLabel}}\" à \"{{toLabel}}\""
+    },
+    "nodata": {
+      "message": "Aucune donnée"
+    },
+    "unsupported": {
+      "description": "Les données fournies ne sont pas prises en charge par ce panneau. Chaque data frame fourni au panneau doit contenir au moins un champ numérique qui sera utilisé pour visualiser chaque étape de l'entonnoir.",
+      "title": "Données non prises en charge"
+    }
+  },
+  "panel": {
+    "options": {
+      "show-remained-percentage": {
+        "description": "Afficher le taux de rétention au lieu du taux d'abandon dans les libellés des intervalles et les infobulles",
+        "name": "Afficher le taux de rétention"
+      },
+      "sorting": {
+        "ascending-description": "Trier du plus bas au plus haut",
+        "ascending-label": "Croissant",
+        "descending-description": "Trier du plus haut au plus bas",
+        "descending-label": "Décroissant",
+        "name": "Tri",
+        "none-description": "Aucun tri n'est appliqué",
+        "none-label": "Aucun"
+      }
+    }
+  }
+}
