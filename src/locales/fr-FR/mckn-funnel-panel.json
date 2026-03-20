@@ -15,7 +15,7 @@
   "panel": {
     "options": {
       "show-remained-percentage": {
-        "description": "Afficher le taux de rétention au lieu du taux d'abandon dans les libellés et les infobulles des intervalles",
+        "description": "Afficher le taux de rétention au lieu du taux d'abandon dans les libellés des intervalles et les infobulles",
         "name": "Afficher le taux de rétention"
       },
       "sorting": {

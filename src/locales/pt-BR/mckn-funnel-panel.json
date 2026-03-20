@@ -24,7 +24,7 @@
         "descending-description": "Ordenar do maior para o menor",
         "descending-label": "Decrescente",
         "name": "Ordenação",
-        "none-description": "Nenhuma ordenação é aplicada",
+        "none-description": "Sem ordem",
         "none-label": "Nenhuma"
       }
     }

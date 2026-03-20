@@ -8,7 +8,7 @@
       "message": "Sin datos"
     },
     "unsupported": {
-      "description": "Los datos proporcionados no son compatibles con este panel. Cada marco de datos proporcionado al panel debe contener al menos un campo numérico que se utilizará para visualizar cada paso del embudo.",
+      "description": "Los datos proporcionados no son compatibles con este panel. Cada data frame proporcionado al panel debe contener al menos un campo numérico que se utilizará para visualizar cada paso del embudo.",
       "title": "Datos no compatibles"
     }
   },
@@ -23,8 +23,8 @@
         "ascending-label": "Ascendente",
         "descending-description": "Ordenar de mayor a menor",
         "descending-label": "Descendente",
-        "name": "Ordenación",
-        "none-description": "No se aplica ninguna ordenación",
+        "name": "Orden",
+        "none-description": "Sin Orden",
         "none-label": "Ninguno"
       }
     }
