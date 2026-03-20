@@ -10,13 +10,30 @@ npm run build        # Production build
 npm run test         # Jest unit tests (watch mode)
 npm run typecheck    # TypeScript type checking (tsc --noEmit)
 npm run lint         # ESLint
-npm run lint:fix     # ESLint with auto-fix
+npm run lint:fix     # ESLint auto-fix + Prettier formatting
 npm run e2e          # Playwright e2e tests (requires running Grafana)
 npm run server       # Start local Grafana via Docker on port 3000
+npm run test:ci      # Jest tests for CI (non-watch, max 4 workers)
 npm run i18n-extract # Extract translation keys to src/locales/
 ```
 
 Node >= 20 (see `.nvmrc`). Use `npm ci` for installs.
+
+## Development Setup
+
+`npm run server` starts a Docker Compose stack with Grafana:
+
+- Grafana version defaults to 11.0.0 (override with `GRAFANA_VERSION` env var)
+- Anonymous auth enabled, basic auth disabled, development mode
+- Plugin signing disabled (unsigned plugins allowed)
+- LiveReload enabled for hot reload during `npm run dev`
+- Installs `marcusolsson-static-datasource` plugin automatically
+- Enables `localizationForPlugins` feature toggle
+
+Provisioned test data:
+
+- Static datasource (UID: `vHsj2qbVk`) with example funnel data (5 steps: Sent → Viewed → Clicked → Add to cart → Purchased)
+- Test dashboard at `/d/NtsITqb4z/funnel-examples` with panels for different sort modes
 
 ## Architecture
 
@@ -129,12 +146,29 @@ import { getContrastText } from 'utils';
 - Framework: Playwright + @grafana/plugin-e2e
 - Files in `tests/`
 - Requires running Grafana: `npm run build` then `npm run server`, then `npm run e2e` in a separate terminal
-- Uses provisioned dashboards and static datasource for test data
+- Uses provisioned dashboard (`/d/NtsITqb4z/funnel-examples`) and static datasource for test data
+- Panel view IDs: 7 (descending sort), 8 (ascending sort)
 - Auth handled by `@grafana/plugin-e2e` auth setup project
 
 ### Test IDs
 
 Follow the pattern `bar-{i}`, `label-{i}`, `percentage-{i}`, `gap-{i}`. Use this convention for new components.
+
+## CI/CD
+
+Three GitHub Actions workflows in `.github/workflows/`:
+
+- **ci.yml** — runs on push to main/master and PRs. Steps: typecheck → lint → unit tests → build → (optional sign) → package → e2e tests against multiple Grafana versions
+- **release.yml** — triggered by `v*` tags (e.g. `v2.1.0`). Builds and releases via `grafana/plugin-actions/build-plugin@release`. Requires `GRAFANA_API_KEY` secret for signing.
+- **is-compatible.yml** — runs on PRs. Checks plugin compatibility against latest Grafana API. Fails the PR if incompatible.
+
+### Release process
+
+1. Update version in `package.json`
+2. Update `CHANGELOG.md`
+3. Commit and push to main
+4. Tag with `git tag v{version}` and push the tag
+5. `release.yml` handles build, sign, and GitHub release creation automatically
 
 ## Gotchas
 
@@ -143,3 +177,5 @@ Follow the pattern `bar-{i}`, `label-{i}`, `percentage-{i}`, `gap-{i}`. Use this
 - Field config defaults `min` to 0. This is required for correct percentage/width calculation in the funnel.
 - `.config/` directory is scaffolded by `@grafana/create-plugin`. Do not edit files there. Extend config via root-level files (`tsconfig.json`, `jest.config.js`, `.eslintrc`, `.prettierrc.js`).
 - The tooltip system uses a module-level mutable registry. Content is registered via `useEffect` and cleaned up on unmount.
+- `lint:fix` runs both ESLint with `--fix` and Prettier — it reformats the entire project, not just lint issues.
+- `.cprc.json` contains `@grafana/create-plugin` feature flags. Don't enable `bundleGrafanaUI`, React Router v6, or Rspack without testing thoroughly.
