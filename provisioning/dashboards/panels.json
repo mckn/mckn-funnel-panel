@@ -543,6 +543,68 @@
         }
       ],
       "type": "mckn-funnel-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "vHsj2qbVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "min": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 11,
+        "x": 11,
+        "y": 54
+      },
+      "id": 10,
+      "options": {
+        "showPercentage": false,
+        "sorting": "descending"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Label",
+                "type": "string",
+                "values": ["Sent", "Viewed", "Clicked", "Add to cart", "Purchased"]
+              },
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [52300, 35679, 15690, 5596, 3290]
+              }
+            ],
+            "meta": {},
+            "name": "Sent"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Funnel - hidden percentages",
+      "transformations": [
+        {
+          "id": "rowsToFields",
+          "options": {}
+        }
+      ],
+      "type": "mckn-funnel-panel"
     }
   ],
   "refresh": "",
