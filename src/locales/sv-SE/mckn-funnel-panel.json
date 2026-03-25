@@ -14,6 +14,10 @@
   },
   "panel": {
     "options": {
+      "show-percentage": {
+        "description": "Visa procentkolumnen bredvid trattdiagrammet",
+        "name": "Visa procent"
+      },
       "show-remained-percentage": {
         "description": "Visa andel som stannar kvar istället för andel som faller bort i mellanrum och verktygstips",
         "name": "Visa andel kvar"

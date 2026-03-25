@@ -14,6 +14,10 @@
   },
   "panel": {
     "options": {
+      "show-percentage": {
+        "description": "Show the percentage column next to the funnel bars",
+        "name": "Show percentages"
+      },
       "show-remained-percentage": {
         "description": "Show retention rate instead of drop-off rate in gap labels and tooltips",
         "name": "Show retention rate"

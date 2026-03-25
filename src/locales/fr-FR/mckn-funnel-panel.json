@@ -14,6 +14,10 @@
   },
   "panel": {
     "options": {
+      "show-percentage": {
+        "description": "Afficher la colonne des pourcentages à côté des barres de l'entonnoir",
+        "name": "Afficher les pourcentages"
+      },
       "show-remained-percentage": {
         "description": "Afficher le taux de rétention au lieu du taux d'abandon dans les libellés des intervalles et les infobulles",
         "name": "Afficher le taux de rétention"
