@@ -1,16 +1,13 @@
-import { LANGUAGES, type ResourceLoader, type Resources } from '@grafana/i18n';
+import { type ResourceLoader, type Resources } from '@grafana/i18n';
 import pluginJson from 'plugin.json';
 
-const pluginLanguageCodes = Array.isArray((pluginJson as any).languages)
-  ? new Set<string>((pluginJson as any).languages)
-  : new Set<string>();
-
-const resources = LANGUAGES.filter((lang) => pluginLanguageCodes.has(lang.code)).reduce<
-  Record<string, () => Promise<{ default: Resources }>>
->((acc, lang) => {
-  acc[lang.code] = async () => await import(`./locales/${lang.code}/${pluginJson.id}.json`);
-  return acc;
-}, {});
+const resources: Record<string, () => Promise<{ default: Resources }>> = {
+  'en-US': () => import('./locales/en-US/mckn-funnel-panel.json'),
+  'sv-SE': () => import('./locales/sv-SE/mckn-funnel-panel.json'),
+  'es-ES': () => import('./locales/es-ES/mckn-funnel-panel.json'),
+  'pt-BR': () => import('./locales/pt-BR/mckn-funnel-panel.json'),
+  'fr-FR': () => import('./locales/fr-FR/mckn-funnel-panel.json'),
+};
 
 export const loadResources: ResourceLoader = async (resolvedLanguage: string) => {
   try {
