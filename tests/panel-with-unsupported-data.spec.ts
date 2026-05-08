@@ -2,5 +2,5 @@ import { test, expect } from '@playwright/test';
 
 test('panel render "Unsupported data" successfully', async ({ page }) => {
   await page.goto('/d/NtsITqb4z/funnel-examples?orgId=1&viewPanel=5');
-  await expect(page.getByText('Unsupported data')).toBeVisible();
+  await expect(page.getByTestId('data-testid Alert info')).toBeVisible();
 });
