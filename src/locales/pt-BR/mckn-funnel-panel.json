@@ -4,6 +4,10 @@
       "drop": "{{percentage}} de queda de \"{{fromLabel}}\" para \"{{toLabel}}\"",
       "retained": "{{percentage}} retido de \"{{fromLabel}}\" para \"{{toLabel}}\""
     },
+    "flow": {
+      "drop-off": "abandono",
+      "retention": "retenção"
+    },
     "nodata": {
       "message": "Sem dados"
     },
@@ -14,6 +18,20 @@
   },
   "panel": {
     "options": {
+      "layout": {
+        "classic-description": "Funil centralizado com rótulos à esquerda e porcentagens à direita",
+        "classic-label": "Clássico",
+        "flow-description": "Uma seção por etapa com detalhes ao lado de um funil contínuo que se estreita suavemente",
+        "flow-label": "Fluxo",
+        "name": "Layout"
+      },
+      "orientation": {
+        "horizontal-description": "Etapas da esquerda para a direita com o funil abaixo dos detalhes",
+        "horizontal-label": "Horizontal",
+        "name": "Orientação",
+        "vertical-description": "Etapas de cima para baixo com o funil à direita",
+        "vertical-label": "Vertical"
+      },
       "show-percentage": {
         "description": "Mostrar a coluna de porcentagens ao lado das barras do funil",
         "name": "Mostrar porcentagens"

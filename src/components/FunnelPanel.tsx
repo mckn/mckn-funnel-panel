@@ -2,17 +2,18 @@ import React, { type ReactElement } from 'react';
 import { css } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { GrafanaTheme2, type PanelProps } from '@grafana/data';
-import { type PanelOptions } from 'types';
+import { Layout, type PanelOptions } from 'types';
 import { FunnelDataResultStatus, useFunnelData } from '../data/useFunnelData';
 import { PureChart } from './Chart';
 import { PureLabels } from './Labels';
 import { PurePercentages } from './Percentages';
+import { PureFlowLayout } from './Flow';
 import { Unsupported } from './Unsupported';
 import { Nodata } from './Nodata';
 
 export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   const { width, height, data, options, fieldConfig, replaceVariables, timeZone } = props;
-  const { showRemainedPercentage, showPercentage } = options;
+  const { layout, orientation, showRemainedPercentage, showPercentage } = options;
 
   const theme = useTheme2();
   const styles = useStyles2(getStyles(width, height));
@@ -42,6 +43,20 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
         </div>
       );
     default:
+      if (layout === Layout.flow) {
+        return (
+          <div className={styles.container}>
+            <PureFlowLayout
+              values={values}
+              orientation={orientation}
+              width={width}
+              height={height}
+              showRemainedPercentage={showRemainedPercentage}
+            />
+          </div>
+        );
+      }
+
       return (
         <div className={styles.container}>
           <PureLabels values={values} />
@@ -58,14 +73,6 @@ const getStyles = (width: number, height: number) => (_: GrafanaTheme2) => {
       width: `${width}px`,
       height: `${height}px`,
       display: 'flex',
-    }),
-    left: css({
-      flexBasis: '150px',
-      backgroundColor: 'blue',
-    }),
-    right: css({
-      flexBasis: '150px',
-      backgroundColor: 'white',
     }),
   };
 };

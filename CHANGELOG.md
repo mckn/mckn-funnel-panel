@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Feature: New "Flow" layout option. The funnel renders as one continuous band that narrows smoothly from step to step. Each step shows its name, value and conversion from the previous step, and the band shows the percentage of the first step. Hovering a step highlights it. The layout can be vertical or horizontal.
+
 ## 1.3.0
 
 Feature: It is now possible to configure the panel to show the bar gap as a retention instead of a drop.

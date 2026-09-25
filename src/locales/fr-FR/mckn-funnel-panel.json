@@ -4,6 +4,10 @@
       "drop": "{{percentage}} de perte de \"{{fromLabel}}\" à \"{{toLabel}}\"",
       "retained": "{{percentage}} retenus de \"{{fromLabel}}\" à \"{{toLabel}}\""
     },
+    "flow": {
+      "drop-off": "abandon",
+      "retention": "rétention"
+    },
     "nodata": {
       "message": "Aucune donnée"
     },
@@ -14,6 +18,20 @@
   },
   "panel": {
     "options": {
+      "layout": {
+        "classic-description": "Entonnoir centré avec les libellés à gauche et les pourcentages à droite",
+        "classic-label": "Classique",
+        "flow-description": "Une section par étape avec les détails à côté d’un entonnoir continu qui se rétrécit en douceur",
+        "flow-label": "Flux",
+        "name": "Disposition"
+      },
+      "orientation": {
+        "horizontal-description": "Étapes de gauche à droite avec l’entonnoir sous les détails",
+        "horizontal-label": "Horizontale",
+        "name": "Orientation",
+        "vertical-description": "Étapes de haut en bas avec l’entonnoir à droite",
+        "vertical-label": "Verticale"
+      },
       "show-percentage": {
         "description": "Afficher la colonne des pourcentages à côté des barres de l'entonnoir",
         "name": "Afficher les pourcentages"

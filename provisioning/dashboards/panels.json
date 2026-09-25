@@ -605,6 +605,198 @@
         }
       ],
       "type": "mckn-funnel-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "vHsj2qbVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "min": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 22,
+        "x": 0,
+        "y": 77
+      },
+      "id": 11,
+      "options": {
+        "layout": "flow",
+        "orientation": "vertical",
+        "sorting": "descending",
+        "showRemainedPercentage": false
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Label",
+                "type": "string",
+                "values": ["Sent", "Viewed", "Clicked", "Add to cart", "Purchased"]
+              },
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [52300, 35679, 15690, 5596, 3290]
+              }
+            ],
+            "meta": {},
+            "name": "Sent"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Funnel - flow layout vertical",
+      "transformations": [
+        {
+          "id": "rowsToFields",
+          "options": {}
+        }
+      ],
+      "type": "mckn-funnel-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "vHsj2qbVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "min": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 22,
+        "x": 0,
+        "y": 93
+      },
+      "id": 12,
+      "options": {
+        "layout": "flow",
+        "orientation": "vertical",
+        "sorting": "descending",
+        "showRemainedPercentage": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Label",
+                "type": "string",
+                "values": ["Sent", "Viewed", "Clicked", "Add to cart", "Purchased"]
+              },
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [52300, 35679, 15690, 5596, 3290]
+              }
+            ],
+            "meta": {},
+            "name": "Sent"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Funnel - flow layout vertical compact with retention rate",
+      "transformations": [
+        {
+          "id": "rowsToFields",
+          "options": {}
+        }
+      ],
+      "type": "mckn-funnel-panel"
+    },
+    {
+      "datasource": {
+        "type": "marcusolsson-static-datasource",
+        "uid": "vHsj2qbVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "min": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 22,
+        "x": 0,
+        "y": 101
+      },
+      "id": 13,
+      "options": {
+        "layout": "flow",
+        "orientation": "horizontal",
+        "sorting": "descending",
+        "showRemainedPercentage": false
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "marcusolsson-static-datasource",
+            "uid": "vHsj2qbVk"
+          },
+          "frame": {
+            "fields": [
+              {
+                "config": {},
+                "name": "Label",
+                "type": "string",
+                "values": ["Sent", "Viewed", "Clicked", "Add to cart", "Purchased"]
+              },
+              {
+                "config": {},
+                "name": "Value",
+                "type": "number",
+                "values": [52300, 35679, 15690, 5596, 3290]
+              }
+            ],
+            "meta": {},
+            "name": "Sent"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Funnel - flow layout horizontal",
+      "transformations": [
+        {
+          "id": "rowsToFields",
+          "options": {}
+        }
+      ],
+      "type": "mckn-funnel-panel"
     }
   ],
   "refresh": "",

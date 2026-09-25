@@ -1,8 +1,14 @@
 import React, { type ReactElement } from 'react';
 import { css } from '@emotion/css';
 import tinycolor from 'tinycolor2';
-import { Icon, type IconName, useStyles2 } from '@grafana/ui';
-import { formatPercentage, getPercentageExtraStyles } from '../utils';
+import { Icon, useStyles2 } from '@grafana/ui';
+import {
+  formatPercentage,
+  getDropRate,
+  getPercentageExtraStyles,
+  getTrapezoidClipPath,
+  getTrendIconName,
+} from '../utils';
 import { useTooltipProps, BarGapTooltip } from './Tooltip';
 import { GrafanaTheme2, type DisplayValue } from '@grafana/data';
 
@@ -20,8 +26,8 @@ export function BarGap(props: Props): ReactElement | null {
 
   const toPercentage = to?.percent ?? 0;
   const fromPercentage = from?.percent ?? 0;
-  const drop = (fromPercentage - toPercentage) / fromPercentage;
-  const icon = getIconName(fromPercentage, toPercentage);
+  const drop = getDropRate(fromPercentage, toPercentage);
+  const icon = getTrendIconName(fromPercentage, toPercentage);
   const tooltipProps = useTooltipProps({
     content: (
       <BarGapTooltip
@@ -48,16 +54,6 @@ export function BarGap(props: Props): ReactElement | null {
   );
 }
 
-function getIconName(from: number, to: number): IconName {
-  if (from > to) {
-    return 'arrow-down';
-  }
-  if (from < to) {
-    return 'arrow-up';
-  }
-  return 'arrow-right';
-}
-
 const getStyles = (from: DisplayValue, to: DisplayValue | undefined, textColor: string) => (theme: GrafanaTheme2) => {
   if (!to) {
     return {};
@@ -66,10 +62,6 @@ const getStyles = (from: DisplayValue, to: DisplayValue | undefined, textColor: 
   const toPercent = to.percent ?? 0;
   const fromPercent = from.percent ?? 0;
   const bgColor = tinycolor(from.color).darken(15).toHexString();
-  const topLeft = 100 * ((1 - fromPercent) / 2);
-  const topRight = 100 - topLeft;
-  const bottomLeft = 100 * ((1 - toPercent) / 2);
-  const bottomRight = 100 - bottomLeft;
 
   return {
     container: css({
@@ -84,7 +76,7 @@ const getStyles = (from: DisplayValue, to: DisplayValue | undefined, textColor: 
       width: '100%',
       height: '100%',
       backgroundColor: bgColor,
-      clipPath: `polygon(${topLeft}% 0%, ${topRight}% 0%, ${bottomRight}% 100%, ${bottomLeft}% 100%)`,
+      clipPath: getTrapezoidClipPath(fromPercent, toPercent),
     }),
     percentage: css({
       display: 'flex',
