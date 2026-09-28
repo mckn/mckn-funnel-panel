@@ -4,7 +4,6 @@ import { measureText, useStyles2, useTheme2 } from '@grafana/ui';
 import { type DisplayValue, type GrafanaTheme2 } from '@grafana/data';
 import { Orientation } from 'types';
 import { formatPercentage, getBandLabelPlacement, getDisplayValueKey, getFlowSegmentPath, useElementSize } from 'utils';
-import { BarTooltip, useTooltipProps } from '../Tooltip';
 
 // Width of the soft halo drawn around the band.
 const HALO_SIZE = 6;
@@ -134,18 +133,13 @@ type FlowSegmentProps = {
 
 function FlowSegment(props: FlowSegmentProps): ReactElement {
   const { value, path, dimmed, onMouseEnter, onMouseLeave } = props;
-  const { color, title = '', percent = 0, numeric } = value;
   const styles = useStyles2(getStyles);
-  const tooltipProps = useTooltipProps({
-    content: <BarTooltip label={title} value={numeric} percentage={percent} />,
-  });
 
   return (
     <path
-      {...tooltipProps}
       className={styles.dimmable}
       d={path}
-      fill={color}
+      fill={value.color}
       opacity={dimmed ? DIMMED_OPACITY : 1}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

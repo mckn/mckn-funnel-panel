@@ -71,4 +71,17 @@ test.describe('panel with flow layout highlighting', () => {
     await expect(page.getByTestId('bar-1')).toHaveAttribute('opacity', '1');
     await expect(page.getByTestId('bar-3')).toHaveAttribute('opacity', '0.35');
   });
+
+  test('does not show a tooltip when hovering the funnel', async ({ page }) => {
+    await page.getByTestId('bar-1').hover();
+
+    await expect(page.getByTestId('bar-3')).toHaveAttribute('opacity', '0.35');
+    await expect(page.getByRole('tooltip')).toHaveCount(0);
+  });
+
+  test('does not focus the funnel when clicking it', async ({ page }) => {
+    await page.getByTestId('bar-2').click();
+
+    await expect(page.getByTestId('bar-2')).not.toBeFocused();
+  });
 });

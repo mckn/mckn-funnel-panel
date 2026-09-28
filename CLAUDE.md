@@ -75,7 +75,7 @@ Flow layout (`layout: flow`, `src/components/Flow/`):
 PureFlowLayout                  # CSS grid, one section per step, owns hover highlight state
 ├── StepInfo                    # Step name, value and conversion from the previous step
 └── FunnelFlow                  # One SVG band across all steps, measured with useElementSize
-    ├── FlowSegment             # Filled path per step (getFlowSegmentPath), tooltip + hover
+    ├── FlowSegment             # Filled path per step (getFlowSegmentPath), hover highlight, no tooltip
     └── percentage labels       # Next to or inside the band (getBandLabelPlacement)
 ```
 
