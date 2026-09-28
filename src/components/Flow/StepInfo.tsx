@@ -4,7 +4,6 @@ import tinycolor from 'tinycolor2';
 import { t } from '@grafana/i18n';
 import { FormattedValueDisplay, Icon, type IconName, useStyles2 } from '@grafana/ui';
 import { type DisplayValue, type GrafanaTheme2, type LinkModel } from '@grafana/data';
-import { BarGapTooltip, useTooltipProps } from '../Tooltip';
 import { formatPercentage, getDropRate, getTrendIconName } from 'utils';
 import { StepLinksMenu } from './StepLinksMenu';
 
@@ -92,20 +91,9 @@ function Conversion(props: ConversionProps): ReactElement {
   const fromPercent = from.percent ?? 0;
   const toPercent = to.percent ?? 0;
   const drop = getDropRate(fromPercent, toPercent);
-  const tooltipProps = useTooltipProps({
-    content: (
-      <BarGapTooltip
-        drop={drop}
-        fromLabel={from.title ?? ''}
-        toLabel={to.title}
-        showRemainedPercentage={showRemainedPercentage}
-      />
-    ),
-  });
 
   return (
     <Metric
-      {...tooltipProps}
       icon={getTrendIconName(fromPercent, toPercent)}
       value={formatPercentage(showRemainedPercentage ? 1 - drop : drop)}
       caption={
@@ -123,8 +111,6 @@ type MetricProps = {
   compact: boolean;
   icon?: IconName;
   'data-testid'?: string;
-  'data-tooltip-id'?: string;
-  'data-tooltip-content'?: string;
 };
 
 function Metric(props: MetricProps): ReactElement {

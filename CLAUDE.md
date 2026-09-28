@@ -72,7 +72,7 @@ FunnelPanel
 Flow layout (`layout: flow`, `src/components/Flow/`):
 
 ```
-PureFlowLayout                  # CSS grid, one section per step, owns hover highlight state
+PureFlowLayout                  # CSS grid, one section per step, owns hover highlight state, no tooltips
 ├── StepInfo                    # Step name, value and conversion from the previous step
 │   └── StepLinksMenu           # "..." button + Dropdown menu of data links, shown on hover/focus
 └── FunnelFlow                  # One SVG band across all steps, measured with useElementSize

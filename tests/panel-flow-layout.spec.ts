@@ -79,6 +79,13 @@ test.describe('panel with flow layout highlighting', () => {
     await expect(page.getByRole('tooltip')).toHaveCount(0);
   });
 
+  test('does not show a tooltip when hovering the conversion', async ({ page }) => {
+    await page.getByTestId('conversion-1').hover();
+
+    await expect(page.getByTestId('bar-1')).toHaveAttribute('opacity', '1');
+    await expect(page.getByRole('tooltip')).toHaveCount(0);
+  });
+
   test('does not focus the funnel when clicking it', async ({ page }) => {
     await page.getByTestId('bar-2').click();
 

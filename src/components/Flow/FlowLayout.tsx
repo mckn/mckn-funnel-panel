@@ -5,7 +5,6 @@ import { type DisplayValue, type GrafanaTheme2 } from '@grafana/data';
 import { Orientation } from 'types';
 import { getDisplayValueKey } from 'utils';
 import { type LinksSupplier } from '../../data/useFunnelData';
-import { TooltipProvider } from '../Tooltip';
 import { StepInfo } from './StepInfo';
 import { FunnelFlow } from './FunnelFlow';
 
@@ -32,36 +31,34 @@ export function FlowLayout(props: Props): ReactElement {
   const [highlightedIndex, setHighlightedIndex] = useState<number>();
 
   return (
-    <TooltipProvider>
-      <div className={styles.container} data-testid={props['data-testid']}>
-        {values.map((v, i) => (
-          <Fragment key={getDisplayValueKey(v)}>
-            <div className={styles.divider} style={getDividerPlacement(i, horizontal)} />
-            <StepInfo
-              value={v}
-              previous={values[i - 1]}
-              index={i}
-              compact={compact}
-              alignTop={horizontal}
-              highlighted={highlightedIndex === i}
-              onMouseEnter={() => setHighlightedIndex(i)}
-              onMouseLeave={() => setHighlightedIndex(undefined)}
-              showRemainedPercentage={showRemainedPercentage}
-              getLinks={links[i]}
-              style={getStepPlacement(i, horizontal)}
-              data-testid={`step-${i}`}
-            />
-          </Fragment>
-        ))}
-        <FunnelFlow
-          values={values}
-          orientation={orientation}
-          highlightedIndex={highlightedIndex}
-          onHighlight={setHighlightedIndex}
-          className={styles.funnel}
-        />
-      </div>
-    </TooltipProvider>
+    <div className={styles.container} data-testid={props['data-testid']}>
+      {values.map((v, i) => (
+        <Fragment key={getDisplayValueKey(v)}>
+          <div className={styles.divider} style={getDividerPlacement(i, horizontal)} />
+          <StepInfo
+            value={v}
+            previous={values[i - 1]}
+            index={i}
+            compact={compact}
+            alignTop={horizontal}
+            highlighted={highlightedIndex === i}
+            onMouseEnter={() => setHighlightedIndex(i)}
+            onMouseLeave={() => setHighlightedIndex(undefined)}
+            showRemainedPercentage={showRemainedPercentage}
+            getLinks={links[i]}
+            style={getStepPlacement(i, horizontal)}
+            data-testid={`step-${i}`}
+          />
+        </Fragment>
+      ))}
+      <FunnelFlow
+        values={values}
+        orientation={orientation}
+        highlightedIndex={highlightedIndex}
+        onHighlight={setHighlightedIndex}
+        className={styles.funnel}
+      />
+    </div>
   );
 }
 
