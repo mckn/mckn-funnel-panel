@@ -2,7 +2,7 @@ import { FieldColorModeId, FieldConfigProperty, PanelPlugin } from '@grafana/dat
 import { t } from '@grafana/i18n';
 import { FunnelPanel } from 'components/FunnelPanel';
 import { initI18n } from './initI18n';
-import { Sorting, type PanelOptions } from './types';
+import { Layout, Orientation, Sorting, type PanelOptions } from './types';
 
 await initI18n();
 
@@ -26,6 +26,61 @@ export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel)
     },
   })
   .setPanelOptions((builder) => {
+    builder.addRadio({
+      path: 'layout',
+      name: t('panel.options.layout.name', 'Layout'),
+      category: ['Funnel'],
+      settings: {
+        options: [
+          {
+            value: Layout.classic,
+            label: t('panel.options.layout.classic-label', 'Classic'),
+            description: t(
+              'panel.options.layout.classic-description',
+              'Centered funnel with labels on the left and percentages on the right'
+            ),
+          },
+          {
+            value: Layout.flow,
+            label: t('panel.options.layout.flow-label', 'Flow'),
+            description: t(
+              'panel.options.layout.flow-description',
+              'One section per step with details next to a continuous, smoothly narrowing funnel'
+            ),
+          },
+        ],
+      },
+      defaultValue: Layout.classic,
+    });
+
+    builder.addRadio({
+      path: 'orientation',
+      name: t('panel.options.orientation.name', 'Orientation'),
+      category: ['Funnel'],
+      settings: {
+        options: [
+          {
+            value: Orientation.vertical,
+            label: t('panel.options.orientation.vertical-label', 'Vertical'),
+            description: t(
+              'panel.options.orientation.vertical-description',
+              'Steps from top to bottom with the funnel on the right'
+            ),
+          },
+          {
+            value: Orientation.horizontal,
+            label: t('panel.options.orientation.horizontal-label', 'Horizontal'),
+            description: t(
+              'panel.options.orientation.horizontal-description',
+              'Steps from left to right with the funnel below the details'
+            ),
+          },
+        ],
+      },
+      defaultValue: Orientation.vertical,
+      showIf: (options) => options.layout === Layout.flow,
+    });
+
     builder.addRadio({
       path: 'sorting',
       name: t('panel.options.sorting.name', 'Sorting'),
@@ -67,10 +122,8 @@ export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel)
       path: 'showPercentage',
       name: t('panel.options.show-percentage.name', 'Show percentages'),
       category: ['Funnel'],
-      description: t(
-        'panel.options.show-percentage.description',
-        'Show the percentage column next to the funnel bars'
-      ),
+      description: t('panel.options.show-percentage.description', 'Show the percentage column next to the funnel bars'),
       defaultValue: true,
+      showIf: (options) => options.layout !== Layout.flow,
     });
   });

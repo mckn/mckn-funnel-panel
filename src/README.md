@@ -21,6 +21,13 @@ If your data, instead, is returned as one data frame with two fields. One field 
 
 The most common scenarios for this would be if you have a pre-baked view containing the data for the funnel e.g. if you have some heavy queries running on a regular basis to aggregate the data.
 
+## Layouts
+
+The panel supports two layouts, selected with the **Layout** option:
+
+- **Classic**: a centered funnel with the step labels on the left and the percentage of the first step on the right.
+- **Flow**: the funnel is one continuous band that narrows smoothly from step to step. Each step shows its name, value and conversion (drop-off or retention) from the previous step. The percentage of the first step is shown next to the band. Hover a step to highlight it. Use the **Orientation** option to show the steps from top to bottom (vertical) or from left to right (horizontal).
+
 ## FAQ
 
 **Q: The percentage values looks off in my funnel, what am I doing wrong?**

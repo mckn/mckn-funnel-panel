@@ -4,6 +4,10 @@
       "drop": "{{percentage}} tapp från \"{{fromLabel}}\" till \"{{toLabel}}\"",
       "retained": "{{percentage}} kvar från \"{{fromLabel}}\" till \"{{toLabel}}\""
     },
+    "flow": {
+      "drop-off": "bortfall",
+      "retention": "kvar"
+    },
     "nodata": {
       "message": "Ingen data"
     },
@@ -14,6 +18,20 @@
   },
   "panel": {
     "options": {
+      "layout": {
+        "classic-description": "Centrerad tratt med etiketter till vänster och procent till höger",
+        "classic-label": "Klassisk",
+        "flow-description": "En sektion per steg med detaljer bredvid en sammanhängande tratt som smalnar av mjukt",
+        "flow-label": "Flöde",
+        "name": "Layout"
+      },
+      "orientation": {
+        "horizontal-description": "Steg från vänster till höger med tratten under detaljerna",
+        "horizontal-label": "Horisontell",
+        "name": "Orientering",
+        "vertical-description": "Steg uppifrån och ned med tratten till höger",
+        "vertical-label": "Vertikal"
+      },
       "show-percentage": {
         "description": "Visa procentkolumnen bredvid trattdiagrammet",
         "name": "Visa procent"

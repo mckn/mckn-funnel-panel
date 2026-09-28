@@ -43,7 +43,7 @@ Provisioned test data:
 
 - `FunnelPanel` as the panel renderer
 - Field config: color mode `ContinuousGrYlRd`, default min 0, disabled NoValue/Thresholds/Links
-- Panel options: `sorting` (descending/ascending/none) and `showRemainedPercentage` (boolean)
+- Panel options: `layout` (classic/flow), `orientation` (vertical/horizontal, flow only), `sorting` (descending/ascending/none), `showRemainedPercentage` (boolean) and `showPercentage` (boolean, classic only)
 
 ### Data flow
 
@@ -52,7 +52,7 @@ Provisioned test data:
    - Empty series → `FunnelDataResultStatus.nodata`
    - No numeric fields → `FunnelDataResultStatus.unsupported`
    - Valid data → calls `getFieldDisplayValues` from `@grafana/data`, applies sorting by `percent`, returns `DisplayValue[]`
-3. `FunnelPanel` renders based on status: `Nodata`, `Unsupported`, or the three-column layout
+3. `FunnelPanel` renders based on status: `Nodata`, `Unsupported`, or the selected layout (classic three-column layout or `PureFlowLayout`)
 
 ### Component hierarchy
 
@@ -69,12 +69,27 @@ FunnelPanel
     └── PurePercentages         # Step percentages (right, 120px flex-basis)
 ```
 
+Flow layout (`layout: flow`, `src/components/Flow/`):
+
+```
+PureFlowLayout                  # CSS grid, one section per step, owns hover highlight state
+├── StepInfo                    # Step name, value and conversion from the previous step
+└── FunnelFlow                  # One SVG band across all steps, measured with useElementSize
+    ├── FlowSegment             # Filled path per step (getFlowSegmentPath), hover highlight, no tooltip
+    └── percentage labels       # Next to or inside the band (getBandLabelPlacement)
+```
+
+- `orientation: vertical` puts steps top to bottom with the band on the right. `horizontal` puts steps left to right with the band below the details.
+- The band keeps each step's thickness, then eases to the next step's thickness. Curve shape constants live at the top of `src/utils/getFlowSegmentPath.ts`.
+
 ### Types
 
 `src/types.ts`:
 
 - `Sorting` enum: `ascending`, `descending`, `none`
-- `PanelOptions`: `{ sorting: Sorting; showRemainedPercentage: boolean }`
+- `Layout` enum: `classic`, `flow`
+- `Orientation` enum: `vertical`, `horizontal`
+- `PanelOptions`: `{ layout: Layout; orientation: Orientation; sorting: Sorting; showRemainedPercentage: boolean; showPercentage: boolean }`
 
 ### Utilities (`src/utils/`)
 
@@ -82,6 +97,11 @@ FunnelPanel
 - `getDisplayValueKey(value)` — composite key from `text-percent-title` for React keys
 - `getContrastText(values, theme)` — picks readable text color against bar background
 - `getPercentageExtraStyles(theme, textColor, bgColor)` — adds background pill when text would be unreadable
+- `getDropRate(from, to)` / `getTrendIconName(from, to)` — drop between two steps and the matching arrow icon
+- `getTrapezoidClipPath(top, bottom)` — clip-path polygon for the classic `BarGap`
+- `getFlowSegmentPath(options)` — SVG area and edge paths for one step of the flow band
+- `getBandLabelPlacement(options)` — where to put a percentage label next to the flow band
+- `useElementSize()` — ResizeObserver hook returning a ref and its width/height
 
 ### Tooltip system (`src/components/Tooltip/`)
 
@@ -147,12 +167,12 @@ import { getContrastText } from 'utils';
 - Files in `tests/`
 - Requires running Grafana: `npm run build` then `npm run server`, then `npm run e2e` in a separate terminal
 - Uses provisioned dashboard (`/d/NtsITqb4z/funnel-examples`) and static datasource for test data
-- Panel view IDs: 7 (descending sort), 8 (ascending sort)
+- Panel view IDs: 7 (descending sort), 8 (ascending sort), 11 (flow vertical), 12 (flow vertical compact with retention rate), 13 (flow horizontal)
 - Auth handled by `@grafana/plugin-e2e` auth setup project
 
 ### Test IDs
 
-Follow the pattern `bar-{i}`, `label-{i}`, `percentage-{i}`, `gap-{i}`. Use this convention for new components.
+Follow the pattern `bar-{i}`, `label-{i}`, `percentage-{i}`, `gap-{i}`. Use this convention for new components. The flow layout adds `step-{i}`, `value-{i}` and `conversion-{i}`.
 
 ## CI/CD
 

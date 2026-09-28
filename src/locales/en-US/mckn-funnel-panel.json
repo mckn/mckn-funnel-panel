@@ -4,6 +4,10 @@
       "drop": "{{percentage}} drop from \"{{fromLabel}}\" to \"{{toLabel}}\"",
       "retained": "{{percentage}} retained from \"{{fromLabel}}\" to \"{{toLabel}}\""
     },
+    "flow": {
+      "drop-off": "drop-off",
+      "retention": "retention"
+    },
     "nodata": {
       "message": "No data"
     },
@@ -14,6 +18,20 @@
   },
   "panel": {
     "options": {
+      "layout": {
+        "classic-description": "Centered funnel with labels on the left and percentages on the right",
+        "classic-label": "Classic",
+        "flow-description": "One section per step with details next to a continuous, smoothly narrowing funnel",
+        "flow-label": "Flow",
+        "name": "Layout"
+      },
+      "orientation": {
+        "horizontal-description": "Steps from left to right with the funnel below the details",
+        "horizontal-label": "Horizontal",
+        "name": "Orientation",
+        "vertical-description": "Steps from top to bottom with the funnel on the right",
+        "vertical-label": "Vertical"
+      },
       "show-percentage": {
         "description": "Show the percentage column next to the funnel bars",
         "name": "Show percentages"

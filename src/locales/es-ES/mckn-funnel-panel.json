@@ -4,6 +4,10 @@
       "drop": "{{percentage}} caída de \"{{fromLabel}}\" a \"{{toLabel}}\"",
       "retained": "{{percentage}} retenido de \"{{fromLabel}}\" a \"{{toLabel}}\""
     },
+    "flow": {
+      "drop-off": "abandono",
+      "retention": "retención"
+    },
     "nodata": {
       "message": "Sin datos"
     },
@@ -14,6 +18,20 @@
   },
   "panel": {
     "options": {
+      "layout": {
+        "classic-description": "Embudo centrado con etiquetas a la izquierda y porcentajes a la derecha",
+        "classic-label": "Clásico",
+        "flow-description": "Una sección por paso con detalles junto a un embudo continuo que se estrecha suavemente",
+        "flow-label": "Flujo",
+        "name": "Diseño"
+      },
+      "orientation": {
+        "horizontal-description": "Pasos de izquierda a derecha con el embudo debajo de los detalles",
+        "horizontal-label": "Horizontal",
+        "name": "Orientación",
+        "vertical-description": "Pasos de arriba abajo con el embudo a la derecha",
+        "vertical-label": "Vertical"
+      },
       "show-percentage": {
         "description": "Mostrar la columna de porcentajes junto a las barras del embudo",
         "name": "Mostrar porcentajes"
