@@ -128,3 +128,36 @@ test.describe('panel with flow layout and no data links', () => {
     await expect(page.getByTestId('menu-0')).toHaveCount(0);
   });
 });
+
+test.describe('panel with compact flow layout', () => {
+  test.beforeEach(async ({ page }) => {
+    // A short viewport makes the steps of panel 12 compact.
+    await page.setViewportSize({ width: 1280, height: 400 });
+    await page.goto('/d/NtsITqb4z/funnel-examples?viewPanel=12&orgId=1');
+  });
+
+  test('puts the step details on the same text baseline', async ({ page }) => {
+    await expect(page.getByTestId('conversion-1')).toBeVisible();
+
+    // A zero-size inline-block after each text sits on the baseline of that text.
+    const baselines = await page.getByTestId('step-1').evaluate((step) => {
+      const walker = document.createTreeWalker(step, NodeFilter.SHOW_TEXT);
+      const result: number[] = [];
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        if (!node.textContent?.trim()) {
+          continue;
+        }
+        const marker = document.createElement('span');
+        marker.style.cssText = 'display: inline-block; width: 0; height: 0;';
+        node.parentNode!.insertBefore(marker, node.nextSibling);
+        result.push(marker.getBoundingClientRect().bottom);
+        marker.remove();
+      }
+      return result;
+    });
+
+    // Title, value, conversion and caption.
+    expect(baselines).toHaveLength(4);
+    expect(Math.max(...baselines) - Math.min(...baselines)).toBeLessThan(1);
+  });
+});

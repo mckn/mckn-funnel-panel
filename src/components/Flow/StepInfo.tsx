@@ -120,7 +120,7 @@ function Metric(props: MetricProps): ReactElement {
   return (
     <div className={cx(styles.metric, compact && styles.compact)} {...rest}>
       <span className={styles.value}>
-        {icon && <Icon name={icon} />}
+        {icon && <Icon name={icon} className={styles.icon} />}
         {value}
       </span>
       <span className={styles.caption}>{caption}</span>
@@ -139,11 +139,23 @@ const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2
   return {
     step: css({
       position: 'relative',
-      display: 'flex',
-      flexDirection: compact ? 'row' : 'column',
-      alignItems: compact ? 'center' : 'flex-start',
-      justifyContent: compact || alignTop ? 'flex-start' : 'center',
-      gap: compact ? theme.spacing(2) : theme.spacing(0.5),
+      ...(compact
+        ? {
+            // One row, centered in the step, with title, value and conversion on the same text baseline.
+            display: 'grid',
+            gridAutoFlow: 'column',
+            justifyContent: 'start',
+            alignContent: 'center',
+            alignItems: 'baseline',
+            columnGap: theme.spacing(2),
+          }
+        : {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: alignTop ? 'flex-start' : 'center',
+            gap: theme.spacing(0.5),
+          }),
       minWidth: 0,
       minHeight: 0,
       overflow: 'hidden',
@@ -218,11 +230,15 @@ const getMetricStyles = (theme: GrafanaTheme2) => {
       alignItems: 'baseline',
       gap: theme.spacing(0.5),
     }),
+    // Baseline alignment lets the text, not the icon, set the baseline of the value.
     value: css({
       display: 'flex',
-      alignItems: 'center',
+      alignItems: 'baseline',
       gap: theme.spacing(0.25),
       fontWeight: theme.typography.fontWeightMedium,
+    }),
+    icon: css({
+      alignSelf: 'center',
     }),
     caption: css({
       color: theme.colors.text.secondary,
