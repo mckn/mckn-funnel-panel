@@ -20,46 +20,27 @@ type Props = {
   onMouseLeave: () => void;
   showRemainedPercentage: boolean;
   getLinks?: () => LinkModel[];
-  // Places the links menu after the title or in the top-right corner of the step.
-  menuPlacement: MenuPlacement;
   style?: CSSProperties;
   'data-testid'?: string;
 };
 
-export type MenuPlacement = 'title' | 'corner';
-
 export function StepInfo(props: Props): ReactElement {
   const { value, previous, index, compact, alignTop, highlighted, onMouseEnter, onMouseLeave } = props;
-  const { showRemainedPercentage, getLinks, menuPlacement, style } = props;
-  const styles = useStyles2(getStyles(compact, alignTop, menuPlacement));
+  const { showRemainedPercentage, getLinks, style } = props;
+  const styles = useStyles2(getStyles(compact, alignTop));
   const highlightStyle = highlighted ? { backgroundColor: getHighlightColor(value.color) } : undefined;
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const menu = getLinks && (
-    <div className={cx(styles.menu, (highlighted || menuOpen) && styles.menuVisible)}>
-      <StepLinksMenu
-        getLinks={getLinks}
-        title={value.title ?? ''}
-        placement={menuPlacement === 'corner' ? 'bottom-end' : 'bottom-start'}
-        onVisibleChange={setMenuOpen}
-        data-testid={`menu-${index}`}
-      />
-    </div>
-  );
-
   return (
     <div
-      className={cx(styles.step, getLinks && menuPlacement === 'corner' && styles.withCornerMenu)}
+      className={cx(styles.step, getLinks && styles.withLinks)}
       style={{ ...style, ...highlightStyle }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       data-testid={props['data-testid']}
     >
-      <div className={styles.header}>
-        <div className={styles.title} data-testid={`label-${index}`}>
-          {value.title}
-        </div>
-        {menuPlacement === 'title' && menu}
+      <div className={styles.title} data-testid={`label-${index}`}>
+        {value.title}
       </div>
       <div className={styles.value} data-testid={`value-${index}`}>
         <FormattedValueDisplay value={value} />
@@ -75,7 +56,16 @@ export function StepInfo(props: Props): ReactElement {
           />
         )}
       </div>
-      {menuPlacement === 'corner' && menu}
+      {getLinks && (
+        <div className={cx(styles.menu, (highlighted || menuOpen) && styles.menuVisible)}>
+          <StepLinksMenu
+            getLinks={getLinks}
+            title={value.title ?? ''}
+            onVisibleChange={setMenuOpen}
+            data-testid={`menu-${index}`}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -149,9 +139,7 @@ function Metric(props: MetricProps): ReactElement {
 
 const menuClassName = 'step-links-menu';
 
-const getStyles = (compact: boolean, alignTop: boolean, menuPlacement: MenuPlacement) => (theme: GrafanaTheme2) => {
-  const inCorner = menuPlacement === 'corner';
-
+const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2) => {
   return {
     step: css({
       position: 'relative',
@@ -173,24 +161,15 @@ const getStyles = (compact: boolean, alignTop: boolean, menuPlacement: MenuPlace
         opacity: 1,
       },
     }),
-    // Keeps long titles and values clear of the menu in the corner.
-    withCornerMenu: css({
+    withLinks: css({
       paddingRight: theme.spacing(5),
-    }),
-    header: css({
-      display: 'flex',
-      alignItems: 'center',
-      gap: theme.spacing(1),
-      minWidth: 0,
-      maxWidth: '100%',
     }),
     menu: cx(
       menuClassName,
       css({
-        ...(inCorner
-          ? { position: 'absolute', top: theme.spacing(0.5), right: theme.spacing(0.5) }
-          : // The button is taller than the title, the negative margin keeps the title row height.
-            { display: 'flex', flexShrink: 0, margin: theme.spacing(-0.5, 0) }),
+        position: 'absolute',
+        right: theme.spacing(0.5),
+        ...(compact ? { top: '50%', transform: 'translateY(-50%)' } : { top: theme.spacing(0.5) }),
         opacity: 0,
         transition: 'opacity 150ms ease-in-out',
         '@media (prefers-reduced-motion: reduce)': {
