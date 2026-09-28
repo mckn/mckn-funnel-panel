@@ -6,6 +6,7 @@
     },
     "flow": {
       "drop-off": "drop-off",
+      "links-menu": "Data links for {{title}}",
       "retention": "retention"
     },
     "nodata": {

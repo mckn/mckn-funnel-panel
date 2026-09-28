@@ -1,11 +1,12 @@
-import React, { type CSSProperties, type ReactElement } from 'react';
+import React, { type CSSProperties, type ReactElement, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import tinycolor from 'tinycolor2';
 import { t } from '@grafana/i18n';
 import { FormattedValueDisplay, Icon, type IconName, useStyles2 } from '@grafana/ui';
-import { type DisplayValue, type GrafanaTheme2 } from '@grafana/data';
+import { type DisplayValue, type GrafanaTheme2, type LinkModel } from '@grafana/data';
 import { BarGapTooltip, useTooltipProps } from '../Tooltip';
 import { formatPercentage, getDropRate, getTrendIconName } from 'utils';
+import { StepLinksMenu } from './StepLinksMenu';
 
 type Props = {
   value: DisplayValue;
@@ -18,19 +19,21 @@ type Props = {
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   showRemainedPercentage: boolean;
+  getLinks?: () => LinkModel[];
   style?: CSSProperties;
   'data-testid'?: string;
 };
 
 export function StepInfo(props: Props): ReactElement {
   const { value, previous, index, compact, alignTop, highlighted, onMouseEnter, onMouseLeave } = props;
-  const { showRemainedPercentage, style } = props;
+  const { showRemainedPercentage, getLinks, style } = props;
   const styles = useStyles2(getStyles(compact, alignTop));
   const highlightStyle = highlighted ? { backgroundColor: getHighlightColor(value.color) } : undefined;
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div
-      className={styles.step}
+      className={cx(styles.step, getLinks && styles.withLinks)}
       style={{ ...style, ...highlightStyle }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -53,6 +56,16 @@ export function StepInfo(props: Props): ReactElement {
           />
         )}
       </div>
+      {getLinks && (
+        <div className={cx(styles.menu, (highlighted || menuOpen) && styles.menuVisible)}>
+          <StepLinksMenu
+            getLinks={getLinks}
+            title={value.title ?? ''}
+            onVisibleChange={setMenuOpen}
+            data-testid={`menu-${index}`}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -124,9 +137,12 @@ function Metric(props: MetricProps): ReactElement {
   );
 }
 
+const menuClassName = 'step-links-menu';
+
 const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2) => {
   return {
     step: css({
+      position: 'relative',
       display: 'flex',
       flexDirection: compact ? 'row' : 'column',
       alignItems: compact ? 'center' : 'flex-start',
@@ -140,6 +156,29 @@ const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2
       '@media (prefers-reduced-motion: reduce)': {
         transition: 'none',
       },
+      // Same show-on-hover behavior as the Grafana panel menu. Opacity only, so the button stays reachable with Tab.
+      [`&:hover .${menuClassName}, &:focus-within .${menuClassName}`]: {
+        opacity: 1,
+      },
+    }),
+    withLinks: css({
+      paddingRight: theme.spacing(5),
+    }),
+    menu: cx(
+      menuClassName,
+      css({
+        position: 'absolute',
+        right: theme.spacing(0.5),
+        ...(compact ? { top: '50%', transform: 'translateY(-50%)' } : { top: theme.spacing(0.5) }),
+        opacity: 0,
+        transition: 'opacity 150ms ease-in-out',
+        '@media (prefers-reduced-motion: reduce)': {
+          transition: 'none',
+        },
+      })
+    ),
+    menuVisible: css({
+      opacity: 1,
     }),
     title: css({
       minWidth: 0,

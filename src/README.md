@@ -28,6 +28,10 @@ The panel supports two layouts, selected with the **Layout** option:
 - **Classic**: a centered funnel with the step labels on the left and the percentage of the first step on the right.
 - **Flow**: the funnel is one continuous band that narrows smoothly from step to step. Each step shows its name, value and conversion (drop-off or retention) from the previous step. The percentage of the first step is shown next to the band. Hover a step to highlight it. Use the **Orientation** option to show the steps from top to bottom (vertical) or from left to right (horizontal).
 
+## Data links
+
+Add links with the standard **Data links** field option. In the flow layout, hover or focus a step to show a menu button in its corner. Click it to open the data links for that step. The classic layout does not show data links.
+
 ## FAQ
 
 **Q: The percentage values looks off in my funnel, what am I doing wrong?**

@@ -85,3 +85,39 @@ test.describe('panel with flow layout highlighting', () => {
     await expect(page.getByTestId('bar-2')).not.toBeFocused();
   });
 });
+
+test.describe('panel with flow layout and data links', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/d/NtsITqb4z/funnel-examples?viewPanel=11&orgId=1');
+  });
+
+  test('shows the links menu when hovering a step', async ({ page }) => {
+    // The wrapper around the button controls the visibility.
+    const menu = page.getByTestId('menu-0').locator('..');
+
+    await expect(menu).toHaveCSS('opacity', '0');
+    await page.getByTestId('step-0').hover();
+    await expect(menu).toHaveCSS('opacity', '1');
+  });
+
+  test('lists the data links of the step when opening the menu', async ({ page }) => {
+    await page.getByTestId('step-0').hover();
+    await page.getByTestId('menu-0').click();
+
+    await expect(page.getByLabel('Show Sent details')).toHaveAttribute('href', /var-step=Sent&var-value=52300/);
+    await expect(page.getByLabel('Search for Sent')).toHaveAttribute('href', 'https://grafana.com/search/?query=Sent');
+    await expect(page.getByLabel('Search for Sent')).toHaveAttribute('target', '_blank');
+  });
+});
+
+test.describe('panel with flow layout and no data links', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/d/NtsITqb4z/funnel-examples?viewPanel=13&orgId=1');
+  });
+
+  test('does not show the links menu', async ({ page }) => {
+    await page.getByTestId('step-0').hover();
+
+    await expect(page.getByTestId('menu-0')).toHaveCount(0);
+  });
+});

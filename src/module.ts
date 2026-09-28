@@ -8,7 +8,7 @@ await initI18n();
 
 export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel)
   .useFieldConfig({
-    disableStandardOptions: [FieldConfigProperty.NoValue, FieldConfigProperty.Thresholds, FieldConfigProperty.Links],
+    disableStandardOptions: [FieldConfigProperty.NoValue, FieldConfigProperty.Thresholds],
     standardOptions: {
       [FieldConfigProperty.Color]: {
         settings: {

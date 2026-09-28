@@ -4,6 +4,7 @@ import { useStyles2 } from '@grafana/ui';
 import { type DisplayValue, type GrafanaTheme2 } from '@grafana/data';
 import { Orientation } from 'types';
 import { getDisplayValueKey } from 'utils';
+import { type LinksSupplier } from '../../data/useFunnelData';
 import { TooltipProvider } from '../Tooltip';
 import { StepInfo } from './StepInfo';
 import { FunnelFlow } from './FunnelFlow';
@@ -14,6 +15,7 @@ const COMPACT_STEP_HEIGHT = 90;
 
 type Props = {
   values: DisplayValue[];
+  links: LinksSupplier[];
   orientation: Orientation;
   width: number;
   height: number;
@@ -22,7 +24,7 @@ type Props = {
 };
 
 export function FlowLayout(props: Props): ReactElement {
-  const { values, orientation, width, height, showRemainedPercentage } = props;
+  const { values, links, orientation, width, height, showRemainedPercentage } = props;
   const horizontal = orientation === Orientation.horizontal;
   const funnelWidth = Math.max(MIN_FUNNEL_WIDTH, Math.round(width * FUNNEL_WIDTH_RATIO));
   const compact = !horizontal && height / Math.max(values.length, 1) < COMPACT_STEP_HEIGHT;
@@ -45,6 +47,7 @@ export function FlowLayout(props: Props): ReactElement {
               onMouseEnter={() => setHighlightedIndex(i)}
               onMouseLeave={() => setHighlightedIndex(undefined)}
               showRemainedPercentage={showRemainedPercentage}
+              getLinks={links[i]}
               style={getStepPlacement(i, horizontal)}
               data-testid={`step-${i}`}
             />
