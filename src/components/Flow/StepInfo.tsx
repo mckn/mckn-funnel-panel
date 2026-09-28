@@ -31,6 +31,17 @@ export function StepInfo(props: Props): ReactElement {
   const highlightStyle = highlighted ? { backgroundColor: getHighlightColor(value.color) } : undefined;
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const menu = getLinks && (
+    <div className={cx(styles.menu, (highlighted || menuOpen) && styles.menuVisible)}>
+      <StepLinksMenu
+        getLinks={getLinks}
+        title={value.title ?? ''}
+        onVisibleChange={setMenuOpen}
+        data-testid={`menu-${index}`}
+      />
+    </div>
+  );
+
   return (
     <div
       className={cx(styles.step, getLinks && styles.withLinks)}
@@ -39,8 +50,11 @@ export function StepInfo(props: Props): ReactElement {
       onMouseLeave={onMouseLeave}
       data-testid={props['data-testid']}
     >
-      <div className={styles.title} data-testid={`label-${index}`}>
-        {value.title}
+      <div className={styles.header}>
+        <div className={styles.title} data-testid={`label-${index}`}>
+          {value.title}
+        </div>
+        {!compact && menu}
       </div>
       <div className={styles.value} data-testid={`value-${index}`}>
         <FormattedValueDisplay value={value} />
@@ -56,16 +70,7 @@ export function StepInfo(props: Props): ReactElement {
           />
         )}
       </div>
-      {getLinks && (
-        <div className={cx(styles.menu, (highlighted || menuOpen) && styles.menuVisible)}>
-          <StepLinksMenu
-            getLinks={getLinks}
-            title={value.title ?? ''}
-            onVisibleChange={setMenuOpen}
-            data-testid={`menu-${index}`}
-          />
-        </div>
-      )}
+      {compact && menu}
     </div>
   );
 }
@@ -139,6 +144,9 @@ function Metric(props: MetricProps): ReactElement {
 
 const menuClassName = 'step-links-menu';
 
+const MENU_PADDING = 5;
+const MENU_OFFSET = 0.5;
+
 const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2) => {
   return {
     step: css({
@@ -162,14 +170,18 @@ const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2
       },
     }),
     withLinks: css({
-      paddingRight: theme.spacing(5),
+      paddingRight: theme.spacing(MENU_PADDING),
     }),
+    // Holds the title and, when not compact, the links menu aligned to the top of the title.
+    header: css(compact ? { minWidth: 0 } : { position: 'relative', alignSelf: 'stretch', minWidth: 0 }),
     menu: cx(
       menuClassName,
       css({
         position: 'absolute',
-        right: theme.spacing(0.5),
-        ...(compact ? { top: '50%', transform: 'translateY(-50%)' } : { top: theme.spacing(0.5) }),
+        ...(compact
+          ? { right: theme.spacing(MENU_OFFSET), top: '50%', transform: 'translateY(-50%)' }
+          : // The header ends at the step padding, move the menu out into the padding to reach the corner.
+            { right: `calc(${theme.spacing(MENU_OFFSET)} - ${theme.spacing(MENU_PADDING)})`, top: 0 }),
         opacity: 0,
         transition: 'opacity 150ms ease-in-out',
         '@media (prefers-reduced-motion: reduce)': {
