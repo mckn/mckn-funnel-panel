@@ -130,8 +130,10 @@ function Metric(props: MetricProps): ReactElement {
 
 const menuClassName = 'step-links-menu';
 
-const MENU_PADDING = 5;
-const MENU_OFFSET = 0.5;
+// Horizontal step padding, also used as the gap between the links menu and the right edge.
+const STEP_PADDING_X = 2;
+// Right padding for steps with links: edge gap + 24px button + 8px gap to the content.
+const MENU_PADDING = STEP_PADDING_X + 4;
 
 const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2) => {
   return {
@@ -145,7 +147,7 @@ const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2
       minWidth: 0,
       minHeight: 0,
       overflow: 'hidden',
-      padding: theme.spacing(compact ? 0 : 1, 2),
+      padding: theme.spacing(compact ? 0 : 1, STEP_PADDING_X),
       transition: 'background-color 150ms ease-in-out',
       '@media (prefers-reduced-motion: reduce)': {
         transition: 'none',
@@ -165,9 +167,9 @@ const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2
       css({
         position: 'absolute',
         ...(compact
-          ? { right: theme.spacing(MENU_OFFSET), top: '50%', transform: 'translateY(-50%)' }
+          ? { right: theme.spacing(STEP_PADDING_X), top: '50%', transform: 'translateY(-50%)' }
           : // The header ends at the step padding, move the menu out into the padding to reach the corner.
-            { right: `calc(${theme.spacing(MENU_OFFSET)} - ${theme.spacing(MENU_PADDING)})`, top: 0 }),
+            { right: `calc(${theme.spacing(STEP_PADDING_X)} - ${theme.spacing(MENU_PADDING)})`, top: 0 }),
         opacity: 0,
         transition: 'opacity 150ms ease-in-out',
         '@media (prefers-reduced-motion: reduce)': {
