@@ -55,14 +55,14 @@ describe('StepInfo', () => {
     expect(search).toHaveAttribute('target', '_blank');
   });
 
-  it('places the links menu before the title', () => {
+  it('places the links menu after the title', () => {
     renderStep(() => links, 'title');
 
     const menu = screen.getByTestId('menu-0');
     const title = screen.getByTestId('label-0');
 
     expect(title.parentElement).toContainElement(menu);
-    expect(menu.compareDocumentPosition(title) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(title.compareDocumentPosition(menu) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it('places the links menu in the corner, outside the title row', () => {

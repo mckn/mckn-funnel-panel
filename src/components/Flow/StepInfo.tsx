@@ -20,7 +20,7 @@ type Props = {
   onMouseLeave: () => void;
   showRemainedPercentage: boolean;
   getLinks?: () => LinkModel[];
-  // Places the links menu before the title or in the top-right corner of the step.
+  // Places the links menu after the title or in the top-right corner of the step.
   menuPlacement: MenuPlacement;
   style?: CSSProperties;
   'data-testid'?: string;
@@ -49,17 +49,17 @@ export function StepInfo(props: Props): ReactElement {
 
   return (
     <div
-      className={cx(styles.step, getLinks && styles.withLinks)}
+      className={cx(styles.step, getLinks && menuPlacement === 'corner' && styles.withCornerMenu)}
       style={{ ...style, ...highlightStyle }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       data-testid={props['data-testid']}
     >
       <div className={styles.header}>
-        {menuPlacement === 'title' && menu}
         <div className={styles.title} data-testid={`label-${index}`}>
           {value.title}
         </div>
+        {menuPlacement === 'title' && menu}
       </div>
       <div className={styles.value} data-testid={`value-${index}`}>
         <FormattedValueDisplay value={value} />
@@ -173,20 +173,24 @@ const getStyles = (compact: boolean, alignTop: boolean, menuPlacement: MenuPlace
         opacity: 1,
       },
     }),
-    // Makes room for the links menu: 4px edge + 24px button + 8px gap before the title.
-    withLinks: css(inCorner ? { paddingRight: theme.spacing(5) } : { paddingLeft: theme.spacing(4.5) }),
+    // Keeps long titles and values clear of the menu in the corner.
+    withCornerMenu: css({
+      paddingRight: theme.spacing(5),
+    }),
     header: css({
-      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
+      gap: theme.spacing(1),
       minWidth: 0,
       maxWidth: '100%',
     }),
     menu: cx(
       menuClassName,
       css({
-        position: 'absolute',
         ...(inCorner
-          ? { top: theme.spacing(0.5), right: theme.spacing(0.5) }
-          : { right: '100%', top: '50%', transform: 'translateY(-50%)', marginRight: theme.spacing(1) }),
+          ? { position: 'absolute', top: theme.spacing(0.5), right: theme.spacing(0.5) }
+          : // The button is taller than the title, the negative margin keeps the title row height.
+            { display: 'flex', flexShrink: 0, margin: theme.spacing(-0.5, 0) }),
         opacity: 0,
         transition: 'opacity 150ms ease-in-out',
         '@media (prefers-reduced-motion: reduce)': {
