@@ -1,4 +1,4 @@
-import React, { type ReactElement, useId } from 'react';
+import React, { type ReactElement } from 'react';
 import { css, cx } from '@emotion/css';
 import { measureText, useStyles2, useTheme2 } from '@grafana/ui';
 import { type DisplayValue, type GrafanaTheme2 } from '@grafana/data';
@@ -8,10 +8,7 @@ import { BarTooltip, useTooltipProps } from '../Tooltip';
 
 // Width of the soft halo drawn around the band.
 const HALO_SIZE = 6;
-// The halo needs more opacity on dark backgrounds to read as a glow instead of a shadow.
-const HALO_OPACITY_DARK = 0.4;
-const HALO_OPACITY_LIGHT = 0.25;
-const HALO_BLUR = 2;
+const HALO_OPACITY = 0.2;
 const MIN_THICKNESS = 2;
 // Opacity of the other steps while one step is highlighted.
 const DIMMED_OPACITY = 0.35;
@@ -30,7 +27,6 @@ export function FunnelFlow(props: Props): ReactElement {
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
   const [ref, { width, height }] = useElementSize<HTMLDivElement>();
-  const filterId = `funnel-halo-${useId().replace(/:/g, '')}`;
 
   const horizontal = orientation === Orientation.horizontal;
   const flowSize = horizontal ? width : height;
@@ -75,12 +71,7 @@ export function FunnelFlow(props: Props): ReactElement {
     <div ref={ref} className={cx(styles.container, className)}>
       {/* Absolutely positioned so the measured size never feeds back into the grid layout. */}
       <svg className={styles.svg} width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
-        <defs>
-          <filter id={filterId} x="-10%" y="-10%" width="120%" height="120%">
-            <feGaussianBlur stdDeviation={HALO_BLUR} />
-          </filter>
-        </defs>
-        <g filter={`url(#${filterId})`}>
+        <g>
           {segments.map(({ key, value, paths, dimmed }) => (
             <path
               key={key}
@@ -88,7 +79,7 @@ export function FunnelFlow(props: Props): ReactElement {
               d={paths.edges}
               fill="none"
               stroke={value.color}
-              strokeOpacity={theme.isDark ? HALO_OPACITY_DARK : HALO_OPACITY_LIGHT}
+              strokeOpacity={HALO_OPACITY}
               strokeWidth={HALO_SIZE * 2}
               strokeLinejoin="round"
               opacity={dimmed ? DIMMED_OPACITY : 1}
