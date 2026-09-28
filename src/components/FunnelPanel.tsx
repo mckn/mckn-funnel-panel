@@ -18,7 +18,7 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   const theme = useTheme2();
   const styles = useStyles2(getStyles(width, height));
 
-  const { values, status } = useFunnelData(
+  const { values, links, status } = useFunnelData(
     {
       fieldConfig,
       replaceVariables,
@@ -48,6 +48,7 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
           <div className={styles.container}>
             <PureFlowLayout
               values={values}
+              links={links}
               orientation={orientation}
               width={width}
               height={height}

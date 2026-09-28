@@ -4,6 +4,8 @@ import {
   getFieldDisplayValues,
   type DisplayValue,
   type DataFrame,
+  type FieldDisplay,
+  type LinkModel,
   FieldType,
 } from '@grafana/data';
 import { PanelOptions, Sorting } from 'types';
@@ -14,8 +16,12 @@ export enum FunnelDataResultStatus {
   success,
 }
 
+export type LinksSupplier = (() => LinkModel[]) | undefined;
+
 export type FunnelDataResult = {
   values: DisplayValue[];
+  // Same index as values. Undefined when the step has no data links.
+  links: LinksSupplier[];
   status: FunnelDataResultStatus;
 };
 
@@ -30,6 +36,7 @@ export function useFunnelData(
     if (noData(data)) {
       return {
         values: [],
+        links: [],
         status: FunnelDataResultStatus.nodata,
       };
     }
@@ -37,36 +44,39 @@ export function useFunnelData(
     if (!isSupported(data)) {
       return {
         values: [],
+        links: [],
         status: FunnelDataResultStatus.unsupported,
       };
     }
 
-    const values = getFieldDisplayValues({
-      fieldConfig: fieldConfig,
-      reduceOptions: { calcs: [] },
-      replaceVariables,
-      theme: theme,
-      data: data,
-      timeZone,
-    });
-
-    const displayValues = values.map((v) => v.display);
+    const fieldDisplays = sortValues(
+      getFieldDisplayValues({
+        fieldConfig: fieldConfig,
+        reduceOptions: { calcs: [] },
+        replaceVariables,
+        theme: theme,
+        data: data,
+        timeZone,
+      }),
+      sorting
+    );
 
     return {
-      values: sortValues(displayValues, sorting),
+      values: fieldDisplays.map((v) => v.display),
+      links: fieldDisplays.map((v) => (v.hasLinks ? v.getLinks : undefined)),
       status: FunnelDataResultStatus.success,
     };
   }, [theme, data, fieldConfig, replaceVariables, timeZone, sorting]);
 }
 
-function sortValues(values: DisplayValue[], sorting: Sorting): DisplayValue[] {
+function sortValues(values: FieldDisplay[], sorting: Sorting): FieldDisplay[] {
   if (sorting === Sorting.none) {
     return values;
   }
 
   return values.sort((a, b) => {
-    const ap = a.percent ?? 0;
-    const bp = b.percent ?? 0;
+    const ap = a.display.percent ?? 0;
+    const bp = b.display.percent ?? 0;
 
     switch (sorting) {
       case Sorting.ascending:

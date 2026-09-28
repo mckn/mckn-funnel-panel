@@ -42,7 +42,7 @@ Provisioned test data:
 `src/module.ts` exports `plugin`, a `PanelPlugin<PanelOptions>` instance. It registers:
 
 - `FunnelPanel` as the panel renderer
-- Field config: color mode `ContinuousGrYlRd`, default min 0, disabled NoValue/Thresholds/Links
+- Field config: color mode `ContinuousGrYlRd`, default min 0, disabled NoValue/Thresholds. Data links are enabled, but only the flow layout uses them
 - Panel options: `layout` (classic/flow), `orientation` (vertical/horizontal, flow only), `sorting` (descending/ascending/none), `showRemainedPercentage` (boolean) and `showPercentage` (boolean, classic only)
 
 ### Data flow
@@ -51,7 +51,7 @@ Provisioned test data:
 2. `useFunnelData` hook (`src/data/useFunnelData.ts`) processes data:
    - Empty series → `FunnelDataResultStatus.nodata`
    - No numeric fields → `FunnelDataResultStatus.unsupported`
-   - Valid data → calls `getFieldDisplayValues` from `@grafana/data`, applies sorting by `percent`, returns `DisplayValue[]`
+   - Valid data → calls `getFieldDisplayValues` from `@grafana/data`, applies sorting by `percent`, returns `DisplayValue[]` and `links` (a `getLinks` supplier per value, same index, `undefined` when the field has no data links)
 3. `FunnelPanel` renders based on status: `Nodata`, `Unsupported`, or the selected layout (classic three-column layout or `PureFlowLayout`)
 
 ### Component hierarchy
@@ -72,8 +72,9 @@ FunnelPanel
 Flow layout (`layout: flow`, `src/components/Flow/`):
 
 ```
-PureFlowLayout                  # CSS grid, one section per step, owns hover highlight state
+PureFlowLayout                  # CSS grid, one section per step, owns hover highlight state, no tooltips
 ├── StepInfo                    # Step name, value and conversion from the previous step
+│   └── StepLinksMenu           # "..." button + Dropdown menu of data links, shown on hover/focus
 └── FunnelFlow                  # One SVG band across all steps, measured with useElementSize
     ├── FlowSegment             # Filled path per step (getFlowSegmentPath), hover highlight, no tooltip
     └── percentage labels       # Next to or inside the band (getBandLabelPlacement)
@@ -167,12 +168,12 @@ import { getContrastText } from 'utils';
 - Files in `tests/`
 - Requires running Grafana: `npm run build` then `npm run server`, then `npm run e2e` in a separate terminal
 - Uses provisioned dashboard (`/d/NtsITqb4z/funnel-examples`) and static datasource for test data
-- Panel view IDs: 7 (descending sort), 8 (ascending sort), 11 (flow vertical), 12 (flow vertical compact with retention rate), 13 (flow horizontal)
+- Panel view IDs: 7 (descending sort), 8 (ascending sort), 11 (flow vertical, with data links), 12 (flow vertical compact with retention rate), 13 (flow horizontal, no data links)
 - Auth handled by `@grafana/plugin-e2e` auth setup project
 
 ### Test IDs
 
-Follow the pattern `bar-{i}`, `label-{i}`, `percentage-{i}`, `gap-{i}`. Use this convention for new components. The flow layout adds `step-{i}`, `value-{i}` and `conversion-{i}`.
+Follow the pattern `bar-{i}`, `label-{i}`, `percentage-{i}`, `gap-{i}`. Use this convention for new components. The flow layout adds `step-{i}`, `value-{i}`, `conversion-{i}` and `menu-{i}` (data links button).
 
 ## CI/CD
 

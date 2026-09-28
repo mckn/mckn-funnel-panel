@@ -1,11 +1,11 @@
-import React, { type CSSProperties, type ReactElement } from 'react';
+import React, { type CSSProperties, type ReactElement, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import tinycolor from 'tinycolor2';
 import { t } from '@grafana/i18n';
 import { FormattedValueDisplay, Icon, type IconName, useStyles2 } from '@grafana/ui';
-import { type DisplayValue, type GrafanaTheme2 } from '@grafana/data';
-import { BarGapTooltip, useTooltipProps } from '../Tooltip';
+import { type DisplayValue, type GrafanaTheme2, type LinkModel } from '@grafana/data';
 import { formatPercentage, getDropRate, getTrendIconName } from 'utils';
+import { StepLinksMenu } from './StepLinksMenu';
 
 type Props = {
   value: DisplayValue;
@@ -18,26 +18,42 @@ type Props = {
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   showRemainedPercentage: boolean;
+  getLinks?: () => LinkModel[];
   style?: CSSProperties;
   'data-testid'?: string;
 };
 
 export function StepInfo(props: Props): ReactElement {
   const { value, previous, index, compact, alignTop, highlighted, onMouseEnter, onMouseLeave } = props;
-  const { showRemainedPercentage, style } = props;
+  const { showRemainedPercentage, getLinks, style } = props;
   const styles = useStyles2(getStyles(compact, alignTop));
   const highlightStyle = highlighted ? { backgroundColor: getHighlightColor(value.color) } : undefined;
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const menu = getLinks && (
+    <div className={cx(styles.menu, (highlighted || menuOpen) && styles.menuVisible)}>
+      <StepLinksMenu
+        getLinks={getLinks}
+        title={value.title ?? ''}
+        onVisibleChange={setMenuOpen}
+        data-testid={`menu-${index}`}
+      />
+    </div>
+  );
 
   return (
     <div
-      className={styles.step}
+      className={cx(styles.step, getLinks && styles.withLinks)}
       style={{ ...style, ...highlightStyle }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       data-testid={props['data-testid']}
     >
-      <div className={styles.title} data-testid={`label-${index}`}>
-        {value.title}
+      <div className={styles.header}>
+        <div className={styles.title} data-testid={`label-${index}`}>
+          {value.title}
+        </div>
+        {!compact && menu}
       </div>
       <div className={styles.value} data-testid={`value-${index}`}>
         <FormattedValueDisplay value={value} />
@@ -53,6 +69,7 @@ export function StepInfo(props: Props): ReactElement {
           />
         )}
       </div>
+      {compact && menu}
     </div>
   );
 }
@@ -74,20 +91,9 @@ function Conversion(props: ConversionProps): ReactElement {
   const fromPercent = from.percent ?? 0;
   const toPercent = to.percent ?? 0;
   const drop = getDropRate(fromPercent, toPercent);
-  const tooltipProps = useTooltipProps({
-    content: (
-      <BarGapTooltip
-        drop={drop}
-        fromLabel={from.title ?? ''}
-        toLabel={to.title}
-        showRemainedPercentage={showRemainedPercentage}
-      />
-    ),
-  });
 
   return (
     <Metric
-      {...tooltipProps}
       icon={getTrendIconName(fromPercent, toPercent)}
       value={formatPercentage(showRemainedPercentage ? 1 - drop : drop)}
       caption={
@@ -105,8 +111,6 @@ type MetricProps = {
   compact: boolean;
   icon?: IconName;
   'data-testid'?: string;
-  'data-tooltip-id'?: string;
-  'data-tooltip-content'?: string;
 };
 
 function Metric(props: MetricProps): ReactElement {
@@ -116,7 +120,7 @@ function Metric(props: MetricProps): ReactElement {
   return (
     <div className={cx(styles.metric, compact && styles.compact)} {...rest}>
       <span className={styles.value}>
-        {icon && <Icon name={icon} />}
+        {icon && <Icon name={icon} className={styles.icon} />}
         {value}
       </span>
       <span className={styles.caption}>{caption}</span>
@@ -124,22 +128,69 @@ function Metric(props: MetricProps): ReactElement {
   );
 }
 
+const menuClassName = 'step-links-menu';
+
+// Horizontal step padding, also used as the gap between the links menu and the right edge.
+const STEP_PADDING_X = 2;
+// Right padding for steps with links: edge gap + 24px button + 8px gap to the content.
+const MENU_PADDING = STEP_PADDING_X + 4;
+
 const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2) => {
   return {
     step: css({
-      display: 'flex',
-      flexDirection: compact ? 'row' : 'column',
-      alignItems: compact ? 'center' : 'flex-start',
-      justifyContent: compact || alignTop ? 'flex-start' : 'center',
-      gap: compact ? theme.spacing(2) : theme.spacing(0.5),
+      position: 'relative',
+      ...(compact
+        ? {
+            // One row, centered in the step, with title, value and conversion on the same text baseline.
+            display: 'grid',
+            gridAutoFlow: 'column',
+            justifyContent: 'start',
+            alignContent: 'center',
+            alignItems: 'baseline',
+            columnGap: theme.spacing(2),
+          }
+        : {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: alignTop ? 'flex-start' : 'center',
+            gap: theme.spacing(0.5),
+          }),
       minWidth: 0,
       minHeight: 0,
       overflow: 'hidden',
-      padding: theme.spacing(compact ? 0 : 1, 2),
+      padding: theme.spacing(compact ? 0 : 1, STEP_PADDING_X),
       transition: 'background-color 150ms ease-in-out',
       '@media (prefers-reduced-motion: reduce)': {
         transition: 'none',
       },
+      // Same show-on-hover behavior as the Grafana panel menu. Opacity only, so the button stays reachable with Tab.
+      [`&:hover .${menuClassName}, &:focus-within .${menuClassName}`]: {
+        opacity: 1,
+      },
+    }),
+    withLinks: css({
+      paddingRight: theme.spacing(MENU_PADDING),
+    }),
+    // Holds the title and, when not compact, the links menu aligned to the top of the title.
+    header: css(compact ? { minWidth: 0 } : { position: 'relative', alignSelf: 'stretch', minWidth: 0 }),
+    menu: cx(
+      menuClassName,
+      css({
+        position: 'absolute',
+        ...(compact
+          ? { right: theme.spacing(STEP_PADDING_X), top: '50%', transform: 'translateY(-50%)' }
+          : // The header ends at the step padding, move the menu out into the padding to reach the corner.
+            { right: `calc(${theme.spacing(STEP_PADDING_X)} - ${theme.spacing(MENU_PADDING)})`, top: 0 }),
+        opacity: 0,
+        transition: 'opacity 150ms ease-in-out',
+        '@media (prefers-reduced-motion: reduce)': {
+          transition: 'none',
+        },
+      })
+    ),
+    menuVisible: css({
+      opacity: 1,
     }),
     title: css({
       minWidth: 0,
@@ -179,11 +230,15 @@ const getMetricStyles = (theme: GrafanaTheme2) => {
       alignItems: 'baseline',
       gap: theme.spacing(0.5),
     }),
+    // Baseline alignment lets the text, not the icon, set the baseline of the value.
     value: css({
       display: 'flex',
-      alignItems: 'center',
+      alignItems: 'baseline',
       gap: theme.spacing(0.25),
       fontWeight: theme.typography.fontWeightMedium,
+    }),
+    icon: css({
+      alignSelf: 'center',
     }),
     caption: css({
       color: theme.colors.text.secondary,

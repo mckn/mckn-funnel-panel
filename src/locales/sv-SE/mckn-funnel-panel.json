@@ -6,6 +6,7 @@
     },
     "flow": {
       "drop-off": "bortfall",
+      "links-menu": "Datalänkar för {{title}}",
       "retention": "kvar"
     },
     "nodata": {

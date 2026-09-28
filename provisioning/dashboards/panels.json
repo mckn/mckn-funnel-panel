@@ -617,6 +617,17 @@
             "mode": "palette-classic"
           },
           "mappings": [],
+          "links": [
+            {
+              "title": "Show ${__field.displayName} details",
+              "url": "/d/NtsITqb4z/funnel-examples?orgId=1&var-step=${__field.displayName}&var-value=${__value.raw}"
+            },
+            {
+              "targetBlank": true,
+              "title": "Search for ${__field.displayName}",
+              "url": "https://grafana.com/search/?query=${__field.displayName}"
+            }
+          ],
           "min": 0
         },
         "overrides": []
