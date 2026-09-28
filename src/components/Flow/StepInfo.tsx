@@ -139,11 +139,22 @@ const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2
   return {
     step: css({
       position: 'relative',
-      display: 'flex',
-      flexDirection: compact ? 'row' : 'column',
-      alignItems: compact ? 'center' : 'flex-start',
-      justifyContent: compact || alignTop ? 'flex-start' : 'center',
-      gap: compact ? theme.spacing(2) : theme.spacing(0.5),
+      ...(compact
+        ? {
+            // Uses the columns of the flow layout grid, so title, value and conversion line up across steps.
+            display: 'grid',
+            gridTemplateColumns: 'subgrid',
+            gridAutoFlow: 'column',
+            alignItems: 'center',
+            columnGap: theme.spacing(2),
+          }
+        : {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: alignTop ? 'flex-start' : 'center',
+            gap: theme.spacing(0.5),
+          }),
       minWidth: 0,
       minHeight: 0,
       overflow: 'hidden',

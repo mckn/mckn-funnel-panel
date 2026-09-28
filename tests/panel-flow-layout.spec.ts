@@ -128,3 +128,25 @@ test.describe('panel with flow layout and no data links', () => {
     await expect(page.getByTestId('menu-0')).toHaveCount(0);
   });
 });
+
+test.describe('panel with compact flow layout', () => {
+  test.beforeEach(async ({ page }) => {
+    // A short viewport makes the steps of panel 12 compact.
+    await page.setViewportSize({ width: 1280, height: 400 });
+    await page.goto('/d/NtsITqb4z/funnel-examples?viewPanel=12&orgId=1');
+  });
+
+  test('aligns the step details in columns', async ({ page }) => {
+    const left = async (testId: string) => (await page.getByTestId(testId).boundingBox())?.x;
+
+    // Compact steps show the title and the value on the same row.
+    const label = await page.getByTestId('label-1').boundingBox();
+    const value = await page.getByTestId('value-1').boundingBox();
+    expect(Math.abs(label!.y + label!.height / 2 - (value!.y + value!.height / 2))).toBeLessThan(4);
+
+    for (const index of [2, 3, 4]) {
+      expect(await left(`value-${index}`)).toBeCloseTo((await left('value-1'))!, 0);
+      expect(await left(`conversion-${index}`)).toBeCloseTo((await left('conversion-1'))!, 0);
+    }
+  });
+});
