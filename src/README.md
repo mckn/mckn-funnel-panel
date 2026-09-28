@@ -30,7 +30,7 @@ The panel supports two layouts, selected with the **Layout** option:
 
 ## Data links
 
-Add links with the standard **Data links** field option. In the flow layout, hover or focus a step to show a menu button in its corner. Click it to open the data links for that step. The classic layout does not show data links.
+Add links with the standard **Data links** field option. In the flow layout, hover or focus a step to show a menu button. The button is before the step name in the vertical orientation and in the top-right corner in the horizontal orientation. Click it to open the data links for that step. The classic layout does not show data links.
 
 ## FAQ
 

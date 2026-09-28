@@ -20,16 +20,32 @@ type Props = {
   onMouseLeave: () => void;
   showRemainedPercentage: boolean;
   getLinks?: () => LinkModel[];
+  // Places the links menu before the title or in the top-right corner of the step.
+  menuPlacement: MenuPlacement;
   style?: CSSProperties;
   'data-testid'?: string;
 };
 
+export type MenuPlacement = 'title' | 'corner';
+
 export function StepInfo(props: Props): ReactElement {
   const { value, previous, index, compact, alignTop, highlighted, onMouseEnter, onMouseLeave } = props;
-  const { showRemainedPercentage, getLinks, style } = props;
-  const styles = useStyles2(getStyles(compact, alignTop));
+  const { showRemainedPercentage, getLinks, menuPlacement, style } = props;
+  const styles = useStyles2(getStyles(compact, alignTop, menuPlacement));
   const highlightStyle = highlighted ? { backgroundColor: getHighlightColor(value.color) } : undefined;
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const menu = getLinks && (
+    <div className={cx(styles.menu, (highlighted || menuOpen) && styles.menuVisible)}>
+      <StepLinksMenu
+        getLinks={getLinks}
+        title={value.title ?? ''}
+        placement={menuPlacement === 'corner' ? 'bottom-end' : 'bottom-start'}
+        onVisibleChange={setMenuOpen}
+        data-testid={`menu-${index}`}
+      />
+    </div>
+  );
 
   return (
     <div
@@ -39,8 +55,11 @@ export function StepInfo(props: Props): ReactElement {
       onMouseLeave={onMouseLeave}
       data-testid={props['data-testid']}
     >
-      <div className={styles.title} data-testid={`label-${index}`}>
-        {value.title}
+      <div className={styles.header}>
+        {menuPlacement === 'title' && menu}
+        <div className={styles.title} data-testid={`label-${index}`}>
+          {value.title}
+        </div>
       </div>
       <div className={styles.value} data-testid={`value-${index}`}>
         <FormattedValueDisplay value={value} />
@@ -56,16 +75,7 @@ export function StepInfo(props: Props): ReactElement {
           />
         )}
       </div>
-      {getLinks && (
-        <div className={cx(styles.menu, (highlighted || menuOpen) && styles.menuVisible)}>
-          <StepLinksMenu
-            getLinks={getLinks}
-            title={value.title ?? ''}
-            onVisibleChange={setMenuOpen}
-            data-testid={`menu-${index}`}
-          />
-        </div>
-      )}
+      {menuPlacement === 'corner' && menu}
     </div>
   );
 }
@@ -139,7 +149,9 @@ function Metric(props: MetricProps): ReactElement {
 
 const menuClassName = 'step-links-menu';
 
-const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2) => {
+const getStyles = (compact: boolean, alignTop: boolean, menuPlacement: MenuPlacement) => (theme: GrafanaTheme2) => {
+  const inCorner = menuPlacement === 'corner';
+
   return {
     step: css({
       position: 'relative',
@@ -161,15 +173,20 @@ const getStyles = (compact: boolean, alignTop: boolean) => (theme: GrafanaTheme2
         opacity: 1,
       },
     }),
-    withLinks: css({
-      paddingRight: theme.spacing(5),
+    // Makes room for the links menu: 4px edge + 24px button + 8px gap before the title.
+    withLinks: css(inCorner ? { paddingRight: theme.spacing(5) } : { paddingLeft: theme.spacing(4.5) }),
+    header: css({
+      position: 'relative',
+      minWidth: 0,
+      maxWidth: '100%',
     }),
     menu: cx(
       menuClassName,
       css({
         position: 'absolute',
-        right: theme.spacing(0.5),
-        ...(compact ? { top: '50%', transform: 'translateY(-50%)' } : { top: theme.spacing(0.5) }),
+        ...(inCorner
+          ? { top: theme.spacing(0.5), right: theme.spacing(0.5) }
+          : { right: '100%', top: '50%', transform: 'translateY(-50%)', marginRight: theme.spacing(1) }),
         opacity: 0,
         transition: 'opacity 150ms ease-in-out',
         '@media (prefers-reduced-motion: reduce)': {

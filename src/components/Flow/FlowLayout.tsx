@@ -48,6 +48,7 @@ export function FlowLayout(props: Props): ReactElement {
               onMouseLeave={() => setHighlightedIndex(undefined)}
               showRemainedPercentage={showRemainedPercentage}
               getLinks={links[i]}
+              menuPlacement={horizontal ? 'corner' : 'title'}
               style={getStepPlacement(i, horizontal)}
               data-testid={`step-${i}`}
             />

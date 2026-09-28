@@ -6,12 +6,13 @@ import { type LinkModel } from '@grafana/data';
 type Props = {
   getLinks: () => LinkModel[];
   title: string;
+  placement: 'bottom-start' | 'bottom-end';
   onVisibleChange?: (visible: boolean) => void;
   'data-testid'?: string;
 };
 
 export function StepLinksMenu(props: Props): ReactElement {
-  const { getLinks, title, onVisibleChange } = props;
+  const { getLinks, title, placement, onVisibleChange } = props;
   const label = t('components.flow.links-menu', 'Data links for {{title}}', { title });
 
   // Resolve the links when the menu opens, so variables are interpolated on demand.
@@ -32,7 +33,7 @@ export function StepLinksMenu(props: Props): ReactElement {
   );
 
   return (
-    <Dropdown overlay={renderMenu} placement="bottom-end" onVisibleChange={onVisibleChange}>
+    <Dropdown overlay={renderMenu} placement={placement} onVisibleChange={onVisibleChange}>
       <Button
         aria-label={label}
         title={label}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { type DisplayValue, type LinkModel } from '@grafana/data';
-import { StepInfo } from './StepInfo';
+import { type MenuPlacement, StepInfo } from './StepInfo';
 
 const value: DisplayValue = { text: '52300', numeric: 52300, title: 'Sent', percent: 1, color: '#73BF69' };
 
@@ -10,7 +10,7 @@ const links: LinkModel[] = [
   { title: 'Search for Sent', href: 'https://grafana.com/search/?query=Sent', target: '_blank', origin: {} },
 ];
 
-function renderStep(getLinks?: () => LinkModel[]) {
+function renderStep(getLinks?: () => LinkModel[], menuPlacement: MenuPlacement = 'title') {
   return render(
     <StepInfo
       value={value}
@@ -22,6 +22,7 @@ function renderStep(getLinks?: () => LinkModel[]) {
       onMouseLeave={jest.fn()}
       showRemainedPercentage={false}
       getLinks={getLinks}
+      menuPlacement={menuPlacement}
     />
   );
 }
@@ -52,5 +53,25 @@ describe('StepInfo', () => {
     expect(details).toHaveAttribute('href', '/d/details?step=Sent');
     expect(search).toHaveAttribute('href', 'https://grafana.com/search/?query=Sent');
     expect(search).toHaveAttribute('target', '_blank');
+  });
+
+  it('places the links menu before the title', () => {
+    renderStep(() => links, 'title');
+
+    const menu = screen.getByTestId('menu-0');
+    const title = screen.getByTestId('label-0');
+
+    expect(title.parentElement).toContainElement(menu);
+    expect(menu.compareDocumentPosition(title) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it('places the links menu in the corner, outside the title row', () => {
+    renderStep(() => links, 'corner');
+
+    const menu = screen.getByTestId('menu-0');
+    const title = screen.getByTestId('label-0');
+
+    expect(title.parentElement).not.toContainElement(menu);
+    expect(title.compareDocumentPosition(menu) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 });
