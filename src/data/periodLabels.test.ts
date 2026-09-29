@@ -57,6 +57,14 @@ describe('getComparisonPeriodLabels', () => {
     expect(labels.oldest).toBe('2026-09-24 10:00:00 to 2026-09-24 12:00:00');
   });
 
+  it('describes an absolute range from text, like the range in the URL', () => {
+    const range = { ...absoluteRange, raw: { from: '2026-09-25T10:00:00.000Z', to: '2026-09-25T12:00:00.000Z' } };
+    const labels = getComparisonPeriodLabels(grafanaSelection(-DAY), range, 'utc');
+
+    expect(labels.newest).toBe('2026-09-25 10:00:00 to 2026-09-25 12:00:00');
+    expect(labels.oldest).toBe('2026-09-24 10:00:00 to 2026-09-24 12:00:00');
+  });
+
   it('does not change the time range of the panel', () => {
     getComparisonPeriodLabels(grafanaSelection(-DAY), absoluteRange, 'utc');
 

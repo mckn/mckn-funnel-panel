@@ -33,6 +33,7 @@ Node >= 20 (see `.nvmrc`). Use `npm ci` for installs.
 Provisioned test data:
 
 - Static datasource (UID: `vHsj2qbVk`) with example funnel data (5 steps: Sent → Viewed → Clicked → Add to cart → Purchased)
+- TestData datasource (UID: `funnel-testdata`) for the Time comparison panels. The "Predictable CSV Wave" scenario returns values from the timestamp, with one value per step every 10 minutes. A Reduce (Total) transformation sums them per step, so the current period and the period one day before get different counts
 - Test dashboard at `/d/NtsITqb4z/funnel-examples` with panels for different sort modes
 
 ## Architecture
@@ -178,7 +179,7 @@ import { getContrastText } from 'utils';
 - Files in `tests/`
 - Requires running Grafana: `npm run build` then `npm run server`, then `npm run e2e` in a separate terminal
 - Uses provisioned dashboard (`/d/NtsITqb4z/funnel-examples`) and static datasource for test data
-- Panel view IDs: 7 (descending sort), 8 (ascending sort), 11 (flow vertical, with data links), 12 (flow vertical compact with retention rate), 13 (flow horizontal, no data links), 14 (flow Grafana Time comparison, Grafana 12.3+), 15 (flow Grafana Time comparison with Rows to fields, Grafana 12.3+). The static datasource returns the same data for both periods, so the e2e changes are 0. Unit tests cover the non-zero changes
+- Panel view IDs: 7 (descending sort), 8 (ascending sort), 11 (flow vertical, with data links), 12 (flow vertical compact with retention rate), 13 (flow horizontal, no data links), 14 (flow Grafana Time comparison with TestData, Grafana 12.3+), 15 (flow Grafana Time comparison with static data and Rows to fields, Grafana 12.3+, all changes 0), 16 (flow horizontal Grafana Time comparison with TestData, oldest period and retention rate, Grafana 12.3+). The comparison specs open panels 14 and 16 with a fixed absolute range (`from`/`to` in the URL) so the TestData values are the same on every run
 - Auth handled by `@grafana/plugin-e2e` auth setup project
 
 ### Test IDs

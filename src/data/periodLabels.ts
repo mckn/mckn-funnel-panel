@@ -28,7 +28,9 @@ export function getComparisonPeriodLabels(
   timeRange: TimeRange,
   timeZone: TimeZone
 ): ComparisonPeriodLabels {
-  const range = rangeUtil.describeTimeRange(timeRange.raw, timeZone);
+  const relative = rangeUtil.isRelativeTimeRange(timeRange.raw);
+  // An absolute range can be raw text, for example from the URL. Describe the parsed range, like the shifted one.
+  const range = rangeUtil.describeTimeRange(relative ? timeRange.raw : timeRange, timeZone);
   const diffMs = selection.previous.map(getTimeCompareDiffMs).find((value) => value !== undefined);
 
   if (diffMs === undefined) {
@@ -45,7 +47,7 @@ export function getComparisonPeriodLabels(
   // Grafana compares with a period in the past. Its alignment code accepts both signs, so do the same.
   const offsetMs = -Math.abs(diffMs);
 
-  if (!rangeUtil.isRelativeTimeRange(timeRange.raw)) {
+  if (!relative) {
     const shifted = {
       from: dateTime(timeRange.from).add(offsetMs, 'millisecond'),
       to: dateTime(timeRange.to).add(offsetMs, 'millisecond'),

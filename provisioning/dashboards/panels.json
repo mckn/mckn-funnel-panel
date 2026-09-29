@@ -811,8 +811,8 @@
     },
     {
       "datasource": {
-        "type": "marcusolsson-static-datasource",
-        "uid": "vHsj2qbVk"
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
       },
       "fieldConfig": {
         "defaults": {
@@ -842,51 +842,53 @@
       "targets": [
         {
           "datasource": {
-            "type": "marcusolsson-static-datasource",
-            "uid": "vHsj2qbVk"
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
           },
-          "frame": {
-            "fields": [
-              {
-                "config": {},
-                "name": "Sent",
-                "type": "number",
-                "values": [52300]
-              },
-              {
-                "config": {},
-                "name": "Viewed",
-                "type": "number",
-                "values": [35679]
-              },
-              {
-                "config": {},
-                "name": "Clicked",
-                "type": "number",
-                "values": [15690]
-              },
-              {
-                "config": {},
-                "name": "Add to cart",
-                "type": "number",
-                "values": [5596]
-              },
-              {
-                "config": {},
-                "name": "Purchased",
-                "type": "number",
-                "values": [3290]
-              }
-            ],
-            "meta": {},
-            "name": "Funnel"
-          },
-          "refId": "A"
+          "refId": "A",
+          "scenarioId": "predictable_csv_wave",
+          "csvWave": [
+            {
+              "name": "Sent",
+              "timeStep": 600,
+              "valuesCSV": "1200,1350,1500,1100,1400,1600,1250"
+            },
+            {
+              "name": "Viewed",
+              "timeStep": 600,
+              "valuesCSV": "840,810,1050,660,980,1280,750"
+            },
+            {
+              "name": "Clicked",
+              "timeStep": 600,
+              "valuesCSV": "420,324,578,264,441,704,300"
+            },
+            {
+              "name": "Add to cart",
+              "timeStep": 600,
+              "valuesCSV": "168,113,231,79,176,317,90"
+            },
+            {
+              "name": "Purchased",
+              "timeStep": 600,
+              "valuesCSV": "101,57,150,40,106,206,45"
+            }
+          ]
         }
       ],
       "title": "Funnel - flow layout with Grafana Time comparison",
       "type": "mckn-funnel-panel",
-      "timeCompare": "1d"
+      "timeCompare": "1d",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "mode": "reduceFields",
+            "reducers": ["sum"],
+            "includeTimeField": false
+          }
+        }
+      ]
     },
     {
       "datasource": {
@@ -954,6 +956,87 @@
       ],
       "type": "mckn-funnel-panel",
       "timeCompare": "1d"
+    },
+    {
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "min": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 22,
+        "x": 0,
+        "y": 147
+      },
+      "id": 16,
+      "options": {
+        "layout": "flow",
+        "orientation": "horizontal",
+        "sorting": "descending",
+        "showRemainedPercentage": true,
+        "comparisonPeriod": "oldest",
+        "outcomeDirection": "higher"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
+          },
+          "refId": "A",
+          "scenarioId": "predictable_csv_wave",
+          "csvWave": [
+            {
+              "name": "Sent",
+              "timeStep": 600,
+              "valuesCSV": "1200,1350,1500,1100,1400,1600,1250"
+            },
+            {
+              "name": "Viewed",
+              "timeStep": 600,
+              "valuesCSV": "840,810,1050,660,980,1280,750"
+            },
+            {
+              "name": "Clicked",
+              "timeStep": 600,
+              "valuesCSV": "420,324,578,264,441,704,300"
+            },
+            {
+              "name": "Add to cart",
+              "timeStep": 600,
+              "valuesCSV": "168,113,231,79,176,317,90"
+            },
+            {
+              "name": "Purchased",
+              "timeStep": 600,
+              "valuesCSV": "101,57,150,40,106,206,45"
+            }
+          ]
+        }
+      ],
+      "title": "Funnel - flow layout horizontal with Grafana Time comparison of the oldest period",
+      "type": "mckn-funnel-panel",
+      "timeCompare": "1d",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "mode": "reduceFields",
+            "reducers": ["sum"],
+            "includeTimeField": false
+          }
+        }
+      ]
     }
   ],
   "refresh": "",
