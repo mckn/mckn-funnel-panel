@@ -3,9 +3,8 @@ import { css } from '@emotion/css';
 import { Alert, useStyles2, useTheme2 } from '@grafana/ui';
 import { GrafanaTheme2, type PanelProps } from '@grafana/data';
 import { t } from '@grafana/i18n';
-import { ComparisonPeriod, Layout, OutcomeDirection, type PanelOptions } from 'types';
+import { Layout, OutcomeDirection, type PanelOptions } from 'types';
 import { buildComparison, type ComparisonError, selectComparisonFrames } from '../data/comparison';
-import { getComparisonPeriodLabels } from '../data/periodLabels';
 import { FunnelDataResultStatus, useFunnelData } from '../data/useFunnelData';
 import { PureChart } from './Chart';
 import { PureLabels } from './Labels';
@@ -15,7 +14,7 @@ import { Unsupported } from './Unsupported';
 import { Nodata } from './Nodata';
 
 export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
-  const { width, height, data, options, fieldConfig, replaceVariables, timeZone, timeRange } = props;
+  const { width, height, data, options, fieldConfig, replaceVariables, timeZone } = props;
   const { layout, orientation, showRemainedPercentage, showPercentage } = options;
   const { sorting, comparisonPeriod, outcomeDirection } = options;
 
@@ -46,19 +45,15 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   }, [selection, fieldConfig, replaceVariables, theme, timeZone, sorting, comparisonPeriod]);
 
   const flowComparison = useMemo((): FlowComparison | undefined => {
-    if (selection.kind !== 'compare' || comparison?.kind !== 'ready') {
+    if (comparison?.kind !== 'ready') {
       return undefined;
     }
-    const { newest, oldest } = getComparisonPeriodLabels(selection, timeRange, timeZone);
-    const showOldest = comparisonPeriod === ComparisonPeriod.oldest;
-
     return {
       steps: comparison.steps,
       overall: comparison.overall,
-      labels: showOldest ? { selected: oldest, compared: newest } : { selected: newest, compared: oldest },
       outcomeDirection: outcomeDirection ?? OutcomeDirection.higher,
     };
-  }, [selection, comparison, timeRange, timeZone, comparisonPeriod, outcomeDirection]);
+  }, [comparison, outcomeDirection]);
 
   if (comparison?.kind === 'ready' && flowComparison) {
     return (

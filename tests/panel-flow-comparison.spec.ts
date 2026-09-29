@@ -19,26 +19,11 @@ test.describe('panel with flow layout and Grafana Time comparison', () => {
     );
   });
 
-  test('labels a relative range with the time offset', async ({ page }) => {
-    await page.goto(`/d/NtsITqb4z/funnel-examples?viewPanel=14&orgId=1`);
-
-    await expect(page.getByTestId('comparison-header')).toContainText(
-      'Last 30 minutes compared with Last 30 minutes (1 day ago)'
-    );
-  });
-
-  test('labels an absolute range with the shifted range', async ({ page }) => {
-    await page.goto(panelUrl(14));
-
-    await expect(page.getByTestId('comparison-header')).toContainText(
-      '2025-09-25 10:00:00 to 2025-09-25 10:30:00 compared with 2025-09-24 10:00:00 to 2025-09-24 10:30:00'
-    );
-  });
-
   test('shows the newest funnel with the changes from the oldest period', async ({ page }) => {
     await page.goto(panelUrl(14));
 
-    await expect(page.getByTestId('comparison-header')).toContainText('Overall conversion8.4%');
+    // Grafana shows the compared period in the panel title, so the header has the overall conversion only.
+    await expect(page.getByTestId('comparison-header')).toHaveText('Overall conversion8.4%+0.8 pp');
     await expect(page.getByTestId('overall-change')).toHaveText('+0.8 pp');
     await expect(page.getByTestId('label-1')).toContainText('Viewed');
     await expect(page.getByTestId('value-1')).toContainText('3010');
@@ -60,10 +45,7 @@ test.describe('panel with flow layout and Grafana Time comparison', () => {
   test('shows the oldest funnel with the changes from the newest period', async ({ page }) => {
     await page.goto(panelUrl(16));
 
-    await expect(page.getByTestId('comparison-header')).toContainText(
-      '2025-09-24 10:00:00 to 2025-09-24 10:30:00 compared with 2025-09-25 10:00:00 to 2025-09-25 10:30:00'
-    );
-    await expect(page.getByTestId('overall-change')).toHaveText('−0.8 pp');
+    await expect(page.getByTestId('comparison-header')).toHaveText('Overall conversion7.6%−0.8 pp');
     await expect(page.getByTestId('value-1')).toContainText('2700');
     await expect(page.getByTestId('count-change-1')).toContainText('−310 (−10.3%)');
     await expect(page.getByTestId('count-change-1')).toContainText('vs 3010');
@@ -75,10 +57,8 @@ test.describe('panel with flow layout and Grafana Time comparison', () => {
   test('detects the comparison after the Rows to fields transformation', async ({ page }) => {
     await page.goto(panelUrl(15, ''));
 
-    // The transformation removes the metadata with the time offset.
-    await expect(page.getByTestId('comparison-header')).toContainText(
-      'Last 30 minutes compared with Comparison period (time offset unavailable)'
-    );
+    // The transformation removes the metadata. The panel detects the comparison by the query reference.
+    await expect(page.getByTestId('comparison-header')).toHaveText('Overall conversion6.29%0 pp');
     await expect(page.getByTestId('label-4')).toContainText('Purchased');
     await expect(page.getByTestId('count-change-4')).toContainText('0 (0%)');
     await expect(page.getByTestId('conversion-change-4')).toContainText('0 pp');

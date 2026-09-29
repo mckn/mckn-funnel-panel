@@ -7,15 +7,10 @@
     "comparison": {
       "invalid-steps": "Comparison needs one non-negative numeric value per step",
       "missing-period": "Time comparison needs the results of the current period",
-      "offset-unavailable": "Comparison period (time offset unavailable)",
-      "same-time-range": "Same time range",
-      "shifted-range": "{{range}} ({{offset}})",
       "unmatched-steps": "Current and previous funnel steps do not match"
     },
     "flow": {
       "compared-value": "vs {{value}}",
-      "comparison-periods": "<0>{{selected}}</0> compared with {{compared}}",
-      "comparison-periods-title": "{{selected}} compared with {{compared}}",
       "drop-off": "drop-off",
       "links-menu": "Data links for {{title}}",
       "overall-conversion": "Overall conversion",

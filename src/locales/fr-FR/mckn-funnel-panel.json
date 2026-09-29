@@ -7,15 +7,10 @@
     "comparison": {
       "invalid-steps": "La comparaison nécessite une valeur numérique non négative par étape",
       "missing-period": "La comparaison temporelle nécessite les résultats de la période actuelle",
-      "offset-unavailable": "Période de comparaison (décalage temporel indisponible)",
-      "same-time-range": "Même plage de temps",
-      "shifted-range": "{{range}} ({{offset}})",
       "unmatched-steps": "Les étapes de l'entonnoir actuel et du précédent ne correspondent pas"
     },
     "flow": {
       "compared-value": "vs {{value}}",
-      "comparison-periods": "<0>{{selected}}</0> comparé à {{compared}}",
-      "comparison-periods-title": "{{selected}} comparé à {{compared}}",
       "drop-off": "abandon",
       "links-menu": "Liens de données pour {{title}}",
       "overall-conversion": "Conversion globale",

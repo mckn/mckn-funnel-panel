@@ -7,15 +7,10 @@
     "comparison": {
       "invalid-steps": "Jämförelsen kräver ett icke-negativt numeriskt värde per steg",
       "missing-period": "Tidsjämförelsen kräver resultaten för den aktuella perioden",
-      "offset-unavailable": "Jämförelseperiod (tidsförskjutning saknas)",
-      "same-time-range": "Samma tidsintervall",
-      "shifted-range": "{{range}} ({{offset}})",
       "unmatched-steps": "Stegen i den aktuella och den tidigare tratten matchar inte"
     },
     "flow": {
       "compared-value": "mot {{value}}",
-      "comparison-periods": "<0>{{selected}}</0> jämfört med {{compared}}",
-      "comparison-periods-title": "{{selected}} jämfört med {{compared}}",
       "drop-off": "bortfall",
       "links-menu": "Datalänkar för {{title}}",
       "overall-conversion": "Total konvertering",

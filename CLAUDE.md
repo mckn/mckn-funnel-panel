@@ -55,7 +55,7 @@ Provisioned test data:
    - Empty series → `FunnelDataResultStatus.nodata`
    - No numeric fields → `FunnelDataResultStatus.unsupported`
    - Valid data → calls `getFieldDisplayValues` from `@grafana/data`, applies sorting by `percent`, returns `DisplayValue[]` and `links` (a `getLinks` supplier per value, same index, `undefined` when the field has no data links)
-4. For a comparison, `buildComparison` pairs the steps of both periods by key, sorts by the displayed period and returns `values`, `links` and a `StepComparison` per step. `getComparisonPeriodLabels` (`src/data/periodLabels.ts`) names the periods. If the comparison fails, the panel shows a warning above the single funnel
+4. For a comparison, `buildComparison` pairs the steps of both periods by key, sorts by the displayed period and returns `values`, `links` and a `StepComparison` per step. If the comparison fails, the panel shows a warning above the single funnel
 5. `FunnelPanel` renders based on status: `Nodata`, `Unsupported`, or the selected layout (classic three-column layout or `PureFlowLayout`)
 
 ### Component hierarchy
@@ -77,7 +77,7 @@ Flow layout (`layout: flow`, `src/components/Flow/`):
 
 ```
 PureFlowLayout                  # CSS grid, one section per step, owns hover highlight state, no tooltips
-├── ComparisonHeader            # Only with a comparison: the two periods and the overall conversion change
+├── ComparisonHeader            # Only with a comparison: overall conversion and its change. Grafana names the periods in the panel title
 ├── StepInfo                    # Step name, value and conversion from the previous step
 │   ├── CountChange             # Only with a comparison: count change and the count of the other period
 │   ├── ConversionChange        # Only with a comparison: drop-off or retention change in pp
@@ -207,7 +207,7 @@ Three GitHub Actions workflows in `.github/workflows/`:
 - `plugin.json` version uses `%VERSION%` placeholder replaced by webpack at build. Never hardcode a version there.
 - `DisplayValue.percent` is a 0–1 decimal, not 0–100. `formatPercentage` multiplies by 100 for display.
 - Grafana calculates `percent` with a range shared by all frames, including the Grafana comparison frames. `buildComparison` recalculates it from the displayed period. The single funnel does not, so with Time comparison in the classic layout the largest step can be below 100%.
-- `Rows to fields` removes `meta.timeCompare`. The panel still detects the comparison by its `-compare` refId, but the time offset is unavailable.
+- `Rows to fields` removes `meta.timeCompare`. The panel still detects the comparison by its `-compare` refId.
 - Field config defaults `min` to 0. This is required for correct percentage/width calculation in the funnel.
 - `.config/` directory is scaffolded by `@grafana/create-plugin`. Do not edit files there. Extend config via root-level files (`tsconfig.json`, `jest.config.js`, `.eslintrc`, `.prettierrc.js`).
 - The tooltip system uses a module-level mutable registry. Content is registered via `useEffect` and cleaned up on unmount.

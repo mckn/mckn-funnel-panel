@@ -60,7 +60,7 @@ type Step = {
 const COMPARE_SUFFIX = '-compare';
 
 export function isGrafanaComparison(frame: DataFrame, frames: DataFrame[]): boolean {
-  if (getTimeCompareDiffMs(frame) !== undefined || frame.meta?.timeCompare?.isTimeShiftQuery) {
+  if (isTimeShiftQuery(frame)) {
     return true;
   }
   // Some transformations, like Rows to fields, discard the frame metadata but keep the query reference.
@@ -69,18 +69,12 @@ export function isGrafanaComparison(frame: DataFrame, frames: DataFrame[]): bool
   return baseRefId !== frame.refId && frames.some((candidate) => candidate.refId === baseRefId);
 }
 
-// Grafana sets the offset on the frame metadata and on the config of every field.
-export function getTimeCompareDiffMs(frame: DataFrame): number | undefined {
-  if (frame.meta?.timeCompare?.isTimeShiftQuery) {
-    return frame.meta.timeCompare.diffMs;
-  }
-  for (const field of frame.fields) {
-    const timeCompare = field.config.custom?.timeCompare;
-    if (timeCompare?.isTimeShiftQuery && typeof timeCompare.diffMs === 'number') {
-      return timeCompare.diffMs;
-    }
-  }
-  return undefined;
+// Grafana marks the frame metadata and the config of every field.
+function isTimeShiftQuery(frame: DataFrame): boolean {
+  return Boolean(
+    frame.meta?.timeCompare?.isTimeShiftQuery ||
+      frame.fields.some((field) => field.config.custom?.timeCompare?.isTimeShiftQuery)
+  );
 }
 
 export function hasGrafanaComparison(frames: DataFrame[] = []): boolean {

@@ -38,7 +38,7 @@ The flow layout can compare the funnel with an earlier period. It shows one funn
 
 - The count change, for example `+1200 (+3.5%)`, and the count of the other period.
 - The change of the drop-off or retention rate in percentage points, for example `+2.1 pp`.
-- A header with the two periods and the change of the overall conversion from the first to the last step.
+- A header with the overall conversion from the first to the last step, and its change.
 
 To compare, enable **Time comparison** in the time settings of the panel. The panel uses the period that Grafana adds. Time comparison needs Grafana 12.3 or later. Grafana 12.3 also needs the `panelTimeSettings` and `timeComparison` feature toggles. To go back to a single funnel, disable Time comparison.
 
@@ -47,7 +47,7 @@ When the panel has a comparison period, these options show in the **Time compari
 - **Funnel to display** shows the newest or the oldest period. The steps are sorted by the displayed period.
 - **A favorable outcome is** sets the colors. With **Higher**, increases are green and decreases are red. With **Lower**, the colors are the other way around.
 
-The header shows the dashboard time range and the offset, for example `Last 30 minutes` compared with `Last 30 minutes (1 day ago)`. Transformations like `Rows to fields` remove the offset, so the header shows it as unavailable. A change is shown as `—` when it can not be calculated, for example when the count of the other period is zero.
+Grafana shows the compared period next to the panel title, for example **Compared to day before**. A change is shown as `—` when it can not be calculated, for example when the count of the other period is zero.
 
 A plain **Time shift** changes the time range of the whole panel. It does not give a second period to compare with.
 

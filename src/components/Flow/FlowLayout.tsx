@@ -6,7 +6,7 @@ import { Orientation, type OutcomeDirection } from 'types';
 import { getDisplayValueKey } from 'utils';
 import { type RateComparison, type StepComparison } from '../../data/comparison';
 import { type LinksSupplier } from '../../data/useFunnelData';
-import { COMPARISON_HEADER_HEIGHT, ComparisonHeader, type PeriodLabels } from './ComparisonHeader';
+import { COMPARISON_HEADER_HEIGHT, ComparisonHeader } from './ComparisonHeader';
 import { StepInfo } from './StepInfo';
 import { FunnelFlow } from './FunnelFlow';
 
@@ -18,7 +18,6 @@ export type FlowComparison = {
   // Same index as the values.
   steps: StepComparison[];
   overall: RateComparison;
-  labels: PeriodLabels;
   outcomeDirection: OutcomeDirection;
 };
 
@@ -83,7 +82,6 @@ export function FlowLayout(props: Props): ReactElement {
   return (
     <div className={styles.comparison} data-testid={props['data-testid']}>
       <ComparisonHeader
-        labels={comparison.labels}
         overall={comparison.overall}
         outcomeDirection={comparison.outcomeDirection}
         data-testid="comparison-header"

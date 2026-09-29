@@ -7,15 +7,10 @@
     "comparison": {
       "invalid-steps": "A comparação precisa de um valor numérico não negativo por etapa",
       "missing-period": "A comparação de tempo precisa dos resultados do período atual",
-      "offset-unavailable": "Período de comparação (deslocamento de tempo indisponível)",
-      "same-time-range": "Mesmo intervalo de tempo",
-      "shifted-range": "{{range}} ({{offset}})",
       "unmatched-steps": "As etapas do funil atual e do anterior não correspondem"
     },
     "flow": {
       "compared-value": "vs. {{value}}",
-      "comparison-periods": "<0>{{selected}}</0> comparado com {{compared}}",
-      "comparison-periods-title": "{{selected}} comparado com {{compared}}",
       "drop-off": "abandono",
       "links-menu": "Links de dados de {{title}}",
       "overall-conversion": "Conversão total",
