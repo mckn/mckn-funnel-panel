@@ -5,10 +5,8 @@
       "retained": "{{percentage}} retenus de \"{{fromLabel}}\" à \"{{toLabel}}\""
     },
     "comparison": {
-      "comparison-query": "Requête de comparaison ({{refId}})",
-      "current-query": "Requête actuelle ({{refId}})",
       "invalid-steps": "La comparaison nécessite une valeur numérique non négative par étape",
-      "missing-period": "La comparaison nécessite les résultats de la requête actuelle et de la précédente",
+      "missing-period": "La comparaison temporelle nécessite les résultats de la période actuelle",
       "offset-unavailable": "Période de comparaison (décalage temporel indisponible)",
       "same-time-range": "Même plage de temps",
       "shifted-range": "{{range}} ({{offset}})",
@@ -33,25 +31,12 @@
   },
   "panel": {
     "options": {
-      "comparison-mode": {
-        "auto-description": "Utiliser la comparaison temporelle de Grafana si elle est disponible",
-        "auto-label": "Auto",
-        "manual-description": "Comparer les résultats de deux requêtes",
-        "manual-label": "Manuel",
-        "name": "Comparaison temporelle",
-        "off-description": "Afficher uniquement l'entonnoir actuel",
-        "off-label": "Désactivé"
-      },
       "comparison-period": {
         "name": "Entonnoir à afficher",
         "newest-description": "Afficher la période la plus récente et sa variation par rapport à la période la plus ancienne",
         "newest-label": "Période la plus récente",
         "oldest-description": "Afficher la période la plus ancienne et sa variation par rapport à la période la plus récente",
         "oldest-label": "Période la plus ancienne"
-      },
-      "current-ref-id": {
-        "description": "Référence de requête de la période la plus récente",
-        "name": "Requête actuelle"
       },
       "layout": {
         "classic-description": "Entonnoir centré avec les libellés à gauche et les pourcentages à droite",
@@ -73,10 +58,6 @@
         "lower-description": "Afficher les baisses comme favorables",
         "lower-label": "Plus bas",
         "name": "Un résultat favorable est"
-      },
-      "previous-ref-id": {
-        "description": "Référence de requête de la période la plus ancienne",
-        "name": "Requête de comparaison"
       },
       "show-percentage": {
         "description": "Afficher la colonne des pourcentages à côté des barres de l'entonnoir",

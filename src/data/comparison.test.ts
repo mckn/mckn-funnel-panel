@@ -1,31 +1,10 @@
 import { createTheme, FieldType, toDataFrame, type DataFrame } from '@grafana/data';
-import {
-  ComparisonMode,
-  ComparisonPeriod,
-  Layout,
-  Orientation,
-  OutcomeDirection,
-  Sorting,
-  type PanelOptions,
-} from 'types';
-import { buildComparison, type CompareSelection, selectComparisonFrames } from './comparison';
+import { ComparisonPeriod, Layout, Sorting } from 'types';
+import { buildComparison, type CompareSelection, hasGrafanaComparison, selectComparisonFrames } from './comparison';
 
 const DAY = 24 * 60 * 60 * 1000;
 
-const options: PanelOptions = {
-  layout: Layout.flow,
-  orientation: Orientation.vertical,
-  sorting: Sorting.none,
-  showRemainedPercentage: false,
-  showPercentage: true,
-  comparisonMode: ComparisonMode.auto,
-  currentRefId: 'A',
-  previousRefId: 'B',
-  comparisonPeriod: ComparisonPeriod.newest,
-  outcomeDirection: OutcomeDirection.higher,
-};
-
-const manual: PanelOptions = { ...options, comparisonMode: ComparisonMode.manual };
+const flow = { layout: Layout.flow };
 
 const displayOptions = {
   fieldConfig: { defaults: {}, overrides: [] },
@@ -38,28 +17,32 @@ const timeCompare = { isTimeShiftQuery: true, diffMs: -DAY };
 
 const link = { title: 'Details', url: '/details' };
 
-// One frame with a numeric field per step.
-function wide(refId: string, counts: Record<string, number>, compare = false): DataFrame {
+// One frame with a numeric field per step. Frames with a "-compare" reference are the comparison period.
+function wide(refId: string, counts: Record<string, number>): DataFrame {
   return toDataFrame({
     refId,
     name: 'Funnel',
-    meta: compare ? { timeCompare } : undefined,
+    meta: refId.endsWith('-compare') ? { timeCompare } : undefined,
     fields: Object.entries(counts).map(([name, value]) => ({ name, type: FieldType.number, values: [value] })),
   });
 }
 
 // One frame per step.
-function step(refId: string, name: string, count: number, compare = false): DataFrame {
+function step(refId: string, name: string, count: number): DataFrame {
   return toDataFrame({
     refId,
     name,
-    meta: compare ? { timeCompare } : undefined,
+    meta: refId.endsWith('-compare') ? { timeCompare } : undefined,
     fields: [{ name: 'Value', type: FieldType.number, values: [count] }],
   });
 }
 
-function select(frames: DataFrame[], panelOptions: PanelOptions = options): CompareSelection {
-  const selection = selectComparisonFrames(frames, panelOptions);
+function compare(current: Record<string, number>, previous: Record<string, number>): CompareSelection {
+  return select([wide('A', current), wide('A-compare', previous)]);
+}
+
+function select(frames: DataFrame[]): CompareSelection {
+  const selection = selectComparisonFrames(frames, flow);
   if (selection.kind !== 'compare') {
     throw new Error(`Expected a comparison selection, got ${selection.kind}`);
   }
@@ -74,87 +57,84 @@ function build(selection: CompareSelection, sorting = Sorting.none, comparisonPe
   return result;
 }
 
+function buildError(selection: CompareSelection) {
+  return buildComparison(selection, displayOptions, {
+    sorting: Sorting.none,
+    comparisonPeriod: ComparisonPeriod.newest,
+  });
+}
+
 describe('selectComparisonFrames', () => {
   it('detects the Grafana Time comparison metadata', () => {
-    const selection = select([wide('A', { Sent: 100 }), wide('A-compare', { Sent: 80 }, true)]);
+    const selection = compare({ Sent: 100 }, { Sent: 80 });
 
-    expect(selection.source).toBe('grafana');
     expect(selection.current.map((frame) => frame.refId)).toEqual(['A']);
     expect(selection.previous.map((frame) => frame.refId)).toEqual(['A-compare']);
   });
 
   it('detects the Grafana Time comparison field config', () => {
-    const compare = toDataFrame({
+    const previous = toDataFrame({
       refId: 'X',
       fields: [{ name: 'Sent', type: FieldType.number, values: [80], config: { custom: { timeCompare } } }],
     });
 
-    expect(select([wide('A', { Sent: 100 }), compare]).previous).toEqual([compare]);
+    expect(select([wide('A', { Sent: 100 }), previous]).previous).toEqual([previous]);
   });
 
   it('detects paired comparison references after a transformation removes the metadata', () => {
-    expect(select([wide('A', { Sent: 100 }), wide('A-compare', { Sent: 80 })]).source).toBe('grafana');
+    const previous = toDataFrame({
+      refId: 'A-compare',
+      fields: [{ name: 'Sent', type: FieldType.number, values: [80] }],
+    });
+
+    expect(select([wide('A', { Sent: 100 }), previous]).previous).toEqual([previous]);
   });
 
   it('does not treat a standalone comparison reference as a comparison', () => {
-    const selection = selectComparisonFrames([wide('A-compare', { Sent: 100 })], options);
+    const frame = toDataFrame({
+      refId: 'A-compare',
+      fields: [{ name: 'Sent', type: FieldType.number, values: [100] }],
+    });
 
-    expect(selection.kind).toBe('single');
+    expect(selectComparisonFrames([frame], flow).kind).toBe('single');
   });
 
   it('shows a single funnel without a comparison period', () => {
-    expect(selectComparisonFrames([wide('A', { Sent: 100 })], options).kind).toBe('single');
+    const frames = [wide('A', { Sent: 100 }), wide('B', { Sent: 80 })];
+
+    expect(selectComparisonFrames(frames, flow)).toEqual({ kind: 'single', current: frames });
   });
 
-  it('uses the selected query references in manual mode', () => {
-    const selection = select([wide('C', { Sent: 100 }), wide('D', { Sent: 80 })], {
-      ...manual,
-      currentRefId: ' C ',
-      previousRefId: 'D',
+  it('reports a missing current period', () => {
+    const selection = selectComparisonFrames([wide('A-compare', { Sent: 80 })], flow);
+
+    expect(selection).toEqual({ kind: 'error', current: [], reason: 'missing-period' });
+  });
+
+  it('shows the current period only in the classic layout', () => {
+    const selection = selectComparisonFrames([wide('A', { Sent: 100 }), wide('A-compare', { Sent: 80 })], {
+      layout: Layout.classic,
     });
-
-    expect(selection.source).toBe('manual');
-    expect(selection.current.map((frame) => frame.refId)).toEqual(['C']);
-    expect(selection.previous.map((frame) => frame.refId)).toEqual(['D']);
-  });
-
-  it('reports a missing period in manual mode', () => {
-    const selection = selectComparisonFrames([wide('A', { Sent: 100 })], manual);
-
-    expect(selection).toMatchObject({ kind: 'error', reason: 'missing-period' });
-  });
-
-  it('reports a missing period when both references are the same', () => {
-    const selection = selectComparisonFrames([wide('A', { Sent: 100 })], { ...manual, previousRefId: 'A' });
-
-    expect(selection).toMatchObject({ kind: 'error', reason: 'missing-period' });
-  });
-
-  it('removes the comparison frames when comparison is off', () => {
-    const frames = [wide('A', { Sent: 100 }), wide('B', { Sent: 90 }), wide('A-compare', { Sent: 80 }, true)];
-    const selection = selectComparisonFrames(frames, { ...options, comparisonMode: ComparisonMode.off });
-
-    expect(selection.kind).toBe('single');
-    expect(selection.current.map((frame) => frame.refId)).toEqual(['A', 'B']);
-  });
-
-  it('does not compare in the classic layout', () => {
-    const frames = [wide('A', { Sent: 100 }), wide('A-compare', { Sent: 80 }, true)];
-    const selection = selectComparisonFrames(frames, { ...manual, layout: Layout.classic });
 
     expect(selection.kind).toBe('single');
     expect(selection.current.map((frame) => frame.refId)).toEqual(['A']);
   });
 });
 
+describe('hasGrafanaComparison', () => {
+  it('is true when the data has a comparison period', () => {
+    expect(hasGrafanaComparison([wide('A', { Sent: 100 }), wide('A-compare', { Sent: 80 })])).toBe(true);
+  });
+
+  it('is false without a comparison period or without data', () => {
+    expect(hasGrafanaComparison([wide('A', { Sent: 100 })])).toBe(false);
+    expect(hasGrafanaComparison(undefined)).toBe(false);
+  });
+});
+
 describe('buildComparison', () => {
   it('compares conversion rates independently of the traffic volume', () => {
-    const result = build(
-      select([
-        wide('A', { Sent: 100, Viewed: 70, Purchased: 20 }),
-        wide('A-compare', { Sent: 200, Viewed: 160, Purchased: 60 }, true),
-      ])
-    );
+    const result = build(compare({ Sent: 100, Viewed: 70, Purchased: 20 }, { Sent: 200, Viewed: 160, Purchased: 60 }));
 
     expect(result.values.map((value) => value.title)).toEqual(['Sent', 'Viewed', 'Purchased']);
     expect(result.steps[1]).toMatchObject({ count: 70, comparedCount: 160, countDelta: -90 });
@@ -166,21 +146,21 @@ describe('buildComparison', () => {
   });
 
   it('has no conversion for the first step', () => {
-    const result = build(select([wide('A', { Sent: 100 }), wide('B', { Sent: 80 })], manual));
+    const result = build(compare({ Sent: 100 }, { Sent: 80 }));
 
     expect(result.steps[0].stepRate).toBeNull();
     expect(result.steps[0].comparedStepRate).toBeNull();
   });
 
   it('calculates the percent from the displayed period only', () => {
-    const result = build(select([wide('A', { Sent: 100, Viewed: 50 }), wide('B', { Sent: 400, Viewed: 100 })], manual));
+    const result = build(compare({ Sent: 100, Viewed: 50 }, { Sent: 400, Viewed: 100 }));
 
     expect(result.values.map((value) => value.percent)).toEqual([1, 0.5]);
   });
 
   it('measures the changes from the oldest period when it is displayed', () => {
     const result = build(
-      select([wide('A', { Sent: 100, Viewed: 70 }), wide('B', { Sent: 100, Viewed: 80 })], manual),
+      compare({ Sent: 100, Viewed: 70 }, { Sent: 100, Viewed: 80 }),
       Sorting.none,
       ComparisonPeriod.oldest
     );
@@ -192,26 +172,13 @@ describe('buildComparison', () => {
   });
 
   it('sorts the steps by the displayed period', () => {
-    const selection = select(
-      [wide('A', { Visit: 100, Signup: 50, Paid: 10 }), wide('B', { Visit: 90, Signup: 20, Paid: 30 })],
-      manual
-    );
+    const selection = compare({ Visit: 100, Signup: 50, Paid: 10 }, { Visit: 90, Signup: 20, Paid: 30 });
+    const titles = (sorting: Sorting, period: ComparisonPeriod) =>
+      build(selection, sorting, period).values.map((value) => value.title);
 
-    expect(build(selection, Sorting.descending).values.map((value) => value.title)).toEqual([
-      'Visit',
-      'Signup',
-      'Paid',
-    ]);
-    expect(build(selection, Sorting.descending, ComparisonPeriod.oldest).values.map((value) => value.title)).toEqual([
-      'Visit',
-      'Paid',
-      'Signup',
-    ]);
-    expect(build(selection, Sorting.ascending, ComparisonPeriod.oldest).values.map((value) => value.title)).toEqual([
-      'Signup',
-      'Paid',
-      'Visit',
-    ]);
+    expect(titles(Sorting.descending, ComparisonPeriod.newest)).toEqual(['Visit', 'Signup', 'Paid']);
+    expect(titles(Sorting.descending, ComparisonPeriod.oldest)).toEqual(['Visit', 'Paid', 'Signup']);
+    expect(titles(Sorting.ascending, ComparisonPeriod.oldest)).toEqual(['Signup', 'Paid', 'Visit']);
   });
 
   it('pairs one frame per step by the base references', () => {
@@ -219,8 +186,8 @@ describe('buildComparison', () => {
       select([
         step('A', 'Sent', 100),
         step('B', 'Bought', 25),
-        step('A-compare', 'Sent', 80, true),
-        step('B-compare', 'Bought', 20, true),
+        step('A-compare', 'Sent', 80),
+        step('B-compare', 'Bought', 20),
       ])
     );
 
@@ -230,25 +197,21 @@ describe('buildComparison', () => {
     expect(result.overall.comparedRate).toBeCloseTo(0.25);
   });
 
-  it('pairs manual frames by the step names', () => {
-    const result = build(select([wide('A', { Sent: 100, Bought: 20 }), wide('B', { Bought: 10, Sent: 100 })], manual));
+  it('pairs the fields of one frame by the step names', () => {
+    const result = build(compare({ Sent: 100, Bought: 20 }, { Bought: 10, Sent: 100 }));
 
     expect(result.steps.map((value) => value.comparedCount)).toEqual([100, 10]);
   });
 
   it('reports different steps instead of comparing them', () => {
-    const selection = select([wide('A', { Sent: 100, Bought: 20 }), wide('B', { Sent: 100, Viewed: 20 })], manual);
-
-    expect(
-      buildComparison(selection, displayOptions, { sorting: Sorting.none, comparisonPeriod: ComparisonPeriod.newest })
-    ).toEqual({
+    expect(buildError(compare({ Sent: 100, Bought: 20 }, { Sent: 100, Viewed: 20 }))).toEqual({
       kind: 'error',
       reason: 'unmatched-steps',
     });
   });
 
   it('keeps the count change and leaves the rates unavailable when the denominator is zero', () => {
-    const result = build(select([wide('A', { Sent: 100, Bought: 20 }), wide('B', { Sent: 0, Bought: 0 })], manual));
+    const result = build(compare({ Sent: 100, Bought: 20 }, { Sent: 0, Bought: 0 }));
 
     expect(result.steps[1]).toMatchObject({ countDelta: 20, countDeltaPercent: null, comparedStepRate: null });
     expect(result.steps[1].stepRate).toBeCloseTo(0.2);
@@ -259,23 +222,13 @@ describe('buildComparison', () => {
     ['negative counts', { Sent: 100, Bought: -1 }],
     ['non-finite counts', { Sent: 100, Bought: NaN }],
   ])('rejects %s', (_, counts) => {
-    const selection = select([wide('A', counts), wide('B', { Sent: 100, Bought: 10 })], manual);
-
-    expect(
-      buildComparison(selection, displayOptions, { sorting: Sorting.none, comparisonPeriod: ComparisonPeriod.newest })
-    ).toEqual({
-      kind: 'error',
-      reason: 'invalid-steps',
-    });
+    expect(buildError(compare(counts, { Sent: 100, Bought: 10 }))).toEqual({ kind: 'error', reason: 'invalid-steps' });
   });
 
   it('rejects fields with more than one value', () => {
-    const frame = toDataFrame({ refId: 'A', fields: [{ name: 'Sent', type: FieldType.number, values: [100, 90] }] });
-    const selection = select([frame, wide('B', { Sent: 100 })], manual);
+    const current = toDataFrame({ refId: 'A', fields: [{ name: 'Sent', type: FieldType.number, values: [100, 90] }] });
 
-    expect(
-      buildComparison(selection, displayOptions, { sorting: Sorting.none, comparisonPeriod: ComparisonPeriod.newest })
-    ).toEqual({
+    expect(buildError(select([current, wide('A-compare', { Sent: 100 })]))).toEqual({
       kind: 'error',
       reason: 'invalid-steps',
     });
@@ -283,12 +236,10 @@ describe('buildComparison', () => {
 
   it('uses the data links of the displayed period', () => {
     const current = wide('A', { Sent: 100 });
-    const previous = wide('B', { Sent: 80 });
+    const previous = wide('A-compare', { Sent: 80 });
     previous.fields[0].config.links = [link];
 
-    expect(build(select([current, previous], manual)).links).toEqual([undefined]);
-    expect(build(select([current, previous], manual), Sorting.none, ComparisonPeriod.oldest).links[0]).toBeInstanceOf(
-      Function
-    );
+    expect(build(select([current, previous])).links).toEqual([undefined]);
+    expect(build(select([current, previous]), Sorting.none, ComparisonPeriod.oldest).links[0]).toBeInstanceOf(Function);
   });
 });

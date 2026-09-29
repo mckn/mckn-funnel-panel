@@ -14,12 +14,6 @@ export enum Orientation {
   horizontal = 'horizontal',
 }
 
-export enum ComparisonMode {
-  auto = 'auto',
-  manual = 'manual',
-  off = 'off',
-}
-
 export enum ComparisonPeriod {
   newest = 'newest',
   oldest = 'oldest',
@@ -36,9 +30,6 @@ export interface PanelOptions {
   sorting: Sorting;
   showRemainedPercentage: boolean;
   showPercentage: boolean;
-  comparisonMode: ComparisonMode;
-  currentRefId: string;
-  previousRefId: string;
   comparisonPeriod: ComparisonPeriod;
   outcomeDirection: OutcomeDirection;
 }

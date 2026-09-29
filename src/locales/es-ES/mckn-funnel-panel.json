@@ -5,10 +5,8 @@
       "retained": "{{percentage}} retenido de \"{{fromLabel}}\" a \"{{toLabel}}\""
     },
     "comparison": {
-      "comparison-query": "Consulta de comparación ({{refId}})",
-      "current-query": "Consulta actual ({{refId}})",
       "invalid-steps": "La comparación necesita un valor numérico no negativo por paso",
-      "missing-period": "La comparación necesita los resultados de la consulta actual y de la anterior",
+      "missing-period": "La comparación de tiempo necesita los resultados del periodo actual",
       "offset-unavailable": "Periodo de comparación (desplazamiento de tiempo no disponible)",
       "same-time-range": "Mismo intervalo de tiempo",
       "shifted-range": "{{range}} ({{offset}})",
@@ -33,25 +31,12 @@
   },
   "panel": {
     "options": {
-      "comparison-mode": {
-        "auto-description": "Usar la comparación de tiempo de Grafana cuando esté disponible",
-        "auto-label": "Automático",
-        "manual-description": "Comparar los resultados de dos consultas",
-        "manual-label": "Manual",
-        "name": "Comparación de tiempo",
-        "off-description": "Mostrar solo el embudo actual",
-        "off-label": "Desactivado"
-      },
       "comparison-period": {
         "name": "Embudo que se muestra",
         "newest-description": "Mostrar el periodo más reciente y su cambio respecto al periodo más antiguo",
         "newest-label": "Periodo más reciente",
         "oldest-description": "Mostrar el periodo más antiguo y su cambio respecto al periodo más reciente",
         "oldest-label": "Periodo más antiguo"
-      },
-      "current-ref-id": {
-        "description": "Referencia de la consulta del periodo más reciente",
-        "name": "Consulta actual"
       },
       "layout": {
         "classic-description": "Embudo centrado con etiquetas a la izquierda y porcentajes a la derecha",
@@ -73,10 +58,6 @@
         "lower-description": "Mostrar las disminuciones como favorables",
         "lower-label": "Menor",
         "name": "Un resultado favorable es"
-      },
-      "previous-ref-id": {
-        "description": "Referencia de la consulta del periodo más antiguo",
-        "name": "Consulta de comparación"
       },
       "show-percentage": {
         "description": "Mostrar la columna de porcentajes junto a las barras del embudo",

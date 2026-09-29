@@ -5,10 +5,8 @@
       "retained": "{{percentage}} retained from \"{{fromLabel}}\" to \"{{toLabel}}\""
     },
     "comparison": {
-      "comparison-query": "Comparison query ({{refId}})",
-      "current-query": "Current query ({{refId}})",
       "invalid-steps": "Comparison needs one non-negative numeric value per step",
-      "missing-period": "Comparison needs both current and previous query results",
+      "missing-period": "Time comparison needs the results of the current period",
       "offset-unavailable": "Comparison period (time offset unavailable)",
       "same-time-range": "Same time range",
       "shifted-range": "{{range}} ({{offset}})",
@@ -33,25 +31,12 @@
   },
   "panel": {
     "options": {
-      "comparison-mode": {
-        "auto-description": "Use Grafana Time comparison when it is available",
-        "auto-label": "Auto",
-        "manual-description": "Compare the results of two queries",
-        "manual-label": "Manual",
-        "name": "Time comparison",
-        "off-description": "Show the current funnel only",
-        "off-label": "Off"
-      },
       "comparison-period": {
         "name": "Funnel to display",
         "newest-description": "Show the newest period and its change from the oldest period",
         "newest-label": "Newest period",
         "oldest-description": "Show the oldest period and its change from the newest period",
         "oldest-label": "Oldest period"
-      },
-      "current-ref-id": {
-        "description": "Query reference of the newest period",
-        "name": "Current query"
       },
       "layout": {
         "classic-description": "Centered funnel with labels on the left and percentages on the right",
@@ -73,10 +58,6 @@
         "lower-description": "Show decreases as favorable",
         "lower-label": "Lower",
         "name": "A favorable outcome is"
-      },
-      "previous-ref-id": {
-        "description": "Query reference of the oldest period",
-        "name": "Comparison query"
       },
       "show-percentage": {
         "description": "Show the percentage column next to the funnel bars",

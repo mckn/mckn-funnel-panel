@@ -6,16 +6,14 @@ import {
   type FieldDisplay,
   type GetFieldDisplayValuesOptions,
 } from '@grafana/data';
-import { ComparisonMode, ComparisonPeriod, Layout, type PanelOptions, Sorting } from 'types';
+import { ComparisonPeriod, Layout, type PanelOptions, Sorting } from 'types';
 import { type LinksSupplier, sortByPercent } from './useFunnelData';
 
 export type ComparisonError = 'missing-period' | 'invalid-steps' | 'unmatched-steps';
 
-export type ComparisonSource = 'grafana' | 'manual';
-
 export type ComparisonSelection =
   | { kind: 'single'; current: DataFrame[] }
-  | { kind: 'compare'; current: DataFrame[]; previous: DataFrame[]; source: ComparisonSource }
+  | { kind: 'compare'; current: DataFrame[]; previous: DataFrame[] }
   | { kind: 'error'; current: DataFrame[]; reason: ComparisonError };
 
 export type CompareSelection = Extract<ComparisonSelection, { kind: 'compare' }>;
@@ -85,41 +83,26 @@ export function getTimeCompareDiffMs(frame: DataFrame): number | undefined {
   return undefined;
 }
 
-export function getComparisonRefIds(options: Pick<PanelOptions, 'currentRefId' | 'previousRefId'>) {
-  return {
-    currentRefId: (options.currentRefId || 'A').trim(),
-    previousRefId: (options.previousRefId || 'B').trim(),
-  };
+export function hasGrafanaComparison(frames: DataFrame[] = []): boolean {
+  return frames.some((frame) => isGrafanaComparison(frame, frames));
 }
 
-export function selectComparisonFrames(frames: DataFrame[], options: PanelOptions): ComparisonSelection {
-  // Only the flow layout shows comparisons.
-  const mode = options.layout === Layout.flow ? options.comparisonMode ?? ComparisonMode.auto : ComparisonMode.off;
-  const unshifted = frames.filter((frame) => !isGrafanaComparison(frame, frames));
-
-  if (mode === ComparisonMode.off) {
-    return { kind: 'single', current: unshifted };
-  }
-
-  if (mode === ComparisonMode.manual) {
-    const { currentRefId, previousRefId } = getComparisonRefIds(options);
-    const current = unshifted.filter((frame) => frame.refId === currentRefId);
-    const previous = unshifted.filter((frame) => frame.refId === previousRefId);
-
-    if (currentRefId === previousRefId || !current.length || !previous.length) {
-      return { kind: 'error', current, reason: 'missing-period' };
-    }
-    return { kind: 'compare', current, previous, source: 'manual' };
-  }
-
+// Grafana adds the comparison period when Time comparison is enabled in the time settings of the panel.
+export function selectComparisonFrames(
+  frames: DataFrame[],
+  options: Pick<PanelOptions, 'layout'>
+): ComparisonSelection {
+  const current = frames.filter((frame) => !isGrafanaComparison(frame, frames));
   const previous = frames.filter((frame) => isGrafanaComparison(frame, frames));
-  if (!previous.length) {
-    return { kind: 'single', current: unshifted };
+
+  // Only the flow layout shows comparisons. The other layouts show the current period.
+  if (options.layout !== Layout.flow || !previous.length) {
+    return { kind: 'single', current };
   }
-  if (!unshifted.length) {
-    return { kind: 'error', current: [], reason: 'missing-period' };
+  if (!current.length) {
+    return { kind: 'error', current, reason: 'missing-period' };
   }
-  return { kind: 'compare', current: unshifted, previous, source: 'grafana' };
+  return { kind: 'compare', current, previous };
 }
 
 export function buildComparison(
@@ -127,8 +110,8 @@ export function buildComparison(
   displayOptions: DisplayOptions,
   options: Pick<PanelOptions, 'sorting' | 'comparisonPeriod'>
 ): ComparisonResult {
-  const newest = extractSteps(selection.current, selection.source, displayOptions);
-  const oldest = extractSteps(selection.previous, selection.source, displayOptions);
+  const newest = extractSteps(selection.current, displayOptions);
+  const oldest = extractSteps(selection.previous, displayOptions);
   if (!newest || !oldest) {
     return { kind: 'error', reason: 'invalid-steps' };
   }
@@ -182,7 +165,7 @@ export function buildComparison(
   };
 }
 
-function extractSteps(frames: DataFrame[], source: ComparisonSource, displayOptions: DisplayOptions): Step[] | null {
+function extractSteps(frames: DataFrame[], displayOptions: DisplayOptions): Step[] | null {
   const fieldDisplays = getFieldDisplayValues({
     ...displayOptions,
     data: frames,
@@ -206,7 +189,8 @@ function extractSteps(frames: DataFrame[], source: ComparisonSource, displayOpti
 
       // One frame per step uses the frame name, one frame with all steps uses the field names.
       const label = (numericFields.length === 1 && frame.name) || field.name;
-      const key = source === 'grafana' ? `${getBaseRefId(frame)}:${label}:${field.name}` : `${label}:${field.name}`;
+      // Grafana names the comparison query "<refId>-compare", so both periods get the same key.
+      const key = `${getBaseRefId(frame)}:${label}:${field.name}`;
       steps.push({ key, count, fieldDisplay });
     }
   }

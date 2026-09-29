@@ -1,14 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { createTheme, FieldType, toDataFrame, type DataFrame, type LinkModel } from '@grafana/data';
-import {
-  ComparisonMode,
-  ComparisonPeriod,
-  Layout,
-  Orientation,
-  OutcomeDirection,
-  Sorting,
-  type PanelOptions,
-} from 'types';
+import { ComparisonPeriod, Layout, Orientation, OutcomeDirection, Sorting, type PanelOptions } from 'types';
 import { useFunnelData } from './useFunnelData';
 
 const options: PanelOptions = {
@@ -17,9 +9,6 @@ const options: PanelOptions = {
   sorting: Sorting.ascending,
   showRemainedPercentage: false,
   showPercentage: true,
-  comparisonMode: ComparisonMode.auto,
-  currentRefId: 'A',
-  previousRefId: 'B',
   comparisonPeriod: ComparisonPeriod.newest,
   outcomeDirection: OutcomeDirection.higher,
 };

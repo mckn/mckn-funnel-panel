@@ -1,8 +1,7 @@
 import { dateTime, rangeUtil, type TimeRange } from '@grafana/data';
 import { type TimeZone } from '@grafana/schema';
 import { t } from '@grafana/i18n';
-import { type PanelOptions } from 'types';
-import { type CompareSelection, getComparisonRefIds, getTimeCompareDiffMs } from './comparison';
+import { type CompareSelection, getTimeCompareDiffMs } from './comparison';
 
 export type ComparisonPeriodLabels = {
   newest: string;
@@ -25,24 +24,6 @@ const OFFSET_UNITS: Array<{ unit: Intl.RelativeTimeFormatUnit; milliseconds: num
 ];
 
 export function getComparisonPeriodLabels(
-  selection: CompareSelection,
-  timeRange: TimeRange,
-  timeZone: TimeZone,
-  options: Pick<PanelOptions, 'currentRefId' | 'previousRefId'>
-): ComparisonPeriodLabels {
-  if (selection.source === 'grafana') {
-    return getGrafanaPeriodLabels(selection, timeRange, timeZone);
-  }
-
-  // The time range of a manual query is defined by the query, so use the query references.
-  const { currentRefId, previousRefId } = getComparisonRefIds(options);
-  return {
-    newest: t('components.comparison.current-query', 'Current query ({{refId}})', { refId: currentRefId }),
-    oldest: t('components.comparison.comparison-query', 'Comparison query ({{refId}})', { refId: previousRefId }),
-  };
-}
-
-function getGrafanaPeriodLabels(
   selection: CompareSelection,
   timeRange: TimeRange,
   timeZone: TimeZone

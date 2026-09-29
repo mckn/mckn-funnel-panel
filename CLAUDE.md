@@ -44,15 +44,12 @@ Provisioned test data:
 - `FunnelPanel` as the panel renderer
 - Field config: color mode `ContinuousGrYlRd`, default min 0, disabled NoValue/Thresholds. Data links are enabled, but only the flow layout uses them
 - Panel options: `layout` (classic/flow), `orientation` (vertical/horizontal, flow only), `sorting` (descending/ascending/none), `showRemainedPercentage` (boolean) and `showPercentage` (boolean, classic only)
-- Time comparison options (flow only): `comparisonMode` (auto/manual/off), `currentRefId` and `previousRefId` (manual only, default `A`/`B`), `comparisonPeriod` (newest/oldest) and `outcomeDirection` (higher/lower)
+- Time comparison options: `comparisonPeriod` (newest/oldest) and `outcomeDirection` (higher/lower). They show only for the flow layout when the data has Grafana Time comparison frames (`hasGrafanaComparison`)
 
 ### Data flow
 
 1. Grafana passes `PanelProps<PanelOptions>` to `FunnelPanel` (`src/components/FunnelPanel.tsx`)
-2. `selectComparisonFrames` (`src/data/comparison.ts`) splits `data.series` into the current period and, in the flow layout, a comparison period:
-   - Auto: Grafana Time comparison frames, detected by `meta.timeCompare`, `config.custom.timeCompare` on a field, or a `X-compare` refId when refId `X` also exists
-   - Manual: the frames of `currentRefId` and `previousRefId`
-   - Off, and always in the classic layout: only removes the Grafana comparison frames
+2. `selectComparisonFrames` (`src/data/comparison.ts`) splits `data.series` into the current period and the Grafana Time comparison period. It detects the comparison frames by `meta.timeCompare`, `config.custom.timeCompare` on a field, or a `X-compare` refId when refId `X` also exists. Only the flow layout compares. The classic layout gets the current period only. There is no manual comparison: the comparison always comes from Grafana Time comparison
 3. `useFunnelData` hook (`src/data/useFunnelData.ts`) processes data:
    - Empty series → `FunnelDataResultStatus.nodata`
    - No numeric fields → `FunnelDataResultStatus.unsupported`
@@ -99,10 +96,9 @@ PureFlowLayout                  # CSS grid, one section per step, owns hover hig
 - `Sorting` enum: `ascending`, `descending`, `none`
 - `Layout` enum: `classic`, `flow`
 - `Orientation` enum: `vertical`, `horizontal`
-- `ComparisonMode` enum: `auto`, `manual`, `off`
 - `ComparisonPeriod` enum: `newest`, `oldest`
 - `OutcomeDirection` enum: `higher`, `lower`
-- `PanelOptions`: `{ layout; orientation; sorting; showRemainedPercentage; showPercentage; comparisonMode; currentRefId; previousRefId; comparisonPeriod; outcomeDirection }`
+- `PanelOptions`: `{ layout; orientation; sorting; showRemainedPercentage; showPercentage; comparisonPeriod; outcomeDirection }`
 
 ### Utilities (`src/utils/`)
 
@@ -182,7 +178,7 @@ import { getContrastText } from 'utils';
 - Files in `tests/`
 - Requires running Grafana: `npm run build` then `npm run server`, then `npm run e2e` in a separate terminal
 - Uses provisioned dashboard (`/d/NtsITqb4z/funnel-examples`) and static datasource for test data
-- Panel view IDs: 7 (descending sort), 8 (ascending sort), 11 (flow vertical, with data links), 12 (flow vertical compact with retention rate), 13 (flow horizontal, no data links), 14 (flow manual comparison), 15 (flow Grafana Time comparison, Grafana 12.3+), 16 (flow Grafana Time comparison with Rows to fields, Grafana 12.3+)
+- Panel view IDs: 7 (descending sort), 8 (ascending sort), 11 (flow vertical, with data links), 12 (flow vertical compact with retention rate), 13 (flow horizontal, no data links), 14 (flow Grafana Time comparison, Grafana 12.3+), 15 (flow Grafana Time comparison with Rows to fields, Grafana 12.3+). The static datasource returns the same data for both periods, so the e2e changes are 0. Unit tests cover the non-zero changes
 - Auth handled by `@grafana/plugin-e2e` auth setup project
 
 ### Test IDs
@@ -210,7 +206,7 @@ Three GitHub Actions workflows in `.github/workflows/`:
 - `plugin.json` version uses `%VERSION%` placeholder replaced by webpack at build. Never hardcode a version there.
 - `DisplayValue.percent` is a 0–1 decimal, not 0–100. `formatPercentage` multiplies by 100 for display.
 - Grafana calculates `percent` with a range shared by all frames, including the Grafana comparison frames. `buildComparison` recalculates it from the displayed period. The single funnel does not, so with Time comparison in the classic layout the largest step can be below 100%.
-- `Rows to fields` removes `meta.timeCompare`. Auto still detects the comparison by its `-compare` refId, but the time offset is unavailable.
+- `Rows to fields` removes `meta.timeCompare`. The panel still detects the comparison by its `-compare` refId, but the time offset is unavailable.
 - Field config defaults `min` to 0. This is required for correct percentage/width calculation in the funnel.
 - `.config/` directory is scaffolded by `@grafana/create-plugin`. Do not edit files there. Extend config via root-level files (`tsconfig.json`, `jest.config.js`, `.eslintrc`, `.prettierrc.js`).
 - The tooltip system uses a module-level mutable registry. Content is registered via `useEffect` and cleaned up on unmount.

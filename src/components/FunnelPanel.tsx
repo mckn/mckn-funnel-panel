@@ -17,11 +17,11 @@ import { Nodata } from './Nodata';
 export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   const { width, height, data, options, fieldConfig, replaceVariables, timeZone, timeRange } = props;
   const { layout, orientation, showRemainedPercentage, showPercentage } = options;
-  const { sorting, comparisonPeriod, outcomeDirection, currentRefId, previousRefId } = options;
+  const { sorting, comparisonPeriod, outcomeDirection } = options;
 
   const theme = useTheme2();
   const styles = useStyles2(getStyles(width, height));
-  const selection = useMemo(() => selectComparisonFrames(data.series, options), [data.series, options]);
+  const selection = useMemo(() => selectComparisonFrames(data.series, { layout }), [data.series, layout]);
 
   const { values, links, status } = useFunnelData(
     {
@@ -49,10 +49,7 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
     if (selection.kind !== 'compare' || comparison?.kind !== 'ready') {
       return undefined;
     }
-    const { newest, oldest } = getComparisonPeriodLabels(selection, timeRange, timeZone, {
-      currentRefId,
-      previousRefId,
-    });
+    const { newest, oldest } = getComparisonPeriodLabels(selection, timeRange, timeZone);
     const showOldest = comparisonPeriod === ComparisonPeriod.oldest;
 
     return {
@@ -61,7 +58,7 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
       labels: showOldest ? { selected: oldest, compared: newest } : { selected: newest, compared: oldest },
       outcomeDirection: outcomeDirection ?? OutcomeDirection.higher,
     };
-  }, [selection, comparison, timeRange, timeZone, currentRefId, previousRefId, comparisonPeriod, outcomeDirection]);
+  }, [selection, comparison, timeRange, timeZone, comparisonPeriod, outcomeDirection]);
 
   if (comparison?.kind === 'ready' && flowComparison) {
     return (
@@ -128,7 +125,7 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
 function getComparisonErrorMessage(reason: ComparisonError): string {
   switch (reason) {
     case 'missing-period':
-      return t('components.comparison.missing-period', 'Comparison needs both current and previous query results');
+      return t('components.comparison.missing-period', 'Time comparison needs the results of the current period');
     case 'unmatched-steps':
       return t('components.comparison.unmatched-steps', 'Current and previous funnel steps do not match');
     default:

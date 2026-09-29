@@ -836,133 +836,6 @@
         "orientation": "vertical",
         "sorting": "descending",
         "showRemainedPercentage": false,
-        "comparisonMode": "manual",
-        "currentRefId": "A",
-        "previousRefId": "B",
-        "comparisonPeriod": "newest",
-        "outcomeDirection": "higher"
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "marcusolsson-static-datasource",
-            "uid": "vHsj2qbVk"
-          },
-          "frame": {
-            "fields": [
-              {
-                "config": {},
-                "name": "Sent",
-                "type": "number",
-                "values": [1000]
-              },
-              {
-                "config": {},
-                "name": "Viewed",
-                "type": "number",
-                "values": [700]
-              },
-              {
-                "config": {},
-                "name": "Clicked",
-                "type": "number",
-                "values": [400]
-              },
-              {
-                "config": {},
-                "name": "Add to cart",
-                "type": "number",
-                "values": [300]
-              },
-              {
-                "config": {},
-                "name": "Purchased",
-                "type": "number",
-                "values": [200]
-              }
-            ],
-            "meta": {},
-            "name": "Funnel"
-          },
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "marcusolsson-static-datasource",
-            "uid": "vHsj2qbVk"
-          },
-          "frame": {
-            "fields": [
-              {
-                "config": {},
-                "name": "Sent",
-                "type": "number",
-                "values": [2000]
-              },
-              {
-                "config": {},
-                "name": "Viewed",
-                "type": "number",
-                "values": [1600]
-              },
-              {
-                "config": {},
-                "name": "Clicked",
-                "type": "number",
-                "values": [1000]
-              },
-              {
-                "config": {},
-                "name": "Add to cart",
-                "type": "number",
-                "values": [700]
-              },
-              {
-                "config": {},
-                "name": "Purchased",
-                "type": "number",
-                "values": [600]
-              }
-            ],
-            "meta": {},
-            "name": "Funnel"
-          },
-          "refId": "B"
-        }
-      ],
-      "title": "Funnel - flow layout with manual comparison",
-      "type": "mckn-funnel-panel"
-    },
-    {
-      "datasource": {
-        "type": "marcusolsson-static-datasource",
-        "uid": "vHsj2qbVk"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "mappings": [],
-          "min": 0
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 16,
-        "w": 22,
-        "x": 0,
-        "y": 131
-      },
-      "id": 15,
-      "options": {
-        "layout": "flow",
-        "orientation": "vertical",
-        "sorting": "descending",
-        "showRemainedPercentage": false,
-        "comparisonMode": "auto",
-        "currentRefId": "A",
-        "previousRefId": "B",
         "comparisonPeriod": "newest",
         "outcomeDirection": "higher"
       },
@@ -1034,17 +907,14 @@
         "h": 16,
         "w": 22,
         "x": 0,
-        "y": 147
+        "y": 131
       },
-      "id": 16,
+      "id": 15,
       "options": {
         "layout": "flow",
         "orientation": "vertical",
         "sorting": "descending",
         "showRemainedPercentage": false,
-        "comparisonMode": "auto",
-        "currentRefId": "A",
-        "previousRefId": "B",
         "comparisonPeriod": "newest",
         "outcomeDirection": "higher"
       },
