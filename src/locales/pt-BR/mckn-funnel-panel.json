@@ -4,9 +4,23 @@
       "drop": "{{percentage}} de queda de \"{{fromLabel}}\" para \"{{toLabel}}\"",
       "retained": "{{percentage}} retido de \"{{fromLabel}}\" para \"{{toLabel}}\""
     },
+    "comparison": {
+      "comparison-query": "Consulta de comparação ({{refId}})",
+      "current-query": "Consulta atual ({{refId}})",
+      "invalid-steps": "A comparação precisa de um valor numérico não negativo por etapa",
+      "missing-period": "A comparação precisa dos resultados da consulta atual e da anterior",
+      "offset-unavailable": "Período de comparação (deslocamento de tempo indisponível)",
+      "same-time-range": "Mesmo intervalo de tempo",
+      "shifted-range": "{{range}} ({{offset}})",
+      "unmatched-steps": "As etapas do funil atual e do anterior não correspondem"
+    },
     "flow": {
+      "compared-value": "vs. {{value}}",
+      "comparison-periods": "<0>{{selected}}</0> comparado com {{compared}}",
+      "comparison-periods-title": "{{selected}} comparado com {{compared}}",
       "drop-off": "abandono",
       "links-menu": "Links de dados de {{title}}",
+      "overall-conversion": "Conversão total",
       "retention": "retenção"
     },
     "nodata": {
@@ -19,6 +33,26 @@
   },
   "panel": {
     "options": {
+      "comparison-mode": {
+        "auto-description": "Usar a comparação de tempo do Grafana quando estiver disponível",
+        "auto-label": "Automático",
+        "manual-description": "Comparar os resultados de duas consultas",
+        "manual-label": "Manual",
+        "name": "Comparação de tempo",
+        "off-description": "Mostrar apenas o funil atual",
+        "off-label": "Desativado"
+      },
+      "comparison-period": {
+        "name": "Funil a exibir",
+        "newest-description": "Mostrar o período mais recente e sua variação em relação ao período mais antigo",
+        "newest-label": "Período mais recente",
+        "oldest-description": "Mostrar o período mais antigo e sua variação em relação ao período mais recente",
+        "oldest-label": "Período mais antigo"
+      },
+      "current-ref-id": {
+        "description": "Referência da consulta do período mais recente",
+        "name": "Consulta atual"
+      },
       "layout": {
         "classic-description": "Funil centralizado com rótulos à esquerda e porcentagens à direita",
         "classic-label": "Clássico",
@@ -32,6 +66,17 @@
         "name": "Orientação",
         "vertical-description": "Etapas de cima para baixo com o funil à direita",
         "vertical-label": "Vertical"
+      },
+      "outcome-direction": {
+        "higher-description": "Mostrar aumentos como favoráveis",
+        "higher-label": "Maior",
+        "lower-description": "Mostrar reduções como favoráveis",
+        "lower-label": "Menor",
+        "name": "Um resultado favorável é"
+      },
+      "previous-ref-id": {
+        "description": "Referência da consulta do período mais antigo",
+        "name": "Consulta de comparação"
       },
       "show-percentage": {
         "description": "Mostrar a coluna de porcentagens ao lado das barras do funil",

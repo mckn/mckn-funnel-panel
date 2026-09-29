@@ -2,15 +2,25 @@ import React, { type CSSProperties, type ReactElement, Fragment, useState } from
 import { css } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
 import { type DisplayValue, type GrafanaTheme2 } from '@grafana/data';
-import { Orientation } from 'types';
+import { Orientation, type OutcomeDirection } from 'types';
 import { getDisplayValueKey } from 'utils';
+import { type RateComparison, type StepComparison } from '../../data/comparison';
 import { type LinksSupplier } from '../../data/useFunnelData';
+import { COMPARISON_HEADER_HEIGHT, ComparisonHeader, type PeriodLabels } from './ComparisonHeader';
 import { StepInfo } from './StepInfo';
 import { FunnelFlow } from './FunnelFlow';
 
 const FUNNEL_WIDTH_RATIO = 0.45;
 const MIN_FUNNEL_WIDTH = 120;
 const COMPACT_STEP_HEIGHT = 90;
+
+export type FlowComparison = {
+  // Same index as the values.
+  steps: StepComparison[];
+  overall: RateComparison;
+  labels: PeriodLabels;
+  outcomeDirection: OutcomeDirection;
+};
 
 type Props = {
   values: DisplayValue[];
@@ -19,19 +29,22 @@ type Props = {
   width: number;
   height: number;
   showRemainedPercentage: boolean;
+  // Change from the other period when comparing two periods.
+  comparison?: FlowComparison;
   'data-testid'?: string;
 };
 
 export function FlowLayout(props: Props): ReactElement {
-  const { values, links, orientation, width, height, showRemainedPercentage } = props;
+  const { values, links, orientation, width, height, showRemainedPercentage, comparison } = props;
   const horizontal = orientation === Orientation.horizontal;
   const funnelWidth = Math.max(MIN_FUNNEL_WIDTH, Math.round(width * FUNNEL_WIDTH_RATIO));
-  const compact = !horizontal && height / Math.max(values.length, 1) < COMPACT_STEP_HEIGHT;
+  const stepsHeight = comparison ? height - COMPARISON_HEADER_HEIGHT : height;
+  const compact = !horizontal && stepsHeight / Math.max(values.length, 1) < COMPACT_STEP_HEIGHT;
   const styles = useStyles2(getStyles(values.length, funnelWidth, horizontal));
   const [highlightedIndex, setHighlightedIndex] = useState<number>();
 
-  return (
-    <div className={styles.container} data-testid={props['data-testid']}>
+  const steps = (
+    <div className={styles.container} data-testid={comparison ? undefined : props['data-testid']}>
       {values.map((v, i) => (
         <Fragment key={getDisplayValueKey(v)}>
           <div className={styles.divider} style={getDividerPlacement(i, horizontal)} />
@@ -46,6 +59,8 @@ export function FlowLayout(props: Props): ReactElement {
             onMouseLeave={() => setHighlightedIndex(undefined)}
             showRemainedPercentage={showRemainedPercentage}
             getLinks={links[i]}
+            comparison={comparison?.steps[i]}
+            outcomeDirection={comparison?.outcomeDirection}
             style={getStepPlacement(i, horizontal)}
             data-testid={`step-${i}`}
           />
@@ -58,6 +73,22 @@ export function FlowLayout(props: Props): ReactElement {
         onHighlight={setHighlightedIndex}
         className={styles.funnel}
       />
+    </div>
+  );
+
+  if (!comparison) {
+    return steps;
+  }
+
+  return (
+    <div className={styles.comparison} data-testid={props['data-testid']}>
+      <ComparisonHeader
+        labels={comparison.labels}
+        overall={comparison.overall}
+        outcomeDirection={comparison.outcomeDirection}
+        data-testid="comparison-header"
+      />
+      {steps}
     </div>
   );
 }
@@ -81,6 +112,14 @@ const getStyles = (steps: number, funnelWidth: number, horizontal: boolean) => (
       display: 'grid',
       gridTemplateColumns: horizontal ? `repeat(${steps}, minmax(0, 1fr))` : `minmax(0, 1fr) ${funnelWidth}px`,
       gridTemplateRows: horizontal ? 'auto minmax(0, 1fr)' : `repeat(${steps}, minmax(0, 1fr))`,
+      width: '100%',
+      height: '100%',
+      minHeight: 0,
+    }),
+    // Header above the steps.
+    comparison: css({
+      display: 'flex',
+      flexDirection: 'column',
       width: '100%',
       height: '100%',
     }),

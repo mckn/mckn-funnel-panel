@@ -1,1 +1,1 @@
-export { PureFlowLayout } from './FlowLayout';
+export { PureFlowLayout, type FlowComparison } from './FlowLayout';

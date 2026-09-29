@@ -4,9 +4,23 @@
       "drop": "{{percentage}} tapp från \"{{fromLabel}}\" till \"{{toLabel}}\"",
       "retained": "{{percentage}} kvar från \"{{fromLabel}}\" till \"{{toLabel}}\""
     },
+    "comparison": {
+      "comparison-query": "Jämförelsefråga ({{refId}})",
+      "current-query": "Aktuell fråga ({{refId}})",
+      "invalid-steps": "Jämförelsen kräver ett icke-negativt numeriskt värde per steg",
+      "missing-period": "Jämförelsen kräver resultat från både den aktuella och den tidigare frågan",
+      "offset-unavailable": "Jämförelseperiod (tidsförskjutning saknas)",
+      "same-time-range": "Samma tidsintervall",
+      "shifted-range": "{{range}} ({{offset}})",
+      "unmatched-steps": "Stegen i den aktuella och den tidigare tratten matchar inte"
+    },
     "flow": {
+      "compared-value": "mot {{value}}",
+      "comparison-periods": "<0>{{selected}}</0> jämfört med {{compared}}",
+      "comparison-periods-title": "{{selected}} jämfört med {{compared}}",
       "drop-off": "bortfall",
       "links-menu": "Datalänkar för {{title}}",
+      "overall-conversion": "Total konvertering",
       "retention": "kvar"
     },
     "nodata": {
@@ -19,6 +33,26 @@
   },
   "panel": {
     "options": {
+      "comparison-mode": {
+        "auto-description": "Använd Grafanas tidsjämförelse när den finns",
+        "auto-label": "Auto",
+        "manual-description": "Jämför resultaten från två frågor",
+        "manual-label": "Manuell",
+        "name": "Tidsjämförelse",
+        "off-description": "Visa endast den aktuella tratten",
+        "off-label": "Av"
+      },
+      "comparison-period": {
+        "name": "Tratt att visa",
+        "newest-description": "Visa den nyaste perioden och dess förändring från den äldsta perioden",
+        "newest-label": "Nyaste perioden",
+        "oldest-description": "Visa den äldsta perioden och dess förändring från den nyaste perioden",
+        "oldest-label": "Äldsta perioden"
+      },
+      "current-ref-id": {
+        "description": "Frågereferens för den nyaste perioden",
+        "name": "Aktuell fråga"
+      },
       "layout": {
         "classic-description": "Centrerad tratt med etiketter till vänster och procent till höger",
         "classic-label": "Klassisk",
@@ -32,6 +66,17 @@
         "name": "Orientering",
         "vertical-description": "Steg uppifrån och ned med tratten till höger",
         "vertical-label": "Vertikal"
+      },
+      "outcome-direction": {
+        "higher-description": "Visa ökningar som gynnsamma",
+        "higher-label": "Högre",
+        "lower-description": "Visa minskningar som gynnsamma",
+        "lower-label": "Lägre",
+        "name": "Ett gynnsamt utfall är"
+      },
+      "previous-ref-id": {
+        "description": "Frågereferens för den äldsta perioden",
+        "name": "Jämförelsefråga"
       },
       "show-percentage": {
         "description": "Visa procentkolumnen bredvid trattdiagrammet",

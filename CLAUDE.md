@@ -28,7 +28,7 @@ Node >= 20 (see `.nvmrc`). Use `npm ci` for installs.
 - Plugin signing disabled (unsigned plugins allowed)
 - LiveReload enabled for hot reload during `npm run dev`
 - Installs `marcusolsson-static-datasource` plugin automatically
-- Enables `localizationForPlugins` feature toggle
+- Enables the `localizationForPlugins`, `panelTimeSettings` and `timeComparison` feature toggles. The last two enable Grafana Time comparison on Grafana 12.3
 
 Provisioned test data:
 
@@ -44,15 +44,21 @@ Provisioned test data:
 - `FunnelPanel` as the panel renderer
 - Field config: color mode `ContinuousGrYlRd`, default min 0, disabled NoValue/Thresholds. Data links are enabled, but only the flow layout uses them
 - Panel options: `layout` (classic/flow), `orientation` (vertical/horizontal, flow only), `sorting` (descending/ascending/none), `showRemainedPercentage` (boolean) and `showPercentage` (boolean, classic only)
+- Time comparison options (flow only): `comparisonMode` (auto/manual/off), `currentRefId` and `previousRefId` (manual only, default `A`/`B`), `comparisonPeriod` (newest/oldest) and `outcomeDirection` (higher/lower)
 
 ### Data flow
 
 1. Grafana passes `PanelProps<PanelOptions>` to `FunnelPanel` (`src/components/FunnelPanel.tsx`)
-2. `useFunnelData` hook (`src/data/useFunnelData.ts`) processes data:
+2. `selectComparisonFrames` (`src/data/comparison.ts`) splits `data.series` into the current period and, in the flow layout, a comparison period:
+   - Auto: Grafana Time comparison frames, detected by `meta.timeCompare`, `config.custom.timeCompare` on a field, or a `X-compare` refId when refId `X` also exists
+   - Manual: the frames of `currentRefId` and `previousRefId`
+   - Off, and always in the classic layout: only removes the Grafana comparison frames
+3. `useFunnelData` hook (`src/data/useFunnelData.ts`) processes data:
    - Empty series → `FunnelDataResultStatus.nodata`
    - No numeric fields → `FunnelDataResultStatus.unsupported`
    - Valid data → calls `getFieldDisplayValues` from `@grafana/data`, applies sorting by `percent`, returns `DisplayValue[]` and `links` (a `getLinks` supplier per value, same index, `undefined` when the field has no data links)
-3. `FunnelPanel` renders based on status: `Nodata`, `Unsupported`, or the selected layout (classic three-column layout or `PureFlowLayout`)
+4. For a comparison, `buildComparison` pairs the steps of both periods by key, sorts by the displayed period and returns `values`, `links` and a `StepComparison` per step. `getComparisonPeriodLabels` (`src/data/periodLabels.ts`) names the periods. If the comparison fails, the panel shows a warning above the single funnel
+5. `FunnelPanel` renders based on status: `Nodata`, `Unsupported`, or the selected layout (classic three-column layout or `PureFlowLayout`)
 
 ### Component hierarchy
 
@@ -73,7 +79,10 @@ Flow layout (`layout: flow`, `src/components/Flow/`):
 
 ```
 PureFlowLayout                  # CSS grid, one section per step, owns hover highlight state, no tooltips
+├── ComparisonHeader            # Only with a comparison: the two periods and the overall conversion change
 ├── StepInfo                    # Step name, value and conversion from the previous step
+│   ├── CountChange             # Only with a comparison: count change and the count of the other period
+│   ├── ConversionChange        # Only with a comparison: drop-off or retention change in pp
 │   └── StepLinksMenu           # "..." button + Dropdown menu of data links, shown on hover/focus
 └── FunnelFlow                  # One SVG band across all steps, measured with useElementSize
     ├── FlowSegment             # Filled path per step (getFlowSegmentPath), hover highlight, no tooltip
@@ -90,7 +99,10 @@ PureFlowLayout                  # CSS grid, one section per step, owns hover hig
 - `Sorting` enum: `ascending`, `descending`, `none`
 - `Layout` enum: `classic`, `flow`
 - `Orientation` enum: `vertical`, `horizontal`
-- `PanelOptions`: `{ layout: Layout; orientation: Orientation; sorting: Sorting; showRemainedPercentage: boolean; showPercentage: boolean }`
+- `ComparisonMode` enum: `auto`, `manual`, `off`
+- `ComparisonPeriod` enum: `newest`, `oldest`
+- `OutcomeDirection` enum: `higher`, `lower`
+- `PanelOptions`: `{ layout; orientation; sorting; showRemainedPercentage; showPercentage; comparisonMode; currentRefId; previousRefId; comparisonPeriod; outcomeDirection }`
 
 ### Utilities (`src/utils/`)
 
@@ -103,6 +115,8 @@ PureFlowLayout                  # CSS grid, one section per step, owns hover hig
 - `getFlowSegmentPath(options)` — SVG area and edge paths for one step of the flow band
 - `getBandLabelPlacement(options)` — where to put a percentage label next to the flow band
 - `useElementSize()` — ResizeObserver hook returning a ref and its width/height
+- `formatCountChange` / `formatPercentChange` / `formatPointChange` / `getPointChange` — signed change strings, `—` when unavailable
+- `getOutcome(change, direction)` / `getOutcomeColor(outcome, theme)` — favorable, unfavorable or neutral, and the matching text color
 
 ### Tooltip system (`src/components/Tooltip/`)
 
@@ -168,12 +182,12 @@ import { getContrastText } from 'utils';
 - Files in `tests/`
 - Requires running Grafana: `npm run build` then `npm run server`, then `npm run e2e` in a separate terminal
 - Uses provisioned dashboard (`/d/NtsITqb4z/funnel-examples`) and static datasource for test data
-- Panel view IDs: 7 (descending sort), 8 (ascending sort), 11 (flow vertical, with data links), 12 (flow vertical compact with retention rate), 13 (flow horizontal, no data links)
+- Panel view IDs: 7 (descending sort), 8 (ascending sort), 11 (flow vertical, with data links), 12 (flow vertical compact with retention rate), 13 (flow horizontal, no data links), 14 (flow manual comparison), 15 (flow Grafana Time comparison, Grafana 12.3+), 16 (flow Grafana Time comparison with Rows to fields, Grafana 12.3+)
 - Auth handled by `@grafana/plugin-e2e` auth setup project
 
 ### Test IDs
 
-Follow the pattern `bar-{i}`, `label-{i}`, `percentage-{i}`, `gap-{i}`. Use this convention for new components. The flow layout adds `step-{i}`, `value-{i}`, `conversion-{i}` and `menu-{i}` (data links button).
+Follow the pattern `bar-{i}`, `label-{i}`, `percentage-{i}`, `gap-{i}`. Use this convention for new components. The flow layout adds `step-{i}`, `value-{i}`, `conversion-{i}` and `menu-{i}` (data links button). The comparison adds `comparison-header`, `overall-change`, `count-change-{i}` and `conversion-change-{i}`.
 
 ## CI/CD
 
@@ -195,6 +209,8 @@ Three GitHub Actions workflows in `.github/workflows/`:
 
 - `plugin.json` version uses `%VERSION%` placeholder replaced by webpack at build. Never hardcode a version there.
 - `DisplayValue.percent` is a 0–1 decimal, not 0–100. `formatPercentage` multiplies by 100 for display.
+- Grafana calculates `percent` with a range shared by all frames, including the Grafana comparison frames. `buildComparison` recalculates it from the displayed period. The single funnel does not, so with Time comparison in the classic layout the largest step can be below 100%.
+- `Rows to fields` removes `meta.timeCompare`. Auto still detects the comparison by its `-compare` refId, but the time offset is unavailable.
 - Field config defaults `min` to 0. This is required for correct percentage/width calculation in the funnel.
 - `.config/` directory is scaffolded by `@grafana/create-plugin`. Do not edit files there. Extend config via root-level files (`tsconfig.json`, `jest.config.js`, `.eslintrc`, `.prettierrc.js`).
 - The tooltip system uses a module-level mutable registry. Content is registered via `useEffect` and cleaned up on unmount.

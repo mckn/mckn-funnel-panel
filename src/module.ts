@@ -2,7 +2,15 @@ import { FieldColorModeId, FieldConfigProperty, PanelPlugin } from '@grafana/dat
 import { t } from '@grafana/i18n';
 import { FunnelPanel } from 'components/FunnelPanel';
 import { initI18n } from './initI18n';
-import { Layout, Orientation, Sorting, type PanelOptions } from './types';
+import {
+  ComparisonMode,
+  ComparisonPeriod,
+  Layout,
+  Orientation,
+  OutcomeDirection,
+  Sorting,
+  type PanelOptions,
+} from './types';
 
 await initI18n();
 
@@ -125,5 +133,103 @@ export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel)
       description: t('panel.options.show-percentage.description', 'Show the percentage column next to the funnel bars'),
       defaultValue: true,
       showIf: (options) => options.layout !== Layout.flow,
+    });
+
+    builder.addRadio({
+      path: 'comparisonMode',
+      name: t('panel.options.comparison-mode.name', 'Time comparison'),
+      category: ['Time comparison'],
+      settings: {
+        options: [
+          {
+            value: ComparisonMode.auto,
+            label: t('panel.options.comparison-mode.auto-label', 'Auto'),
+            description: t(
+              'panel.options.comparison-mode.auto-description',
+              'Use Grafana Time comparison when it is available'
+            ),
+          },
+          {
+            value: ComparisonMode.manual,
+            label: t('panel.options.comparison-mode.manual-label', 'Manual'),
+            description: t('panel.options.comparison-mode.manual-description', 'Compare the results of two queries'),
+          },
+          {
+            value: ComparisonMode.off,
+            label: t('panel.options.comparison-mode.off-label', 'Off'),
+            description: t('panel.options.comparison-mode.off-description', 'Show the current funnel only'),
+          },
+        ],
+      },
+      defaultValue: ComparisonMode.auto,
+      showIf: (options) => options.layout === Layout.flow,
+    });
+
+    builder.addTextInput({
+      path: 'currentRefId',
+      name: t('panel.options.current-ref-id.name', 'Current query'),
+      description: t('panel.options.current-ref-id.description', 'Query reference of the newest period'),
+      category: ['Time comparison'],
+      defaultValue: 'A',
+      showIf: (options) => options.layout === Layout.flow && options.comparisonMode === ComparisonMode.manual,
+    });
+
+    builder.addTextInput({
+      path: 'previousRefId',
+      name: t('panel.options.previous-ref-id.name', 'Comparison query'),
+      description: t('panel.options.previous-ref-id.description', 'Query reference of the oldest period'),
+      category: ['Time comparison'],
+      defaultValue: 'B',
+      showIf: (options) => options.layout === Layout.flow && options.comparisonMode === ComparisonMode.manual,
+    });
+
+    builder.addRadio({
+      path: 'comparisonPeriod',
+      name: t('panel.options.comparison-period.name', 'Funnel to display'),
+      category: ['Time comparison'],
+      settings: {
+        options: [
+          {
+            value: ComparisonPeriod.newest,
+            label: t('panel.options.comparison-period.newest-label', 'Newest period'),
+            description: t(
+              'panel.options.comparison-period.newest-description',
+              'Show the newest period and its change from the oldest period'
+            ),
+          },
+          {
+            value: ComparisonPeriod.oldest,
+            label: t('panel.options.comparison-period.oldest-label', 'Oldest period'),
+            description: t(
+              'panel.options.comparison-period.oldest-description',
+              'Show the oldest period and its change from the newest period'
+            ),
+          },
+        ],
+      },
+      defaultValue: ComparisonPeriod.newest,
+      showIf: (options) => options.layout === Layout.flow && options.comparisonMode !== ComparisonMode.off,
+    });
+
+    builder.addRadio({
+      path: 'outcomeDirection',
+      name: t('panel.options.outcome-direction.name', 'A favorable outcome is'),
+      category: ['Time comparison'],
+      settings: {
+        options: [
+          {
+            value: OutcomeDirection.higher,
+            label: t('panel.options.outcome-direction.higher-label', 'Higher'),
+            description: t('panel.options.outcome-direction.higher-description', 'Show increases as favorable'),
+          },
+          {
+            value: OutcomeDirection.lower,
+            label: t('panel.options.outcome-direction.lower-label', 'Lower'),
+            description: t('panel.options.outcome-direction.lower-description', 'Show decreases as favorable'),
+          },
+        ],
+      },
+      defaultValue: OutcomeDirection.higher,
+      showIf: (options) => options.layout === Layout.flow && options.comparisonMode !== ComparisonMode.off,
     });
   });

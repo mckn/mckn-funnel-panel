@@ -2,9 +2,22 @@ import React, { type CSSProperties, type ReactElement, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import tinycolor from 'tinycolor2';
 import { t } from '@grafana/i18n';
-import { FormattedValueDisplay, Icon, type IconName, useStyles2 } from '@grafana/ui';
-import { type DisplayValue, type GrafanaTheme2, type LinkModel } from '@grafana/data';
-import { formatPercentage, getDropRate, getTrendIconName } from 'utils';
+import { FormattedValueDisplay, Icon, type IconName, useStyles2, useTheme2 } from '@grafana/ui';
+import { type DisplayValue, formattedValueToString, type GrafanaTheme2, type LinkModel } from '@grafana/data';
+import { OutcomeDirection } from 'types';
+import {
+  formatCountChange,
+  formatPercentage,
+  formatPercentChange,
+  formatPointChange,
+  getDropRate,
+  getOutcome,
+  getOutcomeColor,
+  getPointChange,
+  getTrendIconName,
+  UNAVAILABLE,
+} from 'utils';
+import { type StepComparison } from '../../data/comparison';
 import { StepLinksMenu } from './StepLinksMenu';
 
 type Props = {
@@ -19,13 +32,16 @@ type Props = {
   onMouseLeave: () => void;
   showRemainedPercentage: boolean;
   getLinks?: () => LinkModel[];
+  // Change from the other period when comparing two periods.
+  comparison?: StepComparison;
+  outcomeDirection?: OutcomeDirection;
   style?: CSSProperties;
   'data-testid'?: string;
 };
 
 export function StepInfo(props: Props): ReactElement {
   const { value, previous, index, compact, alignTop, highlighted, onMouseEnter, onMouseLeave } = props;
-  const { showRemainedPercentage, getLinks, style } = props;
+  const { showRemainedPercentage, getLinks, comparison, outcomeDirection = OutcomeDirection.higher, style } = props;
   const styles = useStyles2(getStyles(compact, alignTop));
   const highlightStyle = highlighted ? { backgroundColor: getHighlightColor(value.color) } : undefined;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -59,6 +75,14 @@ export function StepInfo(props: Props): ReactElement {
         <FormattedValueDisplay value={value} />
       </div>
       <div className={styles.metrics}>
+        {comparison && (
+          <CountChange
+            comparison={comparison}
+            outcomeDirection={outcomeDirection}
+            compact={compact}
+            data-testid={`count-change-${index}`}
+          />
+        )}
         {previous && (
           <Conversion
             from={previous}
@@ -66,6 +90,15 @@ export function StepInfo(props: Props): ReactElement {
             compact={compact}
             showRemainedPercentage={showRemainedPercentage}
             data-testid={`conversion-${index}`}
+          />
+        )}
+        {previous && comparison && (
+          <ConversionChange
+            comparison={comparison}
+            outcomeDirection={outcomeDirection}
+            compact={compact}
+            showRemainedPercentage={showRemainedPercentage}
+            data-testid={`conversion-change-${index}`}
           />
         )}
       </div>
@@ -105,25 +138,80 @@ function Conversion(props: ConversionProps): ReactElement {
   );
 }
 
+type ChangeProps = {
+  comparison: StepComparison;
+  outcomeDirection: OutcomeDirection;
+  compact: boolean;
+  'data-testid'?: string;
+};
+
+function CountChange(props: ChangeProps): ReactElement {
+  const { comparison, outcomeDirection, compact } = props;
+  const { countDelta, countDeltaPercent, comparedValue } = comparison;
+  const theme = useTheme2();
+
+  return (
+    <Metric
+      value={`${formatCountChange(countDelta)} (${formatPercentChange(countDeltaPercent)})`}
+      color={getOutcomeColor(getOutcome(countDelta, outcomeDirection), theme)}
+      // Compact steps have one line only, so they leave out the compared value.
+      caption={
+        compact
+          ? undefined
+          : t('components.flow.compared-value', 'vs {{value}}', { value: formattedValueToString(comparedValue) })
+      }
+      compact={compact}
+      data-testid={props['data-testid']}
+    />
+  );
+}
+
+function ConversionChange(props: ChangeProps & { showRemainedPercentage: boolean }): ReactElement {
+  const { comparison, outcomeDirection, compact, showRemainedPercentage } = props;
+  const { stepRate, comparedStepRate } = comparison;
+  const theme = useTheme2();
+  // Shows the change of the rate next to it, drop-off or retention. A higher retention is always the higher outcome.
+  const toShownRate = (rate: number | null) => (rate === null || showRemainedPercentage ? rate : 1 - rate);
+  const shownComparedRate = toShownRate(comparedStepRate);
+  const outcome = getOutcome(getPointChange(stepRate, comparedStepRate), outcomeDirection);
+
+  return (
+    <Metric
+      value={formatPointChange(getPointChange(toShownRate(stepRate), shownComparedRate))}
+      color={getOutcomeColor(outcome, theme)}
+      caption={
+        compact
+          ? undefined
+          : t('components.flow.compared-value', 'vs {{value}}', {
+              value: shownComparedRate === null ? UNAVAILABLE : formatPercentage(shownComparedRate),
+            })
+      }
+      compact={compact}
+      data-testid={props['data-testid']}
+    />
+  );
+}
+
 type MetricProps = {
   value: string;
-  caption: string;
+  caption?: string;
   compact: boolean;
   icon?: IconName;
+  color?: string;
   'data-testid'?: string;
 };
 
 function Metric(props: MetricProps): ReactElement {
-  const { value, caption, compact, icon, ...rest } = props;
+  const { value, caption, compact, icon, color, ...rest } = props;
   const styles = useStyles2(getMetricStyles);
 
   return (
     <div className={cx(styles.metric, compact && styles.compact)} {...rest}>
-      <span className={styles.value}>
+      <span className={styles.value} style={color ? { color } : undefined}>
         {icon && <Icon name={icon} className={styles.icon} />}
         {value}
       </span>
-      <span className={styles.caption}>{caption}</span>
+      {caption && <span className={styles.caption}>{caption}</span>}
     </div>
   );
 }

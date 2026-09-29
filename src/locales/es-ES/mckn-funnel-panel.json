@@ -4,9 +4,23 @@
       "drop": "{{percentage}} caída de \"{{fromLabel}}\" a \"{{toLabel}}\"",
       "retained": "{{percentage}} retenido de \"{{fromLabel}}\" a \"{{toLabel}}\""
     },
+    "comparison": {
+      "comparison-query": "Consulta de comparación ({{refId}})",
+      "current-query": "Consulta actual ({{refId}})",
+      "invalid-steps": "La comparación necesita un valor numérico no negativo por paso",
+      "missing-period": "La comparación necesita los resultados de la consulta actual y de la anterior",
+      "offset-unavailable": "Periodo de comparación (desplazamiento de tiempo no disponible)",
+      "same-time-range": "Mismo intervalo de tiempo",
+      "shifted-range": "{{range}} ({{offset}})",
+      "unmatched-steps": "Los pasos del embudo actual y del anterior no coinciden"
+    },
     "flow": {
+      "compared-value": "vs. {{value}}",
+      "comparison-periods": "<0>{{selected}}</0> comparado con {{compared}}",
+      "comparison-periods-title": "{{selected}} comparado con {{compared}}",
       "drop-off": "abandono",
       "links-menu": "Enlaces de datos de {{title}}",
+      "overall-conversion": "Conversión total",
       "retention": "retención"
     },
     "nodata": {
@@ -19,6 +33,26 @@
   },
   "panel": {
     "options": {
+      "comparison-mode": {
+        "auto-description": "Usar la comparación de tiempo de Grafana cuando esté disponible",
+        "auto-label": "Automático",
+        "manual-description": "Comparar los resultados de dos consultas",
+        "manual-label": "Manual",
+        "name": "Comparación de tiempo",
+        "off-description": "Mostrar solo el embudo actual",
+        "off-label": "Desactivado"
+      },
+      "comparison-period": {
+        "name": "Embudo que se muestra",
+        "newest-description": "Mostrar el periodo más reciente y su cambio respecto al periodo más antiguo",
+        "newest-label": "Periodo más reciente",
+        "oldest-description": "Mostrar el periodo más antiguo y su cambio respecto al periodo más reciente",
+        "oldest-label": "Periodo más antiguo"
+      },
+      "current-ref-id": {
+        "description": "Referencia de la consulta del periodo más reciente",
+        "name": "Consulta actual"
+      },
       "layout": {
         "classic-description": "Embudo centrado con etiquetas a la izquierda y porcentajes a la derecha",
         "classic-label": "Clásico",
@@ -32,6 +66,17 @@
         "name": "Orientación",
         "vertical-description": "Pasos de arriba abajo con el embudo a la derecha",
         "vertical-label": "Vertical"
+      },
+      "outcome-direction": {
+        "higher-description": "Mostrar los aumentos como favorables",
+        "higher-label": "Mayor",
+        "lower-description": "Mostrar las disminuciones como favorables",
+        "lower-label": "Menor",
+        "name": "Un resultado favorable es"
+      },
+      "previous-ref-id": {
+        "description": "Referencia de la consulta del periodo más antiguo",
+        "name": "Consulta de comparación"
       },
       "show-percentage": {
         "description": "Mostrar la columna de porcentajes junto a las barras del embudo",
