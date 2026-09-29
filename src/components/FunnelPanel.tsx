@@ -1,61 +1,49 @@
-import React, { type ReactElement, type ReactNode, useMemo } from 'react';
+import React, { type ReactElement, type ReactNode } from 'react';
 import { css } from '@emotion/css';
 import { Alert, useStyles2, useTheme2 } from '@grafana/ui';
 import { GrafanaTheme2, type PanelProps } from '@grafana/data';
 import { t } from '@grafana/i18n';
-import { Layout, OutcomeDirection, type PanelOptions } from 'types';
-import { buildComparison, type ComparisonError, selectComparisonFrames } from '../data/comparison';
+import { Layout, type PanelOptions } from 'types';
+import { type ComparisonError } from '../data/comparison';
+import { useFunnelComparison } from '../data/useFunnelComparison';
 import { FunnelDataResultStatus, useFunnelData } from '../data/useFunnelData';
 import { PureChart } from './Chart';
 import { PureLabels } from './Labels';
 import { PurePercentages } from './Percentages';
-import { type FlowComparison, PureFlowLayout } from './Flow';
+import { PureFlowLayout } from './Flow';
 import { Unsupported } from './Unsupported';
 import { Nodata } from './Nodata';
 
 export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
   const { width, height, data, options, fieldConfig, replaceVariables, timeZone } = props;
-  const { layout, orientation, showRemainedPercentage, showPercentage } = options;
-  const { sorting, comparisonPeriod, outcomeDirection } = options;
+  const { layout, orientation, showRemainedPercentage, showPercentage, outcomeDirection } = options;
 
   const theme = useTheme2();
   const styles = useStyles2(getStyles(width, height));
-  const selection = useMemo(() => selectComparisonFrames(data.series, { layout }), [data.series, layout]);
+
+  const { current, comparison, error } = useFunnelComparison(
+    {
+      fieldConfig,
+      replaceVariables,
+      theme,
+      data: data.series,
+      timeZone,
+    },
+    options
+  );
 
   const { values, links, status } = useFunnelData(
     {
       fieldConfig,
       replaceVariables,
       theme,
-      data: selection.current,
+      data: current,
       timeZone,
     },
     options
   );
 
-  const comparison = useMemo(() => {
-    if (selection.kind !== 'compare') {
-      return undefined;
-    }
-    return buildComparison(
-      selection,
-      { fieldConfig, replaceVariables, theme, timeZone },
-      { sorting, comparisonPeriod }
-    );
-  }, [selection, fieldConfig, replaceVariables, theme, timeZone, sorting, comparisonPeriod]);
-
-  const flowComparison = useMemo((): FlowComparison | undefined => {
-    if (comparison?.kind !== 'ready') {
-      return undefined;
-    }
-    return {
-      steps: comparison.steps,
-      overall: comparison.overall,
-      outcomeDirection: outcomeDirection ?? OutcomeDirection.higher,
-    };
-  }, [comparison, outcomeDirection]);
-
-  if (comparison?.kind === 'ready' && flowComparison) {
+  if (comparison) {
     return (
       <div className={styles.container}>
         <PureFlowLayout
@@ -65,13 +53,12 @@ export function FunnelPanel(props: PanelProps<PanelOptions>): ReactElement {
           width={width}
           height={height}
           showRemainedPercentage={showRemainedPercentage}
-          comparison={flowComparison}
+          comparison={comparison}
+          outcomeDirection={outcomeDirection}
         />
       </div>
     );
   }
-
-  const error = selection.kind === 'error' ? selection.reason : comparison?.kind === 'error' ? comparison.reason : null;
 
   return (
     <div className={styles.container}>

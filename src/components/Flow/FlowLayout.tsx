@@ -2,7 +2,7 @@ import React, { type CSSProperties, type ReactElement, Fragment, useState } from
 import { css } from '@emotion/css';
 import { useStyles2 } from '@grafana/ui';
 import { type DisplayValue, type GrafanaTheme2 } from '@grafana/data';
-import { Orientation, type OutcomeDirection } from 'types';
+import { Orientation, OutcomeDirection } from 'types';
 import { getDisplayValueKey } from 'utils';
 import { type RateComparison, type StepComparison } from '../../data/comparison';
 import { type LinksSupplier } from '../../data/useFunnelData';
@@ -18,7 +18,6 @@ export type FlowComparison = {
   // Same index as the values.
   steps: StepComparison[];
   overall: RateComparison;
-  outcomeDirection: OutcomeDirection;
 };
 
 type Props = {
@@ -30,11 +29,13 @@ type Props = {
   showRemainedPercentage: boolean;
   // Change from the other period when comparing two periods.
   comparison?: FlowComparison;
+  outcomeDirection?: OutcomeDirection;
   'data-testid'?: string;
 };
 
 export function FlowLayout(props: Props): ReactElement {
   const { values, links, orientation, width, height, showRemainedPercentage, comparison } = props;
+  const { outcomeDirection = OutcomeDirection.higher } = props;
   const horizontal = orientation === Orientation.horizontal;
   const funnelWidth = Math.max(MIN_FUNNEL_WIDTH, Math.round(width * FUNNEL_WIDTH_RATIO));
   const stepsHeight = comparison ? height - COMPARISON_HEADER_HEIGHT : height;
@@ -59,7 +60,7 @@ export function FlowLayout(props: Props): ReactElement {
             showRemainedPercentage={showRemainedPercentage}
             getLinks={links[i]}
             comparison={comparison?.steps[i]}
-            outcomeDirection={comparison?.outcomeDirection}
+            outcomeDirection={outcomeDirection}
             style={getStepPlacement(i, horizontal)}
             data-testid={`step-${i}`}
           />
@@ -83,7 +84,7 @@ export function FlowLayout(props: Props): ReactElement {
     <div className={styles.comparison} data-testid={props['data-testid']}>
       <ComparisonHeader
         overall={comparison.overall}
-        outcomeDirection={comparison.outcomeDirection}
+        outcomeDirection={outcomeDirection}
         data-testid="comparison-header"
       />
       {steps}

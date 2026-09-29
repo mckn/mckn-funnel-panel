@@ -50,12 +50,12 @@ Provisioned test data:
 ### Data flow
 
 1. Grafana passes `PanelProps<PanelOptions>` to `FunnelPanel` (`src/components/FunnelPanel.tsx`)
-2. `selectComparisonFrames` (`src/data/comparison.ts`) splits `data.series` into the current period and the Grafana Time comparison period. It detects the comparison frames by `meta.timeCompare`, `config.custom.timeCompare` on a field, or a `X-compare` refId when refId `X` also exists. Only the flow layout compares. The classic layout gets the current period only. There is no manual comparison: the comparison always comes from Grafana Time comparison
-3. `useFunnelData` hook (`src/data/useFunnelData.ts`) processes data:
+2. `useFunnelComparison` hook (`src/data/useFunnelComparison.ts`) returns the `current` frames, and a `comparison` or an `error`. It calls `selectComparisonFrames` (`src/data/comparison.ts`), which splits `data.series` into the current period and the Grafana Time comparison period. It detects the comparison frames by `meta.timeCompare`, `config.custom.timeCompare` on a field, or a `X-compare` refId when refId `X` also exists. Only the flow layout compares. The classic layout gets the current period only. There is no manual comparison: the comparison always comes from Grafana Time comparison
+3. `useFunnelData` hook (`src/data/useFunnelData.ts`) processes the `current` frames:
    - Empty series → `FunnelDataResultStatus.nodata`
    - No numeric fields → `FunnelDataResultStatus.unsupported`
    - Valid data → calls `getFieldDisplayValues` from `@grafana/data`, applies sorting by `percent`, returns `DisplayValue[]` and `links` (a `getLinks` supplier per value, same index, `undefined` when the field has no data links)
-4. For a comparison, `buildComparison` pairs the steps of both periods by key, sorts by the displayed period and returns `values`, `links` and a `StepComparison` per step. If the comparison fails, the panel shows a warning above the single funnel
+4. For a comparison, `useFunnelComparison` calls `buildComparison`, which pairs the steps of both periods by key, sorts by the displayed period and returns `values`, `links` and a `StepComparison` per step. If the comparison fails, `useFunnelComparison` returns an `error` and the panel shows a warning above the single funnel
 5. `FunnelPanel` renders based on status: `Nodata`, `Unsupported`, or the selected layout (classic three-column layout or `PureFlowLayout`)
 
 ### Component hierarchy
