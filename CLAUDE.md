@@ -23,7 +23,7 @@ Node >= 20 (see `.nvmrc`). Use `npm ci` for installs.
 
 `npm run server` starts a Docker Compose stack with Grafana:
 
-- Grafana version defaults to 11.0.0 (override with `GRAFANA_VERSION` env var)
+- Grafana version defaults to 12.3.0, the first version with Time comparison (override with `GRAFANA_VERSION` env var, for example `GRAFANA_VERSION=11.0.0` to test the oldest supported version)
 - Anonymous auth enabled, basic auth disabled, development mode
 - Plugin signing disabled (unsigned plugins allowed)
 - LiveReload enabled for hot reload during `npm run dev`
