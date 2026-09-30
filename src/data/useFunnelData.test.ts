@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { createTheme, FieldType, toDataFrame, type DataFrame, type LinkModel } from '@grafana/data';
-import { Layout, Orientation, Sorting, type PanelOptions } from 'types';
+import { ComparisonPeriod, Layout, Orientation, OutcomeDirection, Sorting, type PanelOptions } from 'types';
 import { useFunnelData } from './useFunnelData';
 
 const options: PanelOptions = {
@@ -9,6 +9,8 @@ const options: PanelOptions = {
   sorting: Sorting.ascending,
   showRemainedPercentage: false,
   showPercentage: true,
+  comparisonPeriod: ComparisonPeriod.newest,
+  outcomeDirection: OutcomeDirection.higher,
 };
 
 function createStep(name: string, value: number, withLinks: boolean): DataFrame {

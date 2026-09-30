@@ -1,8 +1,9 @@
 import { FieldColorModeId, FieldConfigProperty, PanelPlugin } from '@grafana/data';
 import { t } from '@grafana/i18n';
 import { FunnelPanel } from 'components/FunnelPanel';
+import { hasGrafanaComparison } from 'data/comparison';
 import { initI18n } from './initI18n';
-import { Layout, Orientation, Sorting, type PanelOptions } from './types';
+import { ComparisonPeriod, Layout, Orientation, OutcomeDirection, Sorting, type PanelOptions } from './types';
 
 await initI18n();
 
@@ -125,5 +126,57 @@ export const plugin = new PanelPlugin<PanelOptions>(FunnelPanel)
       description: t('panel.options.show-percentage.description', 'Show the percentage column next to the funnel bars'),
       defaultValue: true,
       showIf: (options) => options.layout !== Layout.flow,
+    });
+
+    builder.addRadio({
+      path: 'comparisonPeriod',
+      name: t('panel.options.comparison-period.name', 'Funnel to display'),
+      category: ['Time comparison'],
+      settings: {
+        options: [
+          {
+            value: ComparisonPeriod.newest,
+            label: t('panel.options.comparison-period.newest-label', 'Newest period'),
+            description: t(
+              'panel.options.comparison-period.newest-description',
+              'Show the newest period and its change from the oldest period'
+            ),
+          },
+          {
+            value: ComparisonPeriod.oldest,
+            label: t('panel.options.comparison-period.oldest-label', 'Oldest period'),
+            description: t(
+              'panel.options.comparison-period.oldest-description',
+              'Show the oldest period and its change from the newest period'
+            ),
+          },
+        ],
+      },
+      defaultValue: ComparisonPeriod.newest,
+      // Grafana adds the comparison period when Time comparison is enabled in the time settings of the panel.
+      showIf: (options, data) => options.layout === Layout.flow && hasGrafanaComparison(data),
+    });
+
+    builder.addRadio({
+      path: 'outcomeDirection',
+      name: t('panel.options.outcome-direction.name', 'A favorable outcome is'),
+      category: ['Time comparison'],
+      settings: {
+        options: [
+          {
+            value: OutcomeDirection.higher,
+            label: t('panel.options.outcome-direction.higher-label', 'Higher'),
+            description: t('panel.options.outcome-direction.higher-description', 'Show increases as favorable'),
+          },
+          {
+            value: OutcomeDirection.lower,
+            label: t('panel.options.outcome-direction.lower-label', 'Lower'),
+            description: t('panel.options.outcome-direction.lower-description', 'Show decreases as favorable'),
+          },
+        ],
+      },
+      defaultValue: OutcomeDirection.higher,
+      // Grafana adds the comparison period when Time comparison is enabled in the time settings of the panel.
+      showIf: (options, data) => options.layout === Layout.flow && hasGrafanaComparison(data),
     });
   });

@@ -6,3 +6,5 @@ export { getDropRate, getTrendIconName } from './getDropRate';
 export { getBandLabelPlacement } from './getBandLabelPlacement';
 export { getFlowSegmentPath } from './getFlowSegmentPath';
 export { useElementSize } from './useElementSize';
+export { formatCountChange, formatPercentChange, formatPointChange, getPointChange, UNAVAILABLE } from './formatChange';
+export { getOutcome, getOutcomeColor, type Outcome } from './getOutcomeColor';

@@ -4,9 +4,16 @@
       "drop": "{{percentage}} de perte de \"{{fromLabel}}\" à \"{{toLabel}}\"",
       "retained": "{{percentage}} retenus de \"{{fromLabel}}\" à \"{{toLabel}}\""
     },
+    "comparison": {
+      "invalid-steps": "La comparaison nécessite une valeur numérique non négative par étape",
+      "missing-period": "La comparaison temporelle nécessite les résultats de la période actuelle",
+      "unmatched-steps": "Les étapes de l'entonnoir actuel et du précédent ne correspondent pas"
+    },
     "flow": {
+      "compared-value": "vs {{value}}",
       "drop-off": "abandon",
       "links-menu": "Liens de données pour {{title}}",
+      "overall-conversion": "Conversion globale",
       "retention": "rétention"
     },
     "nodata": {
@@ -19,6 +26,13 @@
   },
   "panel": {
     "options": {
+      "comparison-period": {
+        "name": "Entonnoir à afficher",
+        "newest-description": "Afficher la période la plus récente et sa variation par rapport à la période la plus ancienne",
+        "newest-label": "Période la plus récente",
+        "oldest-description": "Afficher la période la plus ancienne et sa variation par rapport à la période la plus récente",
+        "oldest-label": "Période la plus ancienne"
+      },
       "layout": {
         "classic-description": "Entonnoir centré avec les libellés à gauche et les pourcentages à droite",
         "classic-label": "Classique",
@@ -32,6 +46,13 @@
         "name": "Orientation",
         "vertical-description": "Étapes de haut en bas avec l’entonnoir à droite",
         "vertical-label": "Verticale"
+      },
+      "outcome-direction": {
+        "higher-description": "Afficher les hausses comme favorables",
+        "higher-label": "Plus élevé",
+        "lower-description": "Afficher les baisses comme favorables",
+        "lower-label": "Plus bas",
+        "name": "Un résultat favorable est"
       },
       "show-percentage": {
         "description": "Afficher la colonne des pourcentages à côté des barres de l'entonnoir",

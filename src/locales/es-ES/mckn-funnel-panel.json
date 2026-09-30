@@ -4,9 +4,16 @@
       "drop": "{{percentage}} caída de \"{{fromLabel}}\" a \"{{toLabel}}\"",
       "retained": "{{percentage}} retenido de \"{{fromLabel}}\" a \"{{toLabel}}\""
     },
+    "comparison": {
+      "invalid-steps": "La comparación necesita un valor numérico no negativo por paso",
+      "missing-period": "La comparación de tiempo necesita los resultados del periodo actual",
+      "unmatched-steps": "Los pasos del embudo actual y del anterior no coinciden"
+    },
     "flow": {
+      "compared-value": "vs. {{value}}",
       "drop-off": "abandono",
       "links-menu": "Enlaces de datos de {{title}}",
+      "overall-conversion": "Conversión total",
       "retention": "retención"
     },
     "nodata": {
@@ -19,6 +26,13 @@
   },
   "panel": {
     "options": {
+      "comparison-period": {
+        "name": "Embudo que se muestra",
+        "newest-description": "Mostrar el periodo más reciente y su cambio respecto al periodo más antiguo",
+        "newest-label": "Periodo más reciente",
+        "oldest-description": "Mostrar el periodo más antiguo y su cambio respecto al periodo más reciente",
+        "oldest-label": "Periodo más antiguo"
+      },
       "layout": {
         "classic-description": "Embudo centrado con etiquetas a la izquierda y porcentajes a la derecha",
         "classic-label": "Clásico",
@@ -32,6 +46,13 @@
         "name": "Orientación",
         "vertical-description": "Pasos de arriba abajo con el embudo a la derecha",
         "vertical-label": "Vertical"
+      },
+      "outcome-direction": {
+        "higher-description": "Mostrar los aumentos como favorables",
+        "higher-label": "Mayor",
+        "lower-description": "Mostrar las disminuciones como favorables",
+        "lower-label": "Menor",
+        "name": "Un resultado favorable es"
       },
       "show-percentage": {
         "description": "Mostrar la columna de porcentajes junto a las barras del embudo",

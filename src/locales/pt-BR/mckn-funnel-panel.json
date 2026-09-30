@@ -4,9 +4,16 @@
       "drop": "{{percentage}} de queda de \"{{fromLabel}}\" para \"{{toLabel}}\"",
       "retained": "{{percentage}} retido de \"{{fromLabel}}\" para \"{{toLabel}}\""
     },
+    "comparison": {
+      "invalid-steps": "A comparação precisa de um valor numérico não negativo por etapa",
+      "missing-period": "A comparação de tempo precisa dos resultados do período atual",
+      "unmatched-steps": "As etapas do funil atual e do anterior não correspondem"
+    },
     "flow": {
+      "compared-value": "vs. {{value}}",
       "drop-off": "abandono",
       "links-menu": "Links de dados de {{title}}",
+      "overall-conversion": "Conversão total",
       "retention": "retenção"
     },
     "nodata": {
@@ -19,6 +26,13 @@
   },
   "panel": {
     "options": {
+      "comparison-period": {
+        "name": "Funil a exibir",
+        "newest-description": "Mostrar o período mais recente e sua variação em relação ao período mais antigo",
+        "newest-label": "Período mais recente",
+        "oldest-description": "Mostrar o período mais antigo e sua variação em relação ao período mais recente",
+        "oldest-label": "Período mais antigo"
+      },
       "layout": {
         "classic-description": "Funil centralizado com rótulos à esquerda e porcentagens à direita",
         "classic-label": "Clássico",
@@ -32,6 +46,13 @@
         "name": "Orientação",
         "vertical-description": "Etapas de cima para baixo com o funil à direita",
         "vertical-label": "Vertical"
+      },
+      "outcome-direction": {
+        "higher-description": "Mostrar aumentos como favoráveis",
+        "higher-label": "Maior",
+        "lower-description": "Mostrar reduções como favoráveis",
+        "lower-label": "Menor",
+        "name": "Um resultado favorável é"
       },
       "show-percentage": {
         "description": "Mostrar a coluna de porcentagens ao lado das barras do funil",

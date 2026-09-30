@@ -4,9 +4,16 @@
       "drop": "{{percentage}} drop from \"{{fromLabel}}\" to \"{{toLabel}}\"",
       "retained": "{{percentage}} retained from \"{{fromLabel}}\" to \"{{toLabel}}\""
     },
+    "comparison": {
+      "invalid-steps": "Comparison needs one non-negative numeric value per step",
+      "missing-period": "Time comparison needs the results of the current period",
+      "unmatched-steps": "Current and previous funnel steps do not match"
+    },
     "flow": {
+      "compared-value": "vs {{value}}",
       "drop-off": "drop-off",
       "links-menu": "Data links for {{title}}",
+      "overall-conversion": "Overall conversion",
       "retention": "retention"
     },
     "nodata": {
@@ -19,6 +26,13 @@
   },
   "panel": {
     "options": {
+      "comparison-period": {
+        "name": "Funnel to display",
+        "newest-description": "Show the newest period and its change from the oldest period",
+        "newest-label": "Newest period",
+        "oldest-description": "Show the oldest period and its change from the newest period",
+        "oldest-label": "Oldest period"
+      },
       "layout": {
         "classic-description": "Centered funnel with labels on the left and percentages on the right",
         "classic-label": "Classic",
@@ -32,6 +46,13 @@
         "name": "Orientation",
         "vertical-description": "Steps from top to bottom with the funnel on the right",
         "vertical-label": "Vertical"
+      },
+      "outcome-direction": {
+        "higher-description": "Show increases as favorable",
+        "higher-label": "Higher",
+        "lower-description": "Show decreases as favorable",
+        "lower-label": "Lower",
+        "name": "A favorable outcome is"
       },
       "show-percentage": {
         "description": "Show the percentage column next to the funnel bars",

@@ -9,3 +9,11 @@ datasources:
     version: 1
     editable: true
     uid: vHsj2qbVk
+
+  - name: TestData
+    type: grafana-testdata-datasource
+    access: proxy
+    orgId: 1
+    version: 1
+    editable: true
+    uid: funnel-testdata

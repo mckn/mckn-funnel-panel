@@ -4,7 +4,6 @@ import {
   getFieldDisplayValues,
   type DisplayValue,
   type DataFrame,
-  type FieldDisplay,
   type LinkModel,
   FieldType,
 } from '@grafana/data';
@@ -49,7 +48,7 @@ export function useFunnelData(
       };
     }
 
-    const fieldDisplays = sortValues(
+    const fieldDisplays = sortByPercent(
       getFieldDisplayValues({
         fieldConfig: fieldConfig,
         reduceOptions: { calcs: [] },
@@ -58,7 +57,8 @@ export function useFunnelData(
         data: data,
         timeZone,
       }),
-      sorting
+      sorting,
+      (v) => v.display.percent
     );
 
     return {
@@ -69,14 +69,14 @@ export function useFunnelData(
   }, [theme, data, fieldConfig, replaceVariables, timeZone, sorting]);
 }
 
-function sortValues(values: FieldDisplay[], sorting: Sorting): FieldDisplay[] {
+export function sortByPercent<T>(values: T[], sorting: Sorting, getPercent: (value: T) => number | undefined): T[] {
   if (sorting === Sorting.none) {
     return values;
   }
 
   return values.sort((a, b) => {
-    const ap = a.display.percent ?? 0;
-    const bp = b.display.percent ?? 0;
+    const ap = getPercent(a) ?? 0;
+    const bp = getPercent(b) ?? 0;
 
     switch (sorting) {
       case Sorting.ascending:

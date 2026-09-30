@@ -4,11 +4,11 @@ services:
   grafana:
     build:
       args:
-        grafana_version: ${GRAFANA_VERSION:-11.0.0}
+        grafana_version: ${GRAFANA_VERSION:-12.3.0}
     environment:
       - GF_INSTALL_PLUGINS=marcusolsson-static-datasource
       - GF_USERS_DEFAULT_THEME=system
-      - GF_FEATURE_TOGGLES_ENABLE=localizationForPlugins
+      - GF_FEATURE_TOGGLES_ENABLE=localizationForPlugins,panelTimeSettings,timeComparison
     extends:
       file: .config/docker-compose-base.yaml
       service: grafana
