@@ -1,6 +1,6 @@
 {
   "name": "funnel-panel",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Grafana panel to create funnel charts",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
@@ -12,7 +12,7 @@
     "lint:fix": "npm run lint -- --fix && prettier --write --list-different .",
     "e2e": "playwright test",
     "server": "docker compose up --build",
-    "sign": "npx --yes @grafana/sign-plugin@latest",
+    "sign": "sign-plugin",
     "i18n-extract": "i18next-cli extract --sync-primary"
   },
   "author": "mckn",
@@ -21,6 +21,7 @@
     "@babel/core": "^7.21.4",
     "@grafana/eslint-config": "^8.2.0",
     "@grafana/plugin-e2e": "^3.7.1",
+    "@grafana/sign-plugin": "^3.2.2",
     "@grafana/tsconfig": "~2.0.1",
     "@playwright/test": "^1.52.0",
     "@stylistic/eslint-plugin-ts": "^2.9.0",

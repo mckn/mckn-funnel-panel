@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1
+
+Chore: Updated the plugin to the latest version of the `@grafana/create-plugin` template (7.11.0).
+
 ## 2.1.0
 
 Feature: New "Flow" layout option. The funnel renders as one continuous band that narrows smoothly from step to step. Each step shows its name, value and conversion from the previous step, and the band shows the percentage of the first step. Hovering a step highlights it. The layout can be vertical or horizontal.
