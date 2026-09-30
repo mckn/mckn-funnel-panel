@@ -35,6 +35,7 @@ Provisioned test data:
 - Static datasource (UID: `vHsj2qbVk`) with example funnel data (5 steps: Sent → Viewed → Clicked → Add to cart → Purchased)
 - TestData datasource (UID: `funnel-testdata`) for the Time comparison panels. The "Predictable CSV Wave" scenario returns values from the timestamp, with one value per step every 10 minutes. A Reduce (Total) transformation sums them per step, so the current period and the period one day before get different counts
 - Test dashboard at `/d/NtsITqb4z/funnel-examples` with panels for different sort modes
+- Demo dashboards with TestData only: `/d/funnel-demo` (checkout funnel with Time comparison, a repeated funnel per `platform` and drill-down data links) and `/d/funnel-demo-drilldown` (opened by those links, filtered by the `step` and `platform` variables). `tests/demo-dashboard.spec.ts` covers them
 
 ## Architecture
 

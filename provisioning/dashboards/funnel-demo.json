@@ -1,0 +1,842 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Checkout funnel with Time comparison, a platform breakdown and drill-down data links.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Checkout funnel",
+      "type": "mckn-funnel-panel",
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 17
+      },
+      "description": "Flow layout with Grafana Time comparison (compared to the day before). Hover a step and open the ... menu to drill into the users who left at that step. This panel uses generated data and ignores the platform variable.",
+      "timeCompare": "1d",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "min": 0,
+          "links": [
+            {
+              "title": "Drill into ${__field.displayName}",
+              "url": "/d/funnel-demo-drilldown?orgId=1&var-step=${__field.displayName:percentencode}&${platform:queryparam}&${__url_time_range}"
+            }
+          ]
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Added to cart"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Drill into ${__field.displayName}",
+                    "url": "/d/funnel-demo-drilldown?orgId=1&var-step=${__field.displayName:percentencode}&${platform:queryparam}&${__url_time_range}"
+                  },
+                  {
+                    "title": "Open the cart recovery playbook",
+                    "targetBlank": true,
+                    "url": "https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Payment info"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Drill into ${__field.displayName}",
+                    "url": "/d/funnel-demo-drilldown?orgId=1&var-step=${__field.displayName:percentencode}&${platform:queryparam}&${__url_time_range}"
+                  },
+                  {
+                    "title": "Search payment errors in Explore",
+                    "targetBlank": true,
+                    "url": "/explore?orgId=1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "layout": "flow",
+        "orientation": "vertical",
+        "sorting": "descending",
+        "showRemainedPercentage": false,
+        "comparisonPeriod": "newest",
+        "outcomeDirection": "higher"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
+          },
+          "refId": "A",
+          "scenarioId": "predictable_csv_wave",
+          "csvWave": [
+            {
+              "name": "Product viewed",
+              "timeStep": 600,
+              "valuesCSV": "1200,1350,1500,1100,1400,1600,1250"
+            },
+            {
+              "name": "Added to cart",
+              "timeStep": 600,
+              "valuesCSV": "768,837,975,671,896,1056,775"
+            },
+            {
+              "name": "Checkout started",
+              "timeStep": 600,
+              "valuesCSV": "315,326,410,255,358,454,302"
+            },
+            {
+              "name": "Payment info",
+              "timeStep": 600,
+              "valuesCSV": "192,189,254,145,215,286,175"
+            },
+            {
+              "name": "Order completed",
+              "timeStep": 600,
+              "valuesCSV": "148,142,198,107,163,226,131"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "mode": "reduceFields",
+            "reducers": [
+              "sum"
+            ],
+            "includeTimeField": false
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Visitors",
+      "type": "stat",
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 17,
+        "w": 6,
+        "h": 4
+      },
+      "description": "Product viewed",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
+          },
+          "refId": "A",
+          "scenarioId": "predictable_csv_wave",
+          "csvWave": [
+            {
+              "name": "Product viewed",
+              "timeStep": 600,
+              "valuesCSV": "1200,1350,1500,1100,1400,1600,1250"
+            },
+            {
+              "name": "Added to cart",
+              "timeStep": 600,
+              "valuesCSV": "768,837,975,671,896,1056,775"
+            },
+            {
+              "name": "Checkout started",
+              "timeStep": 600,
+              "valuesCSV": "315,326,410,255,358,454,302"
+            },
+            {
+              "name": "Payment info",
+              "timeStep": 600,
+              "valuesCSV": "192,189,254,145,215,286,175"
+            },
+            {
+              "name": "Order completed",
+              "timeStep": 600,
+              "valuesCSV": "148,142,198,107,163,226,131"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "mode": "reduceFields",
+            "reducers": [
+              "sum"
+            ],
+            "includeTimeField": false
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "Product viewed"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Orders",
+      "type": "stat",
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 17,
+        "w": 6,
+        "h": 4
+      },
+      "description": "Order completed",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
+          },
+          "refId": "A",
+          "scenarioId": "predictable_csv_wave",
+          "csvWave": [
+            {
+              "name": "Product viewed",
+              "timeStep": 600,
+              "valuesCSV": "1200,1350,1500,1100,1400,1600,1250"
+            },
+            {
+              "name": "Added to cart",
+              "timeStep": 600,
+              "valuesCSV": "768,837,975,671,896,1056,775"
+            },
+            {
+              "name": "Checkout started",
+              "timeStep": 600,
+              "valuesCSV": "315,326,410,255,358,454,302"
+            },
+            {
+              "name": "Payment info",
+              "timeStep": 600,
+              "valuesCSV": "192,189,254,145,215,286,175"
+            },
+            {
+              "name": "Order completed",
+              "timeStep": 600,
+              "valuesCSV": "148,142,198,107,163,226,131"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "mode": "reduceFields",
+            "reducers": [
+              "sum"
+            ],
+            "includeTimeField": false
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "Order completed"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Overall conversion",
+      "type": "stat",
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 17,
+        "w": 6,
+        "h": 4
+      },
+      "description": "Order completed / Product viewed",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
+          },
+          "refId": "A",
+          "scenarioId": "predictable_csv_wave",
+          "csvWave": [
+            {
+              "name": "Product viewed",
+              "timeStep": 600,
+              "valuesCSV": "1200,1350,1500,1100,1400,1600,1250"
+            },
+            {
+              "name": "Added to cart",
+              "timeStep": 600,
+              "valuesCSV": "768,837,975,671,896,1056,775"
+            },
+            {
+              "name": "Checkout started",
+              "timeStep": 600,
+              "valuesCSV": "315,326,410,255,358,454,302"
+            },
+            {
+              "name": "Payment info",
+              "timeStep": 600,
+              "valuesCSV": "192,189,254,145,215,286,175"
+            },
+            {
+              "name": "Order completed",
+              "timeStep": 600,
+              "valuesCSV": "148,142,198,107,163,226,131"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "mode": "reduceFields",
+            "reducers": [
+              "sum"
+            ],
+            "includeTimeField": false
+          }
+        },
+        {
+          "id": "concatenate",
+          "options": {}
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "binary",
+            "binary": {
+              "left": "Order completed",
+              "operator": "/",
+              "right": "Product viewed"
+            },
+            "alias": "Overall conversion",
+            "replaceFields": true
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Add-to-cart rate",
+      "type": "stat",
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
+      },
+      "gridPos": {
+        "x": 18,
+        "y": 17,
+        "w": 6,
+        "h": 4
+      },
+      "description": "Added to cart / Product viewed",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
+          },
+          "refId": "A",
+          "scenarioId": "predictable_csv_wave",
+          "csvWave": [
+            {
+              "name": "Product viewed",
+              "timeStep": 600,
+              "valuesCSV": "1200,1350,1500,1100,1400,1600,1250"
+            },
+            {
+              "name": "Added to cart",
+              "timeStep": 600,
+              "valuesCSV": "768,837,975,671,896,1056,775"
+            },
+            {
+              "name": "Checkout started",
+              "timeStep": 600,
+              "valuesCSV": "315,326,410,255,358,454,302"
+            },
+            {
+              "name": "Payment info",
+              "timeStep": 600,
+              "valuesCSV": "192,189,254,145,215,286,175"
+            },
+            {
+              "name": "Order completed",
+              "timeStep": 600,
+              "valuesCSV": "148,142,198,107,163,226,131"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "mode": "reduceFields",
+            "reducers": [
+              "sum"
+            ],
+            "includeTimeField": false
+          }
+        },
+        {
+          "id": "concatenate",
+          "options": {}
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "binary",
+            "binary": {
+              "left": "Added to cart",
+              "operator": "/",
+              "right": "Product viewed"
+            },
+            "alias": "Add-to-cart rate",
+            "replaceFields": true
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Conversion over time",
+      "type": "timeseries",
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 21,
+        "w": 24,
+        "h": 8
+      },
+      "description": "Product viewed to Order completed, per sample.",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 12,
+            "showPoints": "never",
+            "lineInterpolation": "smooth"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
+          },
+          "refId": "A",
+          "scenarioId": "predictable_csv_wave",
+          "csvWave": [
+            {
+              "name": "Product viewed",
+              "timeStep": 600,
+              "valuesCSV": "1200,1350,1500,1100,1400,1600,1250"
+            },
+            {
+              "name": "Order completed",
+              "timeStep": 600,
+              "valuesCSV": "148,142,198,107,163,226,131"
+            }
+          ]
+        }
+      ],
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "Time",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "binary",
+            "binary": {
+              "left": "Order completed",
+              "operator": "/",
+              "right": "Product viewed"
+            },
+            "alias": "Overall conversion",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "Time",
+                "Overall conversion"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Retention by platform: $platform",
+      "type": "mckn-funnel-panel",
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 29,
+        "w": 24,
+        "h": 10
+      },
+      "description": "One funnel per platform, repeated from the platform variable. Shows retention instead of drop-off between steps.",
+      "repeat": "platform",
+      "repeatDirection": "v",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "min": 0,
+          "links": [
+            {
+              "title": "Drill into ${__field.displayName}",
+              "url": "/d/funnel-demo-drilldown?orgId=1&var-step=${__field.displayName:percentencode}&${platform:queryparam}&${__url_time_range}"
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "layout": "flow",
+        "orientation": "horizontal",
+        "sorting": "none",
+        "showRemainedPercentage": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
+          },
+          "refId": "A",
+          "scenarioId": "csv_content",
+          "csvContent": "platform,step,users\nWeb,Product viewed,42000\nWeb,Added to cart,19000\nWeb,Checkout started,11500\nWeb,Payment info,8200\nWeb,Order completed,6900\niOS,Product viewed,21000\niOS,Added to cart,11000\niOS,Checkout started,7400\niOS,Payment info,5600\niOS,Order completed,4700\nAndroid,Product viewed,16000\nAndroid,Added to cart,7000\nAndroid,Checkout started,3600\nAndroid,Payment info,2300\nAndroid,Order completed,1600"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "type": "include",
+            "match": "any",
+            "filters": [
+              {
+                "fieldName": "platform",
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "^${platform}$"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "step": {
+                "operation": "groupby",
+                "aggregations": []
+              },
+              "users": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "sum"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "rowsToFields",
+          "options": {}
+        }
+      ]
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [
+    "funnel",
+    "demo"
+  ],
+  "templating": {
+    "list": [
+      {
+        "type": "custom",
+        "name": "platform",
+        "label": "Platform",
+        "multi": false,
+        "includeAll": true,
+        "allValue": ".*",
+        "query": "Web,iOS,Android",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "Web",
+            "value": "Web"
+          },
+          {
+            "selected": false,
+            "text": "iOS",
+            "value": "iOS"
+          },
+          {
+            "selected": false,
+            "text": "Android",
+            "value": "Android"
+          }
+        ]
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "utc",
+  "title": "Funnel Demo - Checkout",
+  "uid": "funnel-demo",
+  "version": 1,
+  "weekStart": ""
+}

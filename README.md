@@ -72,6 +72,21 @@ A plain **Time shift** changes the time range of the whole panel. It does not gi
 
 The panel supports Grafana 11.0.0 and later. Time comparison needs Grafana 12.3 or later. The panel is available in English, Swedish, Spanish, Portuguese and French.
 
+## Demo dashboard
+
+The repository has a demo of a checkout funnel with a drill-down. The dashboards use generated TestData, so no other plugin is needed. Run `npm run server` and open `/d/funnel-demo`. The files are [funnel-demo.json](https://github.com/mckn/mckn-funnel-panel/blob/main/provisioning/dashboards/funnel-demo.json) and [funnel-demo-drilldown.json](https://github.com/mckn/mckn-funnel-panel/blob/main/provisioning/dashboards/funnel-demo-drilldown.json).
+
+The demo shows how to build the common scenarios of product analytics tools:
+
+- **Step conversion and drop-off.** The flow layout shows the count, the conversion and the drop-off of each step.
+- **Comparison with an earlier period.** Grafana Time comparison shows the change of each step and of the overall conversion.
+- **Breakdown by property.** A `platform` variable repeats a compact funnel for each platform. The funnels show retention instead of drop-off.
+- **Drill-down.** A data link on each step opens the drill-down dashboard. The link passes the step, the platform and the time range.
+- **Session replay.** A data link on the user column of the drill-down table opens a session replay.
+- **Conversion over time, time to convert and next actions.** Standard Grafana panels show these next to the funnel.
+
+Some scenarios depend on how you query the data, not on the panel. Examples are open and closed funnels, strict step order and the conversion window. Use dashboard variables to change your query for these.
+
 ## FAQ
 
 **Q: The percentage values look off in my funnel, what am I doing wrong?**
