@@ -5,17 +5,41 @@
 
 Grafana panel to create funnel charts
 
-![Screenshot](https://raw.githubusercontent.com/mckn/mckn-funnel-panel/83b6605fa913001f965ff951892c9bdf13429f07/src/img/panel.png)
+![Screenshot](https://raw.githubusercontent.com/mckn/mckn-funnel-panel/main/src/img/panel.png)
 
 ## What are funnel charts?
 
 A funnel chart is a specialized chart type that demonstrates the flow of e.g. users through a business or sales process. The chart takes its name from its shape, which starts from a broad head and ends in a narrow neck. The number of users at each stage of the process are indicated from the funnel’s width as it narrows.
 
+## Layouts
+
+The panel has two layouts. Select one with the **Layout** option.
+
+**Classic** shows one bar per step, with the step name on the left and the percentage on the right. The gap between two bars shows the drop from one step to the next. Hover a bar or a gap to see details.
+
+**Flow** shows the funnel as one continuous band that narrows from step to step. Each step shows its name, its value, and the drop or retention from the previous step. The band shows the percentage of the first step. Hover a step to highlight it. The flow layout can run top to bottom (**Vertical**) or left to right (**Horizontal**).
+
+## Panel options
+
+These options are in the **Funnel** category:
+
+- **Layout** selects the classic or the flow layout.
+- **Orientation** selects a vertical or a horizontal band. Only the flow layout uses it.
+- **Sorting** sorts the steps from highest to lowest, from lowest to highest, or not at all.
+- **Show retention rate** shows the retention between steps instead of the drop.
+- **Show percentages** shows or hides the percentage column. Only the classic layout uses it.
+
+When the data has a Grafana Time comparison period, the flow layout also shows the options in [Time comparison](#time-comparison).
+
+## Data links
+
+Add data links in the standard options of the panel to link each step to another dashboard or page. In the flow layout, each step shows a **...** button on hover or focus. The button opens a menu with the data links of that step. The classic layout does not use data links.
+
 ## Getting Started
 
 The panel can be used with any data source that returns data frame(s) containing one numeric field per step in the funnel.
 
-The easies way to achive this is to have one query per step (probably the most common way to query the data).
+The easiest way to achieve this is to have one query per step (probably the most common way to query the data).
 
 If your data, instead, is returned as one data frame with two fields. One field containing all the step labels and one field containing all the numeric values. We recommend using transformations (`Rows to fields`) to transform that data into one data frame with one field per value.
 
@@ -40,11 +64,17 @@ When the panel has a comparison period, these options show in the **Time compari
 
 Grafana shows the compared period next to the panel title, for example **Compared to day before**. A change is shown as `—` when it can not be calculated, for example when the count of the other period is zero.
 
+![Time comparison](https://raw.githubusercontent.com/mckn/mckn-funnel-panel/main/src/img/panel-comparison.png)
+
 A plain **Time shift** changes the time range of the whole panel. It does not give a second period to compare with.
+
+## Compatibility
+
+The panel supports Grafana 11.0.0 and later. Time comparison needs Grafana 12.3 or later. The panel is available in English, Swedish, Spanish, Portuguese and French.
 
 ## FAQ
 
-**Q: The percentage values looks off in my funnel, what am I doing wrong?**
+**Q: The percentage values look off in my funnel, what am I doing wrong?**
 
 A: Check the standard options for your panel. Your `min` value might be set to `auto` which will cause Grafana to normalize the data and use the lowest value in the data set as the minimum value. Try to set this value to `0` to see if it will resolve the issue. For more details see the following [issue](https://github.com/mckn/mckn-funnel-panel/issues/47#issuecomment-2561915080).
 
@@ -62,9 +92,9 @@ git clone git@github.com:mckn/mckn-funnel-panel.git
 cd mckn-funnel-panel
 
 # Install dependencies and build the plugin.
-npm install
+npm ci
 npm run dev
 
 # Start a local instance of Grafana with a provisioned dashboard.
-docker-compose up
+npm run server
 ```
