@@ -1,0 +1,476 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Opened from the data links of the Funnel Demo - Checkout dashboard.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Back to Funnel Demo",
+      "tooltip": "",
+      "type": "link",
+      "url": "/d/funnel-demo"
+    }
+  ],
+  "liveNow": false,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Users whose last step was $step",
+      "type": "stat",
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 8
+      },
+      "description": "Sample users. Filtered by the step and platform variables.",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "/^user_id$/",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
+          },
+          "refId": "A",
+          "scenarioId": "csv_content",
+          "csvContent": "user_id,platform,country,last_step,cart_value,session_seconds\nu_1001,Web,DE,Checkout started,102.21,477\nu_1002,iOS,FR,Checkout started,304.63,198\nu_1003,Web,US,Product viewed,0,496\nu_1004,iOS,GB,Added to cart,242.03,879\nu_1005,Web,FR,Added to cart,297.13,346\nu_1006,Web,SE,Product viewed,0,709\nu_1007,Web,BR,Product viewed,0,724\nu_1008,iOS,SE,Payment info,187.88,795\nu_1009,Android,GB,Added to cart,214.87,760\nu_1010,Web,SE,Checkout started,86.75,612\nu_1011,Android,ES,Order completed,136.68,948\nu_1012,Web,BR,Product viewed,0,1392\nu_1013,iOS,DE,Checkout started,35.42,1320\nu_1014,Web,GB,Added to cart,163.62,572\nu_1015,Android,US,Checkout started,266.53,489\nu_1016,Web,ES,Payment info,33.71,1181\nu_1017,Web,IN,Product viewed,0,1336\nu_1018,Web,BR,Product viewed,0,1169\nu_1019,Web,GB,Checkout started,203.4,761\nu_1020,Web,SE,Order completed,173.87,116\nu_1021,Web,FR,Product viewed,0,1413\nu_1022,Web,BR,Added to cart,207.45,978\nu_1023,Android,SE,Order completed,15.77,1496\nu_1024,iOS,ES,Checkout started,99.52,1332\nu_1025,Web,US,Product viewed,0,949\nu_1026,Android,DE,Order completed,98.39,1045\nu_1027,Web,GB,Added to cart,217.1,1328\nu_1028,iOS,US,Product viewed,0,1124\nu_1029,Web,BR,Added to cart,48.69,763\nu_1030,Web,SE,Product viewed,0,1181\nu_1031,Web,DE,Product viewed,0,161\nu_1032,Web,DE,Product viewed,0,1145\nu_1033,Android,GB,Product viewed,0,886\nu_1034,iOS,BR,Order completed,238.28,1480\nu_1035,iOS,IN,Added to cart,134.48,1079\nu_1036,Web,US,Product viewed,0,712\nu_1037,Web,US,Added to cart,84.23,165\nu_1038,Android,SE,Product viewed,0,696\nu_1039,Web,DE,Added to cart,171.22,1124\nu_1040,Android,IN,Checkout started,201.0,517\nu_1041,Web,ES,Payment info,43.79,902\nu_1042,Web,SE,Added to cart,251.14,1399\nu_1043,iOS,GB,Product viewed,0,243\nu_1044,iOS,FR,Product viewed,0,307\nu_1045,Web,IN,Product viewed,0,174\nu_1046,Android,US,Payment info,44.11,1355\nu_1047,Android,FR,Order completed,290.37,360\nu_1048,Web,DE,Added to cart,143.54,140\nu_1049,Android,BR,Added to cart,98.99,951\nu_1050,Android,IN,Added to cart,338.5,1158\nu_1051,Web,US,Product viewed,0,139\nu_1052,Web,DE,Checkout started,203.61,1049\nu_1053,iOS,SE,Product viewed,0,400\nu_1054,iOS,GB,Added to cart,89.15,265\nu_1055,Web,ES,Added to cart,38.89,1366\nu_1056,Web,BR,Order completed,246.91,508\nu_1057,iOS,SE,Added to cart,110.4,667\nu_1058,iOS,SE,Product viewed,0,1173\nu_1059,Web,DE,Product viewed,0,563\nu_1060,Android,BR,Order completed,300.4,776\nu_1061,Android,BR,Product viewed,0,1460\nu_1062,Android,BR,Checkout started,226.5,36\nu_1063,Web,SE,Order completed,300.03,561\nu_1064,iOS,GB,Order completed,62.99,597\nu_1065,Web,IN,Checkout started,220.03,560\nu_1066,Android,SE,Product viewed,0,124\nu_1067,Android,DE,Checkout started,26.46,703\nu_1068,Web,FR,Checkout started,255.12,1149\nu_1069,Web,DE,Added to cart,321.98,1435\nu_1070,Android,FR,Added to cart,203.06,323\nu_1071,Web,ES,Product viewed,0,101\nu_1072,Web,ES,Product viewed,0,230\nu_1073,Android,DE,Payment info,145.29,1291\nu_1074,Web,FR,Order completed,65.3,382\nu_1075,iOS,FR,Product viewed,0,700\nu_1076,Android,DE,Payment info,277.93,566\nu_1077,Web,GB,Payment info,298.07,983\nu_1078,Android,BR,Product viewed,0,736\nu_1079,Android,GB,Payment info,85.12,1371\nu_1080,Web,ES,Added to cart,34.77,591\nu_1081,Web,ES,Checkout started,333.82,1118\nu_1082,Web,BR,Order completed,330.29,385\nu_1083,iOS,ES,Product viewed,0,727\nu_1084,Android,GB,Added to cart,49.93,1200\nu_1085,iOS,GB,Product viewed,0,23\nu_1086,Web,ES,Added to cart,229.87,696\nu_1087,Web,BR,Checkout started,307.22,1058\nu_1088,Web,DE,Checkout started,240.68,1155\nu_1089,iOS,DE,Product viewed,0,796\nu_1090,Web,BR,Checkout started,191.72,20\nu_1091,Web,ES,Product viewed,0,1207\nu_1092,Web,DE,Added to cart,82.09,989\nu_1093,Web,ES,Checkout started,229.74,1288\nu_1094,Android,BR,Product viewed,0,501\nu_1095,Web,US,Product viewed,0,70\nu_1096,Web,IN,Product viewed,0,169\nu_1097,iOS,FR,Added to cart,75.77,1446\nu_1098,Web,SE,Added to cart,227.19,31\nu_1099,Web,IN,Payment info,275.75,1445\nu_1100,Web,IN,Product viewed,0,268\nu_1101,Web,ES,Product viewed,0,1107\nu_1102,Android,FR,Order completed,212.95,1493\nu_1103,iOS,IN,Payment info,306.28,992\nu_1104,Web,BR,Product viewed,0,1325\nu_1105,iOS,IN,Payment info,217.57,582\nu_1106,Web,ES,Product viewed,0,576\nu_1107,iOS,DE,Product viewed,0,303\nu_1108,iOS,GB,Product viewed,0,1466\nu_1109,Web,IN,Product viewed,0,1131\nu_1110,Web,US,Added to cart,149.81,1216\nu_1111,iOS,ES,Order completed,136.76,32\nu_1112,Web,GB,Product viewed,0,878\nu_1113,Web,ES,Added to cart,171.29,816\nu_1114,iOS,DE,Checkout started,249.53,977\nu_1115,iOS,US,Order completed,309.47,1232\nu_1116,Web,DE,Product viewed,0,965\nu_1117,Web,IN,Product viewed,0,453\nu_1118,iOS,BR,Product viewed,0,796\nu_1119,Android,IN,Payment info,94.75,187\nu_1120,iOS,GB,Product viewed,0,736\nu_1121,iOS,GB,Checkout started,225.78,83\nu_1122,Web,GB,Product viewed,0,332\nu_1123,iOS,GB,Product viewed,0,1175\nu_1124,Web,SE,Added to cart,133.0,1260\nu_1125,Web,US,Payment info,114.02,1205\nu_1126,iOS,FR,Order completed,309.83,788\nu_1127,Web,GB,Order completed,206.21,1304\nu_1128,iOS,SE,Product viewed,0,1421\nu_1129,iOS,FR,Payment info,25.47,1111\nu_1130,Web,FR,Checkout started,224.39,45\nu_1131,Web,IN,Payment info,327.14,1321\nu_1132,Web,BR,Checkout started,252.68,1352\nu_1133,Android,FR,Checkout started,266.08,972\nu_1134,iOS,SE,Payment info,117.72,522\nu_1135,Web,FR,Product viewed,0,971\nu_1136,Web,DE,Product viewed,0,685\nu_1137,Web,BR,Added to cart,96.74,592\nu_1138,iOS,FR,Added to cart,74.67,514\nu_1139,iOS,IN,Added to cart,238.52,1342\nu_1140,Web,GB,Added to cart,108.51,848\nu_1141,iOS,ES,Product viewed,0,989\nu_1142,iOS,IN,Added to cart,120.5,1459\nu_1143,Web,GB,Product viewed,0,267\nu_1144,iOS,DE,Product viewed,0,1433\nu_1145,iOS,BR,Product viewed,0,586\nu_1146,Android,DE,Order completed,109.17,759\nu_1147,iOS,BR,Product viewed,0,279\nu_1148,Web,DE,Product viewed,0,618\nu_1149,iOS,BR,Checkout started,45.65,45\nu_1150,Web,BR,Added to cart,72.47,125\nu_1151,Web,IN,Order completed,281.65,840\nu_1152,iOS,DE,Product viewed,0,129\nu_1153,iOS,SE,Product viewed,0,642\nu_1154,Web,GB,Order completed,262.74,1261\nu_1155,Web,FR,Payment info,309.99,628\nu_1156,iOS,SE,Product viewed,0,1268\nu_1157,Web,SE,Order completed,81.22,1372\nu_1158,Web,DE,Product viewed,0,173\nu_1159,Web,IN,Product viewed,0,1236\nu_1160,Web,BR,Product viewed,0,1467\nu_1161,Web,GB,Checkout started,237.46,561\nu_1162,iOS,DE,Added to cart,224.42,564\nu_1163,Web,BR,Product viewed,0,649\nu_1164,Web,BR,Added to cart,111.74,844\nu_1165,Web,FR,Added to cart,38.38,101\nu_1166,iOS,US,Checkout started,20.48,488\nu_1167,iOS,DE,Order completed,100.4,102\nu_1168,iOS,FR,Added to cart,312.47,391\nu_1169,Web,FR,Checkout started,41.93,732\nu_1170,iOS,ES,Product viewed,0,349\nu_1171,Web,US,Added to cart,229.33,840\nu_1172,Web,US,Added to cart,118.03,847\nu_1173,iOS,ES,Checkout started,147.55,404\nu_1174,Web,GB,Checkout started,156.99,125\nu_1175,Web,IN,Product viewed,0,609\nu_1176,Web,GB,Order completed,21.47,1310\nu_1177,Web,SE,Checkout started,16.49,855\nu_1178,Android,IN,Product viewed,0,252\nu_1179,iOS,BR,Order completed,62.5,1487\nu_1180,Web,GB,Added to cart,285.79,987"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "type": "include",
+            "match": "all",
+            "filters": [
+              {
+                "fieldName": "last_step",
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "^${step}$"
+                  }
+                }
+              },
+              {
+                "fieldName": "platform",
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "^${platform}$"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Time since the previous step",
+      "type": "barchart",
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 9,
+        "h": 8
+      },
+      "description": "How long users needed to reach $step.",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "xField": "bucket",
+        "legend": {
+          "showLegend": false,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "orientation": "vertical",
+        "showValue": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
+          },
+          "refId": "A",
+          "scenarioId": "csv_content",
+          "csvContent": "step,bucket,users\nProduct viewed,0-1 min,30\nProduct viewed,1-5 min,44\nProduct viewed,5-15 min,18\nProduct viewed,15+ min,8\nAdded to cart,0-1 min,22\nAdded to cart,1-5 min,41\nAdded to cart,5-15 min,26\nAdded to cart,15+ min,11\nCheckout started,0-1 min,35\nCheckout started,1-5 min,39\nCheckout started,5-15 min,18\nCheckout started,15+ min,8\nPayment info,0-1 min,48\nPayment info,1-5 min,33\nPayment info,5-15 min,13\nPayment info,15+ min,6\nOrder completed,0-1 min,56\nOrder completed,1-5 min,29\nOrder completed,5-15 min,10\nOrder completed,15+ min,5"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "type": "include",
+            "match": "any",
+            "filters": [
+              {
+                "fieldName": "step",
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "^${step}$"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "What users did next",
+      "type": "barchart",
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
+      },
+      "gridPos": {
+        "x": 15,
+        "y": 0,
+        "w": 9,
+        "h": 8
+      },
+      "description": "Top next actions of users who left at $step.",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "purple"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "xField": "next_action",
+        "legend": {
+          "showLegend": false,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "orientation": "horizontal",
+        "showValue": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
+          },
+          "refId": "A",
+          "scenarioId": "csv_content",
+          "csvContent": "step,next_action,users\nProduct viewed,Left the site,44\nProduct viewed,Searched again,27\nProduct viewed,Viewed another product,21\nProduct viewed,Added to wishlist,9\nProduct viewed,Contacted support,4\nAdded to cart,Left the site,38\nAdded to cart,Continued shopping,29\nAdded to cart,Removed an item,17\nAdded to cart,Viewed shipping costs,12\nAdded to cart,Saved the cart,6\nCheckout started,Left the site,41\nCheckout started,Edited the cart,22\nCheckout started,Applied a promo code,14\nCheckout started,Logged in,9\nCheckout started,Contacted support,5\nPayment info,Left the site,36\nPayment info,Payment error,24\nPayment info,Changed payment method,16\nPayment info,Returned to cart,11\nPayment info,Contacted support,6\nOrder completed,Viewed the order,40\nOrder completed,Left the site,31\nOrder completed,Continued shopping,18\nOrder completed,Created an account,8\nOrder completed,Shared the product,3"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "type": "include",
+            "match": "any",
+            "filters": [
+              {
+                "fieldName": "step",
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "^${step}$"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Users whose last step was $step",
+      "type": "table",
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "funnel-testdata"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 24,
+        "h": 14
+      },
+      "description": "Open a session replay from the user_id column.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "user_id"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Watch session replay",
+                    "targetBlank": true,
+                    "url": "https://grafana.com/docs/grafana-cloud/monitor-applications/frontend-observability/?session=${__value.raw}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cart_value"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "session_seconds"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "cart_value"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "funnel-testdata"
+          },
+          "refId": "A",
+          "scenarioId": "csv_content",
+          "csvContent": "user_id,platform,country,last_step,cart_value,session_seconds\nu_1001,Web,DE,Checkout started,102.21,477\nu_1002,iOS,FR,Checkout started,304.63,198\nu_1003,Web,US,Product viewed,0,496\nu_1004,iOS,GB,Added to cart,242.03,879\nu_1005,Web,FR,Added to cart,297.13,346\nu_1006,Web,SE,Product viewed,0,709\nu_1007,Web,BR,Product viewed,0,724\nu_1008,iOS,SE,Payment info,187.88,795\nu_1009,Android,GB,Added to cart,214.87,760\nu_1010,Web,SE,Checkout started,86.75,612\nu_1011,Android,ES,Order completed,136.68,948\nu_1012,Web,BR,Product viewed,0,1392\nu_1013,iOS,DE,Checkout started,35.42,1320\nu_1014,Web,GB,Added to cart,163.62,572\nu_1015,Android,US,Checkout started,266.53,489\nu_1016,Web,ES,Payment info,33.71,1181\nu_1017,Web,IN,Product viewed,0,1336\nu_1018,Web,BR,Product viewed,0,1169\nu_1019,Web,GB,Checkout started,203.4,761\nu_1020,Web,SE,Order completed,173.87,116\nu_1021,Web,FR,Product viewed,0,1413\nu_1022,Web,BR,Added to cart,207.45,978\nu_1023,Android,SE,Order completed,15.77,1496\nu_1024,iOS,ES,Checkout started,99.52,1332\nu_1025,Web,US,Product viewed,0,949\nu_1026,Android,DE,Order completed,98.39,1045\nu_1027,Web,GB,Added to cart,217.1,1328\nu_1028,iOS,US,Product viewed,0,1124\nu_1029,Web,BR,Added to cart,48.69,763\nu_1030,Web,SE,Product viewed,0,1181\nu_1031,Web,DE,Product viewed,0,161\nu_1032,Web,DE,Product viewed,0,1145\nu_1033,Android,GB,Product viewed,0,886\nu_1034,iOS,BR,Order completed,238.28,1480\nu_1035,iOS,IN,Added to cart,134.48,1079\nu_1036,Web,US,Product viewed,0,712\nu_1037,Web,US,Added to cart,84.23,165\nu_1038,Android,SE,Product viewed,0,696\nu_1039,Web,DE,Added to cart,171.22,1124\nu_1040,Android,IN,Checkout started,201.0,517\nu_1041,Web,ES,Payment info,43.79,902\nu_1042,Web,SE,Added to cart,251.14,1399\nu_1043,iOS,GB,Product viewed,0,243\nu_1044,iOS,FR,Product viewed,0,307\nu_1045,Web,IN,Product viewed,0,174\nu_1046,Android,US,Payment info,44.11,1355\nu_1047,Android,FR,Order completed,290.37,360\nu_1048,Web,DE,Added to cart,143.54,140\nu_1049,Android,BR,Added to cart,98.99,951\nu_1050,Android,IN,Added to cart,338.5,1158\nu_1051,Web,US,Product viewed,0,139\nu_1052,Web,DE,Checkout started,203.61,1049\nu_1053,iOS,SE,Product viewed,0,400\nu_1054,iOS,GB,Added to cart,89.15,265\nu_1055,Web,ES,Added to cart,38.89,1366\nu_1056,Web,BR,Order completed,246.91,508\nu_1057,iOS,SE,Added to cart,110.4,667\nu_1058,iOS,SE,Product viewed,0,1173\nu_1059,Web,DE,Product viewed,0,563\nu_1060,Android,BR,Order completed,300.4,776\nu_1061,Android,BR,Product viewed,0,1460\nu_1062,Android,BR,Checkout started,226.5,36\nu_1063,Web,SE,Order completed,300.03,561\nu_1064,iOS,GB,Order completed,62.99,597\nu_1065,Web,IN,Checkout started,220.03,560\nu_1066,Android,SE,Product viewed,0,124\nu_1067,Android,DE,Checkout started,26.46,703\nu_1068,Web,FR,Checkout started,255.12,1149\nu_1069,Web,DE,Added to cart,321.98,1435\nu_1070,Android,FR,Added to cart,203.06,323\nu_1071,Web,ES,Product viewed,0,101\nu_1072,Web,ES,Product viewed,0,230\nu_1073,Android,DE,Payment info,145.29,1291\nu_1074,Web,FR,Order completed,65.3,382\nu_1075,iOS,FR,Product viewed,0,700\nu_1076,Android,DE,Payment info,277.93,566\nu_1077,Web,GB,Payment info,298.07,983\nu_1078,Android,BR,Product viewed,0,736\nu_1079,Android,GB,Payment info,85.12,1371\nu_1080,Web,ES,Added to cart,34.77,591\nu_1081,Web,ES,Checkout started,333.82,1118\nu_1082,Web,BR,Order completed,330.29,385\nu_1083,iOS,ES,Product viewed,0,727\nu_1084,Android,GB,Added to cart,49.93,1200\nu_1085,iOS,GB,Product viewed,0,23\nu_1086,Web,ES,Added to cart,229.87,696\nu_1087,Web,BR,Checkout started,307.22,1058\nu_1088,Web,DE,Checkout started,240.68,1155\nu_1089,iOS,DE,Product viewed,0,796\nu_1090,Web,BR,Checkout started,191.72,20\nu_1091,Web,ES,Product viewed,0,1207\nu_1092,Web,DE,Added to cart,82.09,989\nu_1093,Web,ES,Checkout started,229.74,1288\nu_1094,Android,BR,Product viewed,0,501\nu_1095,Web,US,Product viewed,0,70\nu_1096,Web,IN,Product viewed,0,169\nu_1097,iOS,FR,Added to cart,75.77,1446\nu_1098,Web,SE,Added to cart,227.19,31\nu_1099,Web,IN,Payment info,275.75,1445\nu_1100,Web,IN,Product viewed,0,268\nu_1101,Web,ES,Product viewed,0,1107\nu_1102,Android,FR,Order completed,212.95,1493\nu_1103,iOS,IN,Payment info,306.28,992\nu_1104,Web,BR,Product viewed,0,1325\nu_1105,iOS,IN,Payment info,217.57,582\nu_1106,Web,ES,Product viewed,0,576\nu_1107,iOS,DE,Product viewed,0,303\nu_1108,iOS,GB,Product viewed,0,1466\nu_1109,Web,IN,Product viewed,0,1131\nu_1110,Web,US,Added to cart,149.81,1216\nu_1111,iOS,ES,Order completed,136.76,32\nu_1112,Web,GB,Product viewed,0,878\nu_1113,Web,ES,Added to cart,171.29,816\nu_1114,iOS,DE,Checkout started,249.53,977\nu_1115,iOS,US,Order completed,309.47,1232\nu_1116,Web,DE,Product viewed,0,965\nu_1117,Web,IN,Product viewed,0,453\nu_1118,iOS,BR,Product viewed,0,796\nu_1119,Android,IN,Payment info,94.75,187\nu_1120,iOS,GB,Product viewed,0,736\nu_1121,iOS,GB,Checkout started,225.78,83\nu_1122,Web,GB,Product viewed,0,332\nu_1123,iOS,GB,Product viewed,0,1175\nu_1124,Web,SE,Added to cart,133.0,1260\nu_1125,Web,US,Payment info,114.02,1205\nu_1126,iOS,FR,Order completed,309.83,788\nu_1127,Web,GB,Order completed,206.21,1304\nu_1128,iOS,SE,Product viewed,0,1421\nu_1129,iOS,FR,Payment info,25.47,1111\nu_1130,Web,FR,Checkout started,224.39,45\nu_1131,Web,IN,Payment info,327.14,1321\nu_1132,Web,BR,Checkout started,252.68,1352\nu_1133,Android,FR,Checkout started,266.08,972\nu_1134,iOS,SE,Payment info,117.72,522\nu_1135,Web,FR,Product viewed,0,971\nu_1136,Web,DE,Product viewed,0,685\nu_1137,Web,BR,Added to cart,96.74,592\nu_1138,iOS,FR,Added to cart,74.67,514\nu_1139,iOS,IN,Added to cart,238.52,1342\nu_1140,Web,GB,Added to cart,108.51,848\nu_1141,iOS,ES,Product viewed,0,989\nu_1142,iOS,IN,Added to cart,120.5,1459\nu_1143,Web,GB,Product viewed,0,267\nu_1144,iOS,DE,Product viewed,0,1433\nu_1145,iOS,BR,Product viewed,0,586\nu_1146,Android,DE,Order completed,109.17,759\nu_1147,iOS,BR,Product viewed,0,279\nu_1148,Web,DE,Product viewed,0,618\nu_1149,iOS,BR,Checkout started,45.65,45\nu_1150,Web,BR,Added to cart,72.47,125\nu_1151,Web,IN,Order completed,281.65,840\nu_1152,iOS,DE,Product viewed,0,129\nu_1153,iOS,SE,Product viewed,0,642\nu_1154,Web,GB,Order completed,262.74,1261\nu_1155,Web,FR,Payment info,309.99,628\nu_1156,iOS,SE,Product viewed,0,1268\nu_1157,Web,SE,Order completed,81.22,1372\nu_1158,Web,DE,Product viewed,0,173\nu_1159,Web,IN,Product viewed,0,1236\nu_1160,Web,BR,Product viewed,0,1467\nu_1161,Web,GB,Checkout started,237.46,561\nu_1162,iOS,DE,Added to cart,224.42,564\nu_1163,Web,BR,Product viewed,0,649\nu_1164,Web,BR,Added to cart,111.74,844\nu_1165,Web,FR,Added to cart,38.38,101\nu_1166,iOS,US,Checkout started,20.48,488\nu_1167,iOS,DE,Order completed,100.4,102\nu_1168,iOS,FR,Added to cart,312.47,391\nu_1169,Web,FR,Checkout started,41.93,732\nu_1170,iOS,ES,Product viewed,0,349\nu_1171,Web,US,Added to cart,229.33,840\nu_1172,Web,US,Added to cart,118.03,847\nu_1173,iOS,ES,Checkout started,147.55,404\nu_1174,Web,GB,Checkout started,156.99,125\nu_1175,Web,IN,Product viewed,0,609\nu_1176,Web,GB,Order completed,21.47,1310\nu_1177,Web,SE,Checkout started,16.49,855\nu_1178,Android,IN,Product viewed,0,252\nu_1179,iOS,BR,Order completed,62.5,1487\nu_1180,Web,GB,Added to cart,285.79,987"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "type": "include",
+            "match": "all",
+            "filters": [
+              {
+                "fieldName": "last_step",
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "^${step}$"
+                  }
+                }
+              },
+              {
+                "fieldName": "platform",
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "^${platform}$"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [
+    "funnel",
+    "demo"
+  ],
+  "templating": {
+    "list": [
+      {
+        "type": "custom",
+        "name": "step",
+        "label": "Step",
+        "multi": false,
+        "includeAll": false,
+        "query": "Product viewed,Added to cart,Checkout started,Payment info,Order completed",
+        "current": {
+          "selected": true,
+          "text": "Payment info",
+          "value": "Payment info"
+        },
+        "options": [
+          {
+            "selected": false,
+            "text": "Product viewed",
+            "value": "Product viewed"
+          },
+          {
+            "selected": false,
+            "text": "Added to cart",
+            "value": "Added to cart"
+          },
+          {
+            "selected": false,
+            "text": "Checkout started",
+            "value": "Checkout started"
+          },
+          {
+            "selected": true,
+            "text": "Payment info",
+            "value": "Payment info"
+          },
+          {
+            "selected": false,
+            "text": "Order completed",
+            "value": "Order completed"
+          }
+        ]
+      },
+      {
+        "type": "custom",
+        "name": "platform",
+        "label": "Platform",
+        "multi": false,
+        "includeAll": true,
+        "allValue": ".*",
+        "query": "Web,iOS,Android",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "Web",
+            "value": "Web"
+          },
+          {
+            "selected": false,
+            "text": "iOS",
+            "value": "iOS"
+          },
+          {
+            "selected": false,
+            "text": "Android",
+            "value": "Android"
+          }
+        ]
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "utc",
+  "title": "Funnel Demo - Drill-down",
+  "uid": "funnel-demo-drilldown",
+  "version": 1,
+  "weekStart": ""
+}
