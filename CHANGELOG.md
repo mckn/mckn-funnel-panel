@@ -3,6 +3,7 @@
 ## 2.1.1
 
 Chore: Updated the plugin to the latest version of the `@grafana/create-plugin` template (7.11.0).
+Bugfix: The release workflow no longer fails because it referenced a `grafana/plugin-actions` ref that was removed. The GitHub workflows now use the pinned actions from the template.
 
 ## 2.1.0
 
