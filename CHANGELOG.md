@@ -3,6 +3,8 @@
 ## Unreleased
 
 Feature: New "Flow" layout option. The funnel renders as one continuous band that narrows smoothly from step to step. Each step shows its name, value and conversion from the previous step, and the band shows the percentage of the first step. Hovering a step highlights it. The layout can be vertical or horizontal.
+Feature: The flow layout shows a menu with the data links of each step.
+Feature: The flow layout can compare the funnel with an earlier period, using Grafana Time comparison (Grafana 12.3 or later).
 
 ## 1.3.0
 
