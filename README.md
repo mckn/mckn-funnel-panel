@@ -87,6 +87,8 @@ The demo shows how to build the common scenarios of product analytics tools:
 
 Some scenarios depend on how you query the data, not on the panel. Examples are open and closed funnels, strict step order and the conversion window. Use dashboard variables to change your query for these.
 
+The drill-down dashboard filters its data with dashboard variables in transformations. This needs Grafana 11.3 or later. On Grafana 11.0 the drill-down panels show no data.
+
 ## FAQ
 
 **Q: The percentage values look off in my funnel, what am I doing wrong?**

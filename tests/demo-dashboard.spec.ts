@@ -1,4 +1,8 @@
 import { expect, test } from '@grafana/plugin-e2e';
+import semver from 'semver';
+
+// Grafana 11.0 does not replace dashboard variables in the filter transformations of the drill-down.
+const DRILLDOWN_FILTER_VERSION = '11.3.0';
 
 test.describe('demo dashboard', () => {
   test('opens the drill-down dashboard from the links menu of a step', async ({ page }) => {
@@ -24,11 +28,16 @@ test.describe('demo dashboard', () => {
     await expect(page).toHaveURL(/var-platform=iOS/);
   });
 
-  test('shows only the users of the selected step in the drill-down table', async ({ page }) => {
+  test('shows only the users of the selected step in the drill-down table', async ({ page, grafanaVersion }) => {
+    test.skip(
+      semver.lt(grafanaVersion, DRILLDOWN_FILTER_VERSION),
+      'The drill-down filters need variables in transformations, which Grafana 11.3 or later supports'
+    );
     await page.goto('/d/funnel-demo-drilldown?orgId=1&var-step=Payment%20info&var-platform=$__all');
 
-    const cells = page.getByRole('gridcell', { name: 'Payment info' });
-    await expect(cells.first()).toBeVisible();
-    await expect(page.getByRole('gridcell', { name: 'Product viewed' })).toHaveCount(0);
+    // Older Grafana versions render table cells without a gridcell role, so match on text.
+    await expect(page.getByRole('link', { name: /^u_\d+$/ }).first()).toBeVisible();
+    await expect(page.getByText('Payment info', { exact: true }).first()).toBeVisible();
+    await expect(page.getByText('Product viewed', { exact: true })).toHaveCount(0);
   });
 });
