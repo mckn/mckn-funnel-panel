@@ -88,5 +88,10 @@
     "semver": "^7.7.4",
     "tinycolor2": "^1.6.0",
     "tslib": "2.8.1"
+  },
+  "overrides": {
+    "get-uri": {
+      "basic-ftp": "^6.2.1"
+    }
   }
 }
