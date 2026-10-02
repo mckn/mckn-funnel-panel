@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.2
+
+Chore: Updated a transitive development dependency (`basic-ftp`) to 6.2.1 to fix CVE-2026-102990. The dependency is only used by the signing tooling, so the plugin itself does not change.
+
 ## 2.1.1
 
 Chore: Updated the plugin to the latest version of the `@grafana/create-plugin` template (7.11.0).
