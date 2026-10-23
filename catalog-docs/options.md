@@ -6,48 +6,85 @@ sidebar_position: 3
 
 To change these options, edit the panel and use the options pane.
 
-<!-- section-brief
-Fill this in: Reference the options Funnel exposes in the panel editor. Cover both the custom options the panel adds (via `setPanelOptions` in source) and the standard field options it enables (via `useFieldConfig`). Skip the sections below that don't apply to this panel - if there's no Standard field options block, no Tooltip and legend section etc., remove those headings entirely rather than leaving an empty brief.
-
-Do not redocument the framework-level standard options themselves (Min, Max, Unit, etc.) - Grafana's own docs cover those. The Standard field options section lists which ones are enabled, nothing more.
--->
-
 ## Panel options
 
-<!-- section-brief
-Fill this in: Emit a markdown table with these columns - one row per option registered through `setPanelOptions` in `src/module.ts`. Match the Grafana built-in panel docs style: https://grafana.com/docs/grafana/latest/visualizations/panels-visualizations/visualizations/logs/#logs-options
+Some options only show for one layout. The **Time comparison** options only show when the panel has a comparison period.
 
-| Option | Type | Default | Description |
-| ------ | ---- | ------- | ----------- |
+### Funnel
 
-- _Option_: the `name` value from the `setPanelOptions` `.add*({...})` call, verbatim.
-- _Type_: a short label for the editor the option uses, derived from the builder method (`addBooleanSwitch` → Toggle, `addSelect` → Select, `addNumberInput` → Number, `addFieldNamePicker` → Field picker). For a custom editor, name what it is, such as Color picker, rather than writing Custom.
-- _Default_: the value a reader sees in the panel editor, rendered as inline code. Resolve enum members, constants and translation calls to that value - `ClockMode.time` becomes `Time`. Keep the source expression only when it can't be resolved. When there is no default but the code falls back to a value while the option is unset, give that fallback value. Leave the cell empty only when there is neither. When the default matches none of the values the option offers, such as a different case, give what the panel actually does with it.
-- _Description_: the `description` value, verbatim. If the verbatim text causes a `docs:validate` warning, reword it as little as possible and keep its meaning. When source has none, write one short sentence describing what the option does, based on how the panel code uses it. Don't guess beyond what the code shows.
+| Option                  | Type   | Default      | Description                                                                                                                                                                                                                   |
+| ----------------------- | ------ | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Layout**              | Radio  | `Classic`    | Selects how the panel draws the funnel.<br>**Classic**: Centered funnel with labels on the left and percentages on the right.<br>**Flow**: One section per step with details next to a continuous, smoothly narrowing funnel. |
+| **Orientation**         | Radio  | `Vertical`   | Selects the direction of the steps. Only shows for the flow layout.<br>**Vertical**: Steps from top to bottom with the funnel on the right.<br>**Horizontal**: Steps from left to right with the funnel below the details.    |
+| **Sorting**             | Radio  | `Descending` | Selects the order of the steps, by value.<br>**Descending**: Sort from highest to lowest.<br>**Ascending**: Sort from lowest to highest.<br>**None**: No sorting is applied.                                                  |
+| **Show retention rate** | Toggle | `Off`        | Show retention rate instead of drop-off rate in gap labels and tooltips.                                                                                                                                                      |
+| **Show percentages**    | Toggle | `On`         | Show the percentage column next to the funnel bars. Only shows for the classic layout.                                                                                                                                        |
 
-If the panel does not call `setPanelOptions`, remove this section entirely.
--->
+With **None**, the steps keep the order of the fields in the query result.
+
+**Show retention rate** also applies to the flow layout. There, each step shows its retention from the previous step instead of its drop-off.
+
+### Time comparison
+
+| Option                     | Type  | Default         | Description                                                                                                                                                                                                       |
+| -------------------------- | ----- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Funnel to display**      | Radio | `Newest period` | Selects the period that the funnel shows.<br>**Newest period**: Show the newest period and its change from the oldest period.<br>**Oldest period**: Show the oldest period and its change from the newest period. |
+| **A favorable outcome is** | Radio | `Higher`        | Selects which changes show as favorable.<br>**Higher**: Show increases as favorable.<br>**Lower**: Show decreases as favorable.                                                                                   |
+
+These options only show for the flow layout, when the panel has a Grafana Time comparison period. For how to turn it on, refer to [Time comparison](#time-comparison).
 
 ## Standard field options
 
 For what each standard option does, refer to [Configure standard options](https://grafana.com/docs/grafana/latest/panels-visualizations/configure-standard-options/).
 
-<!-- section-brief
-Fill this in: A bulleted list of the standard field options this panel enables - the entries from `useFieldConfig({ standardOptions: [...] })` in `src/module.ts`. If the panel calls `useFieldConfig()` or `useFieldConfig({})` without a `standardOptions` key, document this as "all standard options are enabled" and list the standard set.
+The panel turns off **No value** and **Thresholds**. The other standard options stay on, including:
 
-If the panel does not call `useFieldConfig` at all, remove this section entirely, including the link above.
--->
+- **Unit**
+- **Min**, with a default of `0`
+- **Max**
+- **Decimals**
+- **Display name**
+- **Color scheme**, with a default of **Green-Yellow-Red (by value)**
+- **Value mappings**
+- **Data links**
 
-## Custom field options
+Keep **Min** at `0`. The panel draws each step relative to the field range, so a different minimum changes the widths and the percentages. For more information, refer to [Troubleshooting](./troubleshooting.md#the-percentages-look-wrong).
 
-<!-- section-brief
-Fill this in: A table with the same shape as Panel options (Option / Type / Default / Description) but for the per-field overrides registered via `useFieldConfig({ useCustomConfig: builder => ... })`. These appear under the Overrides picker in the panel editor.
+## Time comparison
 
-If the panel does not register custom field options, remove this section entirely.
--->
+The flow layout can compare the funnel with an earlier period. It shows one funnel at a time, and each step shows its change from the other period:
 
-## Tooltip and legend options
+- The count change, for example `+1200 (+3.5%)`, and the count of the other period.
+- The change of the drop-off or retention rate in percentage points, for example `+2.1 pp`, and the rate of the other period.
+- A header with the overall conversion from the first to the last step, and its change.
 
-<!-- section-brief
-Fill this in: Describe the tooltip and legend options Funnel exposes: hover behavior, the fields the tooltip shows and its formatting, and legend placement, values and calculations. Most of these already appear in the Panel options table above when they're registered via `setPanelOptions` with `category: ['Tooltip']` or `category: ['Legend']`, so use this section only for narrative context that doesn't fit in a table row. Remove this section if there is nothing extra to say beyond the table.
--->
+![A horizontal flow funnel with Time comparison. Each step shows its count change and its retention change from the day before.](./img/panel-comparison.png)
+
+To compare, edit the panel and turn on **Time comparison** in the time settings of the panel. Grafana adds a second period to the query results, and the panel compares the two periods. To go back to a single funnel, turn off **Time comparison**.
+
+- Time comparison needs Grafana 12.3 or later. Grafana 12.3 also needs the `panelTimeSettings` and `timeComparison` feature toggles.
+- Only the flow layout compares. The classic layout shows the current period only.
+- Each step of each period must have exactly one value. For how to shape the data, refer to [Data formats](./data-formats.md#time-comparison).
+
+Grafana shows the compared period next to the panel title, for example **Compared to day before**. A change shows as `—` when the panel can't calculate it, for example when the count of the other period is zero.
+
+The **A favorable outcome is** option sets the colors of the changes. With **Higher**, increases are green and decreases are red. With **Lower**, the colors are the other way around. A higher retention rate counts as a higher outcome, and a higher drop-off rate as a lower outcome.
+
+The steps are sorted by the period that the funnel shows, and the step names come from the newest period.
+
+> [!NOTE]
+> A plain **Time shift** changes the time range of the whole panel. It doesn't add a second period to compare with.
+
+## Data links
+
+Add links with the standard **Data links** field option to link each step to another dashboard or page.
+
+In the flow layout, hover or focus a step to show a menu button with three vertical dots in its corner. The button is labeled **Data links for** and the step name. Click it to open a menu with the data links of that step. The classic layout doesn't show data links.
+
+To give one step other links, add a field override for that step. For an example, refer to [Examples](./examples.md#time-comparison-and-data-links).
+
+## Tooltips and highlights
+
+In the classic layout, hover a bar to see the step name, its value and its percentage. Hover the gap between two bars to see the drop from one step to the next, for example `31.78% drop from "Sent" to "Viewed"`. With **Show retention rate**, the gap shows the retained percentage instead.
+
+The flow layout has no tooltips. Hover a step to highlight it in the details and in the band.

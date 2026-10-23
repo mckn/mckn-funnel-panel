@@ -4,23 +4,17 @@ description: 'Where to start and what to read next in the Funnel docs.'
 sidebar_position: 1
 ---
 
-<!-- section-brief
-Fill this in: Write a short orientation for someone who already has Funnel installed and landed here from the Documentation tab. One or two sentences on what this section covers and how it's organized. Do not restate what the plugin does, its feature list, or its requirements - that's the README's job on the Overview tab, and this reader has already seen it there. Do not list every page in this folder either - the sidebar already does that; use prose to say what to read first and why.
--->
+These docs explain how to shape your data for the Funnel panel, how to configure the classic and the flow layouts and how to compare a funnel with an earlier period. The pages start from a panel that you already added to a dashboard.
 
 ## Recommended path
 
-<!-- section-brief
-Fill this in: Give a short, ordered reading path for someone new to Funnel - two or three sentences, not a repeat of the sidebar. Point out the one or two pages most people need first and why, e.g. "Start with **Data formats** to shape your query results, then **Options** to configure the panel."
--->
+Start with **Data formats**, because the panel draws one step for each numeric field and your query must return that shape. Then read **Options** to select a layout and to set up Time comparison and data links. To start from a working panel, copy one of the **Examples**.
 
 ## Common tasks
 
-- [Shape your query results for Funnel](./data-formats.md)
-- [Configure panel and field options](./options.md)
-- [See worked dashboard.json examples](./examples.md)
-- [Fix a panel that isn't rendering correctly](./troubleshooting.md)
-
-<!-- section-brief
-Fill this in: Keep the list above and adapt it to Funnel's actual entry points - add, remove or reword tasks so each one matches a real job a user comes here to do. If you remove a page, remove its task too. This is a curated set of jobs, not a mechanical list of every file in this folder.
--->
+- [Shape your query results into funnel steps](./data-formats.md)
+- [Select a layout and configure the panel](./options.md#panel-options)
+- [Compare the funnel with an earlier period](./options.md#time-comparison)
+- [Link each step to a drill-down dashboard](./options.md#data-links)
+- [Copy a worked dashboard JSON example](./examples.md)
+- [Fix a panel that shows unsupported data or wrong percentages](./troubleshooting.md)
