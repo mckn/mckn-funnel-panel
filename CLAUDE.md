@@ -15,6 +15,8 @@ npm run e2e          # Playwright e2e tests (requires running Grafana)
 npm run server       # Start local Grafana via Docker on port 3000
 npm run test:ci      # Jest tests for CI (non-watch, max 4 workers)
 npm run i18n-extract # Extract translation keys to src/locales/
+npm run docs:serve   # Preview the catalog docs at http://localhost:3001
+npm run docs:validate # Validate the catalog docs (same check as the release)
 ```
 
 Node >= 20 (see `.nvmrc`). Use `npm ci` for installs.
@@ -161,6 +163,14 @@ import { Sorting } from 'types';
 import { getContrastText } from 'utils';
 ```
 
+### Catalog docs
+
+- `catalog-docs/` holds the plugin docs for the Documentation tab in the plugin catalog. `docsPath` in `src/plugin.json` turns them on, and the release build adds them to the plugin archive
+- `src/README.md` is the Overview tab. Keep it to the pitch and the feature list. Instructions go on the docs pages
+- When you add, change or remove a feature, update the matching page in the same change. `catalog-docs/AGENTS.md` maps each page to its source
+- Run `npm run docs:validate` after a docs change. It must report no warnings
+- Images go in `catalog-docs/img/` as PNG or WebP (no SVG), with relative paths
+
 ### Backward compatibility
 
 - `Center.tsx` runtime-checks for `Stack` component availability, falls back to deprecated `HorizontalGroup`
@@ -189,11 +199,12 @@ Follow the pattern `bar-{i}`, `label-{i}`, `percentage-{i}`, `gap-{i}`. Use this
 
 ## CI/CD
 
-Three GitHub Actions workflows in `.github/workflows/`:
+Four GitHub Actions workflows in `.github/workflows/`:
 
 - **ci.yml** — runs on push to main/master and PRs. Steps: typecheck → lint → unit tests → build → (optional sign) → package → e2e tests against multiple Grafana versions
 - **release.yml** — triggered by `v*` tags (e.g. `v2.1.0`). Builds and releases via `grafana/plugin-actions/build-plugin@release`. Requires `GRAFANA_API_KEY` secret for signing.
 - **is-compatible.yml** — runs on PRs. Checks plugin compatibility against latest Grafana API. Fails the PR if incompatible.
+- **validate-docs.yml** — runs `docs:validate` on pushes and PRs that change `catalog-docs/`, `src/plugin.json` or the package files. Warnings do not fail it
 
 ### Release process
 
@@ -214,3 +225,7 @@ Three GitHub Actions workflows in `.github/workflows/`:
 - The tooltip system uses a module-level mutable registry. Content is registered via `useEffect` and cleaned up on unmount.
 - `lint:fix` runs both ESLint with `--fix` and Prettier — it reformats the entire project, not just lint issues.
 - `.cprc.json` contains `@grafana/create-plugin` feature flags. Don't enable `bundleGrafanaUI`, React Router v6, or Rspack without testing thoroughly.
+
+## Project knowledge
+
+This repository contains a **Grafana plugin**. You must Read @./.config/AGENTS/instructions.md before doing changes.

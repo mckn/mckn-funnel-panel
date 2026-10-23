@@ -36,5 +36,6 @@
     "grafanaDependency": ">=11.0.0",
     "plugins": []
   },
-  "languages": ["en-US", "sv-SE", "es-ES", "pt-BR", "fr-FR"]
+  "languages": ["en-US", "sv-SE", "es-ES", "pt-BR", "fr-FR"],
+  "docsPath": "catalog-docs"
 }
