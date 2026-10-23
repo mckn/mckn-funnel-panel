@@ -214,3 +214,7 @@ Three GitHub Actions workflows in `.github/workflows/`:
 - The tooltip system uses a module-level mutable registry. Content is registered via `useEffect` and cleaned up on unmount.
 - `lint:fix` runs both ESLint with `--fix` and Prettier — it reformats the entire project, not just lint issues.
 - `.cprc.json` contains `@grafana/create-plugin` feature flags. Don't enable `bundleGrafanaUI`, React Router v6, or Rspack without testing thoroughly.
+
+## Project knowledge
+
+This repository contains a **Grafana plugin**. You must Read @./.config/AGENTS/instructions.md before doing changes.
