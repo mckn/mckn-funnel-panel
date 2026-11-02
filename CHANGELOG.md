@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.3
+
+Docs: Added documentation to the Documentation tab of the plugin catalog. It covers the panel options, data formats, examples and troubleshooting. The Overview tab now only has the pitch and the feature list.
+
 ## 2.1.2
 
 Chore: Updated a transitive development dependency (`basic-ftp`) to 6.2.1 to fix CVE-2026-102990. The dependency is only used by the signing tooling, so the plugin itself does not change.
