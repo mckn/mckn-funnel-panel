@@ -23,7 +23,7 @@
     "@babel/core": "^7.21.4",
     "@grafana/eslint-config": "^8.2.0",
     "@grafana/plugin-docs-cli": "^0.13.0",
-    "@grafana/plugin-e2e": "^3.7.1",
+    "@grafana/plugin-e2e": "^3.15.4",
     "@grafana/sign-plugin": "^3.2.2",
     "@grafana/tsconfig": "~2.0.1",
     "@playwright/test": "^1.52.0",
