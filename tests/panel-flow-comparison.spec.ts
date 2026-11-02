@@ -2,6 +2,15 @@ import { expect, test } from '@grafana/plugin-e2e';
 import semver from 'semver';
 
 const TIME_COMPARISON_VERSION = '12.3.0';
+// Grafana 13.0 and 13.1 do not run the comparison query for a dashboard with `timeCompare`. The panel gets one period.
+const TIME_COMPARISON_MISSING_RANGE = '>=13.0.0 <13.2.0';
+
+function hasTimeComparison(grafanaVersion: string): boolean {
+  return (
+    semver.gte(grafanaVersion, TIME_COMPARISON_VERSION) &&
+    !semver.satisfies(grafanaVersion, TIME_COMPARISON_MISSING_RANGE)
+  );
+}
 
 // The TestData waves depend on the time, so a fixed range gives the same values on every run.
 // 2025-09-25 10:00:00 to 10:30:00 UTC, compared with the same range one day before.
@@ -14,8 +23,8 @@ function panelUrl(panelId: number, range = FIXED_RANGE): string {
 test.describe('panel with flow layout and Grafana Time comparison', () => {
   test.beforeEach(async ({ grafanaVersion }) => {
     test.skip(
-      semver.lt(grafanaVersion, TIME_COMPARISON_VERSION),
-      'Grafana Time comparison requires Grafana 12.3 or later'
+      !hasTimeComparison(grafanaVersion),
+      'Grafana Time comparison requires Grafana 12.3 or later, except 13.0 and 13.1'
     );
   });
 
@@ -67,7 +76,7 @@ test.describe('panel with flow layout and Grafana Time comparison', () => {
 
 test.describe('panel with flow layout without Grafana Time comparison', () => {
   test.beforeEach(async ({ grafanaVersion }) => {
-    test.skip(semver.gte(grafanaVersion, TIME_COMPARISON_VERSION), 'Grafana supports Time comparison');
+    test.skip(hasTimeComparison(grafanaVersion), 'Grafana supports Time comparison');
   });
 
   test('shows the funnel without changes', async ({ page }) => {
